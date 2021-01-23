@@ -3,19 +3,36 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		79FAD3914DD6BD3F19E9864C /* Pods_Hoxy.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F984CD5AE290D05D2906238D /* Pods_Hoxy.framework */; };
 		EB25DC8825B9C1E5006F4008 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB25DC8725B9C1E5006F4008 /* AppDelegate.swift */; };
 		EB25DC8A25B9C1E5006F4008 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB25DC8925B9C1E5006F4008 /* SceneDelegate.swift */; };
 		EB25DC8C25B9C1E5006F4008 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB25DC8B25B9C1E5006F4008 /* ViewController.swift */; };
 		EB25DC8F25B9C1E5006F4008 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EB25DC8D25B9C1E5006F4008 /* Main.storyboard */; };
 		EB25DC9125B9C1E6006F4008 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EB25DC9025B9C1E6006F4008 /* Assets.xcassets */; };
 		EB25DC9425B9C1E6006F4008 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EB25DC9225B9C1E6006F4008 /* LaunchScreen.storyboard */; };
+		EB87AB7F25BC11EF00DF3BBB /* UnKnownVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB87AB7D25BC11EF00DF3BBB /* UnKnownVC.swift */; };
+		EB87AB8025BC11EF00DF3BBB /* UnKnownVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = EB87AB7E25BC11EF00DF3BBB /* UnKnownVC.xib */; };
+		EB87AB8425BC1A7A00DF3BBB /* LoginVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB87AB8325BC1A7A00DF3BBB /* LoginVC.swift */; };
+		EB87AB8725BC1B0A00DF3BBB /* UIFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB87AB8625BC1B0A00DF3BBB /* UIFont.swift */; };
+		EB87AB8A25BC728500DF3BBB /* Device.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB87AB8925BC728500DF3BBB /* Device.swift */; };
+		EBDA504B25BB325A00C6A122 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = EBDA504A25BB325A00C6A122 /* GoogleService-Info.plist */; };
+		EBDA504E25BB37C300C6A122 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBDA504D25BB37C300C6A122 /* TabBarController.swift */; };
+		EBDA506A25BC03BC00C6A122 /* HomeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBDA506825BC03BB00C6A122 /* HomeVC.swift */; };
+		EBDA506B25BC03BC00C6A122 /* HomeVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = EBDA506925BC03BB00C6A122 /* HomeVC.xib */; };
+		EBDA506F25BC03CA00C6A122 /* ChatVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBDA506D25BC03CA00C6A122 /* ChatVC.swift */; };
+		EBDA507025BC03CA00C6A122 /* ChatVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = EBDA506E25BC03CA00C6A122 /* ChatVC.xib */; };
+		EBDA507425BC03DC00C6A122 /* MyPageVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBDA507225BC03DC00C6A122 /* MyPageVC.swift */; };
+		EBDA507525BC03DC00C6A122 /* MyPageVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = EBDA507325BC03DC00C6A122 /* MyPageVC.xib */; };
+		EBDA507A25BC054100C6A122 /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBDA507925BC054100C6A122 /* UIColor.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		A74370B774BB4905B3B6108B /* Pods-Hoxy.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Hoxy.release.xcconfig"; path = "Target Support Files/Pods-Hoxy/Pods-Hoxy.release.xcconfig"; sourceTree = "<group>"; };
+		CCEA5CB1BB645FCD82AB47CB /* Pods-Hoxy.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Hoxy.debug.xcconfig"; path = "Target Support Files/Pods-Hoxy/Pods-Hoxy.debug.xcconfig"; sourceTree = "<group>"; };
 		EB25DC8425B9C1E5006F4008 /* Hoxy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Hoxy.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB25DC8725B9C1E5006F4008 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		EB25DC8925B9C1E5006F4008 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -24,6 +41,21 @@
 		EB25DC9025B9C1E6006F4008 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		EB25DC9325B9C1E6006F4008 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		EB25DC9525B9C1E6006F4008 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		EB87AB7D25BC11EF00DF3BBB /* UnKnownVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnKnownVC.swift; sourceTree = "<group>"; };
+		EB87AB7E25BC11EF00DF3BBB /* UnKnownVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = UnKnownVC.xib; sourceTree = "<group>"; };
+		EB87AB8325BC1A7A00DF3BBB /* LoginVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginVC.swift; sourceTree = "<group>"; };
+		EB87AB8625BC1B0A00DF3BBB /* UIFont.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIFont.swift; sourceTree = "<group>"; };
+		EB87AB8925BC728500DF3BBB /* Device.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Device.swift; sourceTree = "<group>"; };
+		EBDA504A25BB325A00C6A122 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		EBDA504D25BB37C300C6A122 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
+		EBDA506825BC03BB00C6A122 /* HomeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeVC.swift; sourceTree = "<group>"; };
+		EBDA506925BC03BB00C6A122 /* HomeVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HomeVC.xib; sourceTree = "<group>"; };
+		EBDA506D25BC03CA00C6A122 /* ChatVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatVC.swift; sourceTree = "<group>"; };
+		EBDA506E25BC03CA00C6A122 /* ChatVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ChatVC.xib; sourceTree = "<group>"; };
+		EBDA507225BC03DC00C6A122 /* MyPageVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageVC.swift; sourceTree = "<group>"; };
+		EBDA507325BC03DC00C6A122 /* MyPageVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MyPageVC.xib; sourceTree = "<group>"; };
+		EBDA507925BC054100C6A122 /* UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
+		F984CD5AE290D05D2906238D /* Pods_Hoxy.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Hoxy.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -31,17 +63,37 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				79FAD3914DD6BD3F19E9864C /* Pods_Hoxy.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		A45ED85C272FCC7C190A7BB6 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				CCEA5CB1BB645FCD82AB47CB /* Pods-Hoxy.debug.xcconfig */,
+				A74370B774BB4905B3B6108B /* Pods-Hoxy.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		CE9B51F10AB1A15DAF134ABE /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				F984CD5AE290D05D2906238D /* Pods_Hoxy.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		EB25DC7B25B9C1E5006F4008 = {
 			isa = PBXGroup;
 			children = (
 				EB25DC8625B9C1E5006F4008 /* Hoxy */,
 				EB25DC8525B9C1E5006F4008 /* Products */,
+				A45ED85C272FCC7C190A7BB6 /* Pods */,
+				CE9B51F10AB1A15DAF134ABE /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -56,6 +108,11 @@
 		EB25DC8625B9C1E5006F4008 /* Hoxy */ = {
 			isa = PBXGroup;
 			children = (
+				EBDA507825BC052B00C6A122 /* CommonClass */,
+				EBDA507725BC051D00C6A122 /* Extension */,
+				EB25DC9F25BB2C87006F4008 /* Model */,
+				EB25DCA025BB2C97006F4008 /* View */,
+				EB25DCA125BB2C9D006F4008 /* ViewModel */,
 				EB25DC8725B9C1E5006F4008 /* AppDelegate.swift */,
 				EB25DC8925B9C1E5006F4008 /* SceneDelegate.swift */,
 				EB25DC8B25B9C1E5006F4008 /* ViewController.swift */,
@@ -63,8 +120,57 @@
 				EB25DC9025B9C1E6006F4008 /* Assets.xcassets */,
 				EB25DC9225B9C1E6006F4008 /* LaunchScreen.storyboard */,
 				EB25DC9525B9C1E6006F4008 /* Info.plist */,
+				EBDA504A25BB325A00C6A122 /* GoogleService-Info.plist */,
 			);
 			path = Hoxy;
+			sourceTree = "<group>";
+		};
+		EB25DC9F25BB2C87006F4008 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		EB25DCA025BB2C97006F4008 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				EB87AB8325BC1A7A00DF3BBB /* LoginVC.swift */,
+				EBDA504D25BB37C300C6A122 /* TabBarController.swift */,
+				EBDA506825BC03BB00C6A122 /* HomeVC.swift */,
+				EBDA506925BC03BB00C6A122 /* HomeVC.xib */,
+				EB87AB7D25BC11EF00DF3BBB /* UnKnownVC.swift */,
+				EB87AB7E25BC11EF00DF3BBB /* UnKnownVC.xib */,
+				EBDA506D25BC03CA00C6A122 /* ChatVC.swift */,
+				EBDA506E25BC03CA00C6A122 /* ChatVC.xib */,
+				EBDA507225BC03DC00C6A122 /* MyPageVC.swift */,
+				EBDA507325BC03DC00C6A122 /* MyPageVC.xib */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		EB25DCA125BB2C9D006F4008 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		EBDA507725BC051D00C6A122 /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				EBDA507925BC054100C6A122 /* UIColor.swift */,
+				EB87AB8625BC1B0A00DF3BBB /* UIFont.swift */,
+			);
+			path = Extension;
+			sourceTree = "<group>";
+		};
+		EBDA507825BC052B00C6A122 /* CommonClass */ = {
+			isa = PBXGroup;
+			children = (
+				EB87AB8925BC728500DF3BBB /* Device.swift */,
+			);
+			path = CommonClass;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -74,9 +180,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = EB25DC9825B9C1E6006F4008 /* Build configuration list for PBXNativeTarget "Hoxy" */;
 			buildPhases = (
+				ABD09307201AE466083B75E9 /* [CP] Check Pods Manifest.lock */,
 				EB25DC8025B9C1E5006F4008 /* Sources */,
 				EB25DC8125B9C1E5006F4008 /* Frameworks */,
 				EB25DC8225B9C1E5006F4008 /* Resources */,
+				B0845B554B3F94725B695DFA /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -125,19 +233,75 @@
 			buildActionMask = 2147483647;
 			files = (
 				EB25DC9425B9C1E6006F4008 /* LaunchScreen.storyboard in Resources */,
+				EBDA507525BC03DC00C6A122 /* MyPageVC.xib in Resources */,
+				EBDA504B25BB325A00C6A122 /* GoogleService-Info.plist in Resources */,
+				EBDA506B25BC03BC00C6A122 /* HomeVC.xib in Resources */,
 				EB25DC9125B9C1E6006F4008 /* Assets.xcassets in Resources */,
+				EBDA507025BC03CA00C6A122 /* ChatVC.xib in Resources */,
 				EB25DC8F25B9C1E5006F4008 /* Main.storyboard in Resources */,
+				EB87AB8025BC11EF00DF3BBB /* UnKnownVC.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		ABD09307201AE466083B75E9 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Hoxy-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		B0845B554B3F94725B695DFA /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Hoxy/Pods-Hoxy-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Hoxy/Pods-Hoxy-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Hoxy/Pods-Hoxy-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		EB25DC8025B9C1E5006F4008 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EBDA506F25BC03CA00C6A122 /* ChatVC.swift in Sources */,
+				EB87AB7F25BC11EF00DF3BBB /* UnKnownVC.swift in Sources */,
 				EB25DC8C25B9C1E5006F4008 /* ViewController.swift in Sources */,
+				EB87AB8A25BC728500DF3BBB /* Device.swift in Sources */,
+				EBDA506A25BC03BC00C6A122 /* HomeVC.swift in Sources */,
+				EB87AB8425BC1A7A00DF3BBB /* LoginVC.swift in Sources */,
+				EBDA504E25BB37C300C6A122 /* TabBarController.swift in Sources */,
+				EB87AB8725BC1B0A00DF3BBB /* UIFont.swift in Sources */,
+				EBDA507425BC03DC00C6A122 /* MyPageVC.swift in Sources */,
+				EBDA507A25BC054100C6A122 /* UIColor.swift in Sources */,
 				EB25DC8825B9C1E5006F4008 /* AppDelegate.swift in Sources */,
 				EB25DC8A25B9C1E5006F4008 /* SceneDelegate.swift in Sources */,
 			);
@@ -283,29 +447,48 @@
 		};
 		EB25DC9925B9C1E6006F4008 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = CCEA5CB1BB645FCD82AB47CB /* Pods-Hoxy.debug.xcconfig */;
 			buildSettings = {
+				ARCHS = (
+					"$(ARCHS_STANDARD_INCLUDING_64_BIT)",
+					arm64,
+					arm7s,
+					arm7,
+				);
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = RT3T8DHJJ3;
 				INFOPLIST_FILE = Hoxy/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kang.Hoxy;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
 		EB25DC9A25B9C1E6006F4008 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A74370B774BB4905B3B6108B /* Pods-Hoxy.release.xcconfig */;
 			buildSettings = {
+				ARCHS = (
+					"$(ARCHS_STANDARD_INCLUDING_64_BIT)",
+					arm64,
+					arm7s,
+					arm7,
+				);
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = RT3T8DHJJ3;
 				INFOPLIST_FILE = Hoxy/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -313,7 +496,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.kang.Hoxy;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
