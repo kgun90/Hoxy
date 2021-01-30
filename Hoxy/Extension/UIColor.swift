@@ -20,5 +20,8 @@ extension UIColor {
     // ex. label.textColor = .mainOrange
     class var mainBackground: UIColor { UIColor(hex: 0xdddddd, alpha: 1)}
     class var mainYellow: UIColor { #colorLiteral(red: 0.9607843137, green: 0.8745098039, blue: 0.3019607843, alpha: 1) }
+    class var meetingTimeOrange: UIColor { #colorLiteral(red: 0.9607843137, green: 0.5803921569, blue: 0.3019607843, alpha: 1) }
+    class var labelGray: UIColor { #colorLiteral(red: 0.537254902, green: 0.5725490196, blue: 0.6039215686, alpha: 1) }
+    class var hashtagBlue: UIColor { #colorLiteral(red: 0.05098039216, green: 0.5490196078, blue: 1, alpha: 1) }
    
 }

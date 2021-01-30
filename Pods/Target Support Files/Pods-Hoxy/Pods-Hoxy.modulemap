@@ -1,0 +1,6 @@
+framework module Pods_Hoxy {
+  umbrella header "Pods-Hoxy-umbrella.h"
+
+  export *
+  module * { export * }
+}
