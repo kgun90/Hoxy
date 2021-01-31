@@ -58,14 +58,9 @@ class MainLoginVC: UIViewController {
     }
     
     @objc func emailLoginAction() {
-        let vc = TabBarController()
-        if let window = UIApplication.shared.windows.first {
-            window.rootViewController = vc
-            UIView.transition(with: window, duration: 0.3, options: .transitionCrossDissolve, animations: nil)
-        } else {
-            vc.modalPresentationStyle = .overFullScreen
-            self.present(vc, animated: true, completion: nil)
-        }
+        let vc = EmailLoginVC()
+        vc.modalPresentationStyle = .overFullScreen
+        present(vc, animated: true, completion: nil)
     }
     
     @objc func joinAction() {

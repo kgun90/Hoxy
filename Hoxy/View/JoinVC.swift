@@ -268,8 +268,7 @@ class JoinVC: UIViewController {
            self.passItem.tf.text?.validatePassword() ?? false,
            self.passItem.tf.text == self.passCheckItem.tf.text,
            self.phoneNumTextfield.text?.validatePhoneNum() ?? false,
-           self.veriID != "",
-           self.authCompleteLabel.isHidden == false {
+           self.veriID != ""{
             progressButton.isEnabled = true
             progressButton.backgroundColor = .mainYellow
         }
@@ -305,7 +304,6 @@ class JoinVC: UIViewController {
             self.uid = authResult?.user.uid ?? ""
             self.view.endEditing(true)
            
-            
         }
     }
   

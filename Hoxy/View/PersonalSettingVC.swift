@@ -394,7 +394,7 @@ extension PersonalSettingVC: UITextFieldDelegate, UIPickerViewDelegate, UIPicker
     }
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         ageTextField.text = years[row]
-        joinInfo.age = years[row]
+        joinInfo.age = Int(years[row]) ?? 0
         disableHidden(years[row])
     }
     

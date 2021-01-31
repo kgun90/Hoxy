@@ -14,5 +14,5 @@ struct LoginModel {
     var city: String = ""
     var town: String = ""
     var uid: String = ""
-    var age: String = ""
+    var age: Int = 0
 }

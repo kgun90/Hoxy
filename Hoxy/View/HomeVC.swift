@@ -39,8 +39,24 @@ class HomeVC: BaseViewController {
             $0.center.equalToSuperview()
         }
     }
+    func menuHandler(action: UIAction) {
+        Swift.debugPrint("Menu handler: \(action.title)")
+    }
     
-    
+    override func configureNavigationBar() {
+        super.configureNavigationBar()
+        let barButtonMenu = UIMenu(title: "", children: [
+            UIAction(title: NSLocalizedString("Copy", comment: ""), image: UIImage(systemName: "doc.on.doc"), handler: menuHandler),
+            UIAction(title: NSLocalizedString("Rename", comment: ""), image: UIImage(systemName: "pencil"), handler: menuHandler),
+            UIAction(title: NSLocalizedString("Duplicate", comment: ""), image: UIImage(systemName: "plus.square.on.square"), handler: menuHandler),
+            UIAction(title: NSLocalizedString("Move", comment: ""), image: UIImage(systemName: "folder"), handler: menuHandler)
+        ])
+        if #available(iOS 14.0, *) {
+            navigationController?.navigationItem.leftBarButtonItem?.menu = barButtonMenu
+        } else {
+            // Fallback on earlier versions
+        }
+    }
 
 }
 extension HomeVC: UITableViewDataSource, UITableViewDelegate {
