@@ -84,6 +84,15 @@ extension String {
           let emoji = UnicodeScalar(ascii)?.description
           return emoji ?? "😍"
       }
+    
+    func attributedText(withString string: String, boldString: String, font: UIFont) -> NSAttributedString {
+        let attributedString = NSMutableAttributedString(string: string,
+                                                     attributes: [NSAttributedString.Key.font: font])
+        let boldFontAttribute: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: UIFont.BasicFont(.semiBold, size: 16)]
+        let range = (string as NSString).range(of: boldString)
+        attributedString.addAttributes(boldFontAttribute, range: range)
+        return attributedString
+    }
 }
  
 

@@ -71,7 +71,7 @@ class JoinVC: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .white
        
-        buttonTarget()
+        optionSetting()
         layout()
     }
     
@@ -230,7 +230,7 @@ class JoinVC: UIViewController {
         }
     }
     // MARK: - Logic
-    func buttonTarget() {
+    func optionSetting() {
         
         emailItem.tf.delegate = self
         passItem.tf.delegate = self

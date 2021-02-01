@@ -18,7 +18,7 @@ extension UIColor {
     }
     // MARK: 메인 테마 색 또는 자주 쓰는 색을 정의
     // ex. label.textColor = .mainOrange
-    class var mainBackground: UIColor { UIColor(hex: 0xdddddd, alpha: 1)}
+    class var mainBackground: UIColor { #colorLiteral(red: 0.8666666667, green: 0.8666666667, blue: 0.8666666667, alpha: 1)}
     class var mainYellow: UIColor { #colorLiteral(red: 0.9607843137, green: 0.8745098039, blue: 0.3019607843, alpha: 1) }
     class var meetingTimeOrange: UIColor { #colorLiteral(red: 0.9607843137, green: 0.5803921569, blue: 0.3019607843, alpha: 1) }
     class var labelGray: UIColor { #colorLiteral(red: 0.537254902, green: 0.5725490196, blue: 0.6039215686, alpha: 1) }

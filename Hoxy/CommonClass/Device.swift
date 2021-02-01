@@ -36,7 +36,7 @@ struct Device {
         return UIApplication.shared.windows.first?.safeAreaInsets.top ?? 0
     }
     static var topHeight: CGFloat {
-        return statusBarHeight + navigationBarHeight
+        return statusBarHeight + navigationBarHeight        
     }
     
     // MARK: 디바이스의 아래쪽 여백 (Safe Area 아래쪽 여백)

@@ -30,7 +30,7 @@ class GradeButton: UIView {
         gradeLabel.font = .BasicFont(.medium, size: fontSize)
         gradeLabel.textColor = .white
         
-        layer.cornerRadius = 8
+        layer.cornerRadius = Device.heightScale(8)
         frame = CGRect(x: 0, y: 0, width: 47, height: 20)
         
         switch grade {

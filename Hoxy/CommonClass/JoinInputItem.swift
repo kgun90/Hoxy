@@ -22,14 +22,11 @@ class JoinInputItem: UIView {
         itemLabel.font = .BasicFont(.medium, size: 14)
         itemLabel.textColor = .black
         
-        
         tf.placeholder = placeholder
         tf.font = .BasicFont(.medium, size: 14)
         tf.isSecureTextEntry = secureTextType
         tf.autocapitalizationType = .none
-
-        
-       
+   
         descriptionLabel.text = descriptionText
         descriptionLabel.font = .BasicFont(.medium, size: 10)
         descriptionLabel.textColor = UIColor(hex: 0x918dff)

@@ -6,20 +6,40 @@
 //
 
 import UIKit
+import Firebase
 
-class HomeVC: BaseViewController {
+class HomeVC: BaseViewController, PostDataDelegate {
+
+
     
     // MARK: - Properties
     lazy var listTableView = UITableView().then {
         $0.backgroundColor = .mainBackground
     }
+    lazy var writeButton = UIButton().then {
+        $0.frame = CGRect(x: 0, y: 0, width: Device.widthScale(55), height:  Device.heightScale(55))
+        $0.setImage(UIImage(systemName: "plus"), for: .normal)
+        $0.layer.cornerRadius = $0.frame.size.height / 2
+        $0.backgroundColor = .mainYellow
+        $0.tintColor = .white
+        $0.addTarget(self, action: #selector(moveToWrite), for: .touchUpInside)
+    }
+    var postDataManager = PostDataManager()
+    var posts: [PostDataModel] = []
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setting()
         layout()
+        postDataManager.delegate = self
+        postDataManager.requestPostData()
+       
     }
     // MARK: - Selectors
+    @objc func moveToWrite() {
+        let vc = WriteVC()
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
     // MARK: - Logics
     func setting() {
         listTableView.delegate = self
@@ -30,7 +50,8 @@ class HomeVC: BaseViewController {
     // MARK: - Helpers
     func layout() {
         view.addSubview(listTableView)
-        
+        view.addSubview(writeButton)
+        view.bringSubviewToFront(writeButton)
         listTableView.snp.makeConstraints {
             $0.top.equalToSuperview()
             $0.bottom.equalToSuperview()
@@ -38,7 +59,26 @@ class HomeVC: BaseViewController {
             $0.height.equalToSuperview()
             $0.center.equalToSuperview()
         }
+        writeButton.snp.makeConstraints {
+            $0.bottom.equalToSuperview().offset(-(Device.tabBarHeight + Device.heightScale(46)))
+            $0.trailing.equalToSuperview().offset(Device.widthScale(-30))
+            $0.width.equalTo(Device.widthScale(55))
+            $0.height.equalTo(Device.heightScale(55))
+        }
     }
+    
+    func getPostData(_ postData: [PostDataModel]) {
+        posts = postData
+        DispatchQueue.main.async {
+            self.listTableView.reloadData()
+        }
+        for data in posts {
+            print(data.tag)
+        }
+    }
+    
+    
+    
     func menuHandler(action: UIAction) {
         Swift.debugPrint("Menu handler: \(action.title)")
     }
@@ -61,7 +101,7 @@ class HomeVC: BaseViewController {
 }
 extension HomeVC: UITableViewDataSource, UITableViewDelegate {
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 5
+        return posts.count
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 1
@@ -69,7 +109,13 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = self.listTableView.dequeueReusableCell(withIdentifier: "HomeTableViewCell", for: indexPath as IndexPath) as! HomeTableViewCell
-        
+        cell.emojiLable.text = posts[indexPath.section].emoji
+        cell.titleLabel.text = posts[indexPath.section].title
+        cell.locationLabel.text = posts[indexPath.section].town
+        cell.writeTimeLabel.text = posts[indexPath.section].date.relativeTime_abbreviated
+        cell.viewsLabel.text = String(posts[indexPath.section].view)
+//        cell.meetingTimeLabel.text = posts[indexPath.section].start
+        cell.attenderCountLabel.text = String(posts[indexPath.section].headcount)
         return cell
     }
     

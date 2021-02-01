@@ -13,6 +13,7 @@ extension UIFont {
         case medium = "Medium"
         case regular = "Regular"
         case semiBold = "SemiBold"
+        case light = "Light"
     
     }
 

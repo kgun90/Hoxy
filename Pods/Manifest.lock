@@ -332,7 +332,6 @@ PODS:
   - nanopb/encode (2.30906.0)
   - PromisesObjC (1.2.11)
   - SnapKit (5.0.1)
-  - SwiftPhoneNumberFormatter (1.5)
   - Then (2.7.0)
 
 DEPENDENCIES:
@@ -341,7 +340,6 @@ DEPENDENCIES:
   - Firebase/Auth
   - Firebase/Firestore
   - SnapKit
-  - SwiftPhoneNumberFormatter
   - Then
 
 SPEC REPOS:
@@ -366,7 +364,6 @@ SPEC REPOS:
     - nanopb
     - PromisesObjC
     - SnapKit
-    - SwiftPhoneNumberFormatter
     - Then
 
 SPEC CHECKSUMS:
@@ -390,9 +387,8 @@ SPEC CHECKSUMS:
   nanopb: 1bf24dd71191072e120b83dd02d08f3da0d65e53
   PromisesObjC: 8c196f5a328c2cba3e74624585467a557dcb482f
   SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
-  SwiftPhoneNumberFormatter: 0cc91f4daa06dd606a9defb21048a75c36a771a2
   Then: acfe0be7e98221c6204e12f8161459606d5d822d
 
-PODFILE CHECKSUM: 14c3bdeff63a5b7eb726b674b4d0dab36a30adde
+PODFILE CHECKSUM: 5ebbb40a30083bf5b3e7f6242ba928895ae42480
 
 COCOAPODS: 1.10.0

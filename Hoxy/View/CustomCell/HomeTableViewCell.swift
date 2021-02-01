@@ -9,18 +9,18 @@ import UIKit
 
 class HomeTableViewCell: UITableViewCell {
     // MARK: - Properties
-    private lazy var emojiLable = UILabel().then {
+    lazy var emojiLable = UILabel().then {
         $0.text = "😇"
         $0.font = .BasicFont(.regular, size: 40)
     }
     
-    private lazy var titleLabel = UILabel().then {
+    lazy var titleLabel = UILabel().then {
         $0.text = "글제목"
         $0.font = .BasicFont(.medium, size: 18)
         $0.textColor = .black
     }
     
-    private lazy var meetingTimeLabel = UILabel().then {
+    lazy var meetingTimeLabel = UILabel().then {
         $0.text = "만남시간"
         $0.font = .BasicFont(.medium, size: 11)
         $0.textColor = .meetingTimeOrange
@@ -28,34 +28,38 @@ class HomeTableViewCell: UITableViewCell {
     
     let gradeButton = GradeButton(mode: .tableCell, 1990)
     
-    private lazy var locationLabel = UILabel().then {
+    lazy var locationLabel = UILabel().then {
         $0.text = "동네"
         $0.font = .BasicFont(.medium, size: 12)
         $0.textColor = .labelGray
     }
-    private lazy var writeTimeLabel = UILabel().then {
+    lazy var writeTimeLabel = UILabel().then {
         $0.text = "작성시간"
         $0.font = .BasicFont(.medium, size: 12)
         $0.textColor = .labelGray
     }
-    private lazy var viewsLabel = UILabel().then {
+     lazy var viewsLabel = UILabel().then {
         $0.text = "􀋭 191"
         $0.font = .BasicFont(.medium, size: 12)
         $0.textColor = .labelGray
     }
     
-    private lazy var hashTagLabel = UILabel().then {
+    lazy var hashTagLabel = UILabel().then {
         $0.text = "#해쉬태그"
         $0.font = .BasicFont(.medium, size: 11)
         $0.textColor = .hashtagBlue
     }
     
-    private lazy var attenderCountView = UIView().then {
-        $0.layer.cornerRadius = 20
-        $0.backgroundColor = .mainYellow
+    lazy var attenderCountView = UIView().then {
+        $0.frame = CGRect(x: 0, y: 0, width: Device.widthScale(40), height: Device.heightScale(40))
+        $0.layer.cornerRadius = $0.frame.size.height / 2
+        $0.layer.borderColor = UIColor(hex: 0xeaeaea).cgColor
+        $0.layer.borderWidth = 0.5
+        $0.backgroundColor = .white
     }
     
-    private lazy var attenderCountLabel = UILabel().then {
+    lazy var attenderCountLabel = UILabel().then {
+      
         $0.text = "1/4"
         $0.font = .BasicFont(.medium, size: 12)
         $0.textColor = UIColor(hex: 0x6c6c6c)
@@ -112,13 +116,13 @@ class HomeTableViewCell: UITableViewCell {
         }
         
         locationLabel.snp.makeConstraints {
-            $0.top.equalTo(meetingTimeLabel.snp.bottom).offset(3)
+            $0.top.equalTo(meetingTimeLabel.snp.bottom).offset(Device.heightScale(3))
             $0.leading.equalTo(titleLabel.snp.leading)
         }
         
         writeTimeLabel.snp.makeConstraints {
             $0.top.equalTo(locationLabel.snp.top)
-            $0.leading.equalTo(locationLabel.snp.trailing).offset(2)
+            $0.leading.equalTo(locationLabel.snp.trailing).offset(Device.widthScale(2))
         }
         
         viewsLabel.snp.makeConstraints {
@@ -128,7 +132,7 @@ class HomeTableViewCell: UITableViewCell {
         
         hashTagLabel.snp.makeConstraints {
             $0.leading.equalTo(titleLabel.snp.leading)
-            $0.top.equalTo(locationLabel.snp.bottom).offset(Device.heightScale(8))
+            $0.top.equalTo(locationLabel.snp.bottom).offset(Device.heightScale(4))
         }
         
         attenderCountLabel.snp.makeConstraints {

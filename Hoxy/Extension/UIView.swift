@@ -20,7 +20,7 @@ extension UIView {
         static let vertical: BorderOptions = [.top, .bottom]
     }
     
-    func addBorder(toSide options: BorderOptions, color: UIColor, borderWidth width: CGFloat) {
+    func addBorder(toSide options: BorderOptions, color: UIColor, borderWidth width: CGFloat, circle: Bool = false) {
             // options에 .top이 포함되어있는지 확인
             if options.contains(.top) {
                 // 이미 해당 사이드에 경계선이 있는지 확인하고, 있으면 제거
