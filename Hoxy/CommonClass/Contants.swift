@@ -16,7 +16,13 @@ struct set {
         static let chatting = "chatting"
         static let post = "post"
     }
-        
+    
+    static let communicationEmoji = [["😷", "🤫", "🤐"], ["😀", "😃", "😄"], ["😆", "🤩", "🥳"]]
+    static let meetingLocationDemo = ["삼성동", "풍덕천동"]
+    static let communicationLevel = ["조용히 만나요", "대화는 해요", "재밌게 놀아요"]
+    static let headCount = [1, 2, 3, 4]
+    static let meetingDuration = ["30분", "1시간", "1시간 30분", "2시간", "2시간 30분", "3시간", "3시간 30분", "4시간"]
+    
     static let title = [
         "하얀",
         "파란",

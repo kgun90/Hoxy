@@ -11,17 +11,17 @@ import Firebase
 struct PostDataModel{
     var title: String = ""
     var content: String = ""
-    var writer: DocumentReference
+    var writer: DocumentReference?
     var headcount: Int = 0
     var tag: [String] = []
-    var date: Date
+    var date: Date = Date()
     var emoji: String = ""
     var communication: Int = 0
-    var start: Date
+    var start: Date = Date()
     var duration: Int = 0
     var city: String = ""
     var town: String = ""
-    var location: GeoPoint
+    var location: GeoPoint?
     var view: Int = 0
-    var chat: DocumentReference
+    var chat: DocumentReference?
 }

@@ -8,18 +8,22 @@
 import UIKit
 
 class WriteOptionItem: UIView {
+    let textField = UITextField().then {
+        $0.font = .BasicFont(.semiBold, size: 16)
+        $0.tintColor = .clear
+    }
     init(title: String) {
         super.init(frame: .zero)
         backgroundColor = .white
 
-        let title = UILabel().then {
-            $0.font = .BasicFont(.semiBold, size: 16)
-            $0.text = "\(title) >"
-        }
-        addSubview(title)
-        title.snp.makeConstraints {
+        textField.text = "\(title) >"
+        
+ 
+        addSubview(textField)
+        textField.snp.makeConstraints {
             $0.centerY.equalToSuperview()
             $0.leading.equalTo(Device.widthScale(31))
+            $0.width.equalToSuperview()
         }
     }
     

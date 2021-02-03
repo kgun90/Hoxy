@@ -36,6 +36,7 @@
 		EB5D8E7225C7D629003D957C /* PostDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5D8E7125C7D629003D957C /* PostDataModel.swift */; };
 		EB5D8E7525C7E1BF003D957C /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5D8E7425C7E1BF003D957C /* Date.swift */; };
 		EB5D8E7825C7E999003D957C /* NSMutableAttrubutedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5D8E7725C7E999003D957C /* NSMutableAttrubutedString.swift */; };
+		EB5D8E7E25CA645A003D957C /* PostVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5D8E7D25CA645A003D957C /* PostVC.swift */; };
 		EB87AB7F25BC11EF00DF3BBB /* UnKnownVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB87AB7D25BC11EF00DF3BBB /* UnKnownVC.swift */; };
 		EB87AB8025BC11EF00DF3BBB /* UnKnownVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = EB87AB7E25BC11EF00DF3BBB /* UnKnownVC.xib */; };
 		EB87AB8425BC1A7A00DF3BBB /* MainLoginVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB87AB8325BC1A7A00DF3BBB /* MainLoginVC.swift */; };
@@ -88,6 +89,7 @@
 		EB5D8E7125C7D629003D957C /* PostDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDataModel.swift; sourceTree = "<group>"; };
 		EB5D8E7425C7E1BF003D957C /* Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
 		EB5D8E7725C7E999003D957C /* NSMutableAttrubutedString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSMutableAttrubutedString.swift; sourceTree = "<group>"; };
+		EB5D8E7D25CA645A003D957C /* PostVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostVC.swift; sourceTree = "<group>"; };
 		EB87AB7D25BC11EF00DF3BBB /* UnKnownVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnKnownVC.swift; sourceTree = "<group>"; };
 		EB87AB7E25BC11EF00DF3BBB /* UnKnownVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = UnKnownVC.xib; sourceTree = "<group>"; };
 		EB87AB8325BC1A7A00DF3BBB /* MainLoginVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainLoginVC.swift; sourceTree = "<group>"; };
@@ -196,6 +198,7 @@
 				EBDA506825BC03BB00C6A122 /* HomeVC.swift */,
 				EB5D8E6A25C7D3E5003D957C /* PostDataManager.swift */,
 				EB5D8E5B25C7168C003D957C /* WriteVC.swift */,
+				EB5D8E7D25CA645A003D957C /* PostVC.swift */,
 				EB87AB7D25BC11EF00DF3BBB /* UnKnownVC.swift */,
 				EB87AB7E25BC11EF00DF3BBB /* UnKnownVC.xib */,
 				EBDA506D25BC03CA00C6A122 /* ChatVC.swift */,
@@ -399,6 +402,7 @@
 				EBDA504E25BB37C300C6A122 /* TabBarController.swift in Sources */,
 				EB38A72325BE62C200516515 /* UITextField.swift in Sources */,
 				EB38A71425BD707100516515 /* JoinVC.swift in Sources */,
+				EB5D8E7E25CA645A003D957C /* PostVC.swift in Sources */,
 				EB38A74725BF0A9900516515 /* GradeButton.swift in Sources */,
 				EB38A71D25BD89ED00516515 /* JoinInputItem.swift in Sources */,
 				EB5D8E6025C7172D003D957C /* WriteOptionItem.swift in Sources */,

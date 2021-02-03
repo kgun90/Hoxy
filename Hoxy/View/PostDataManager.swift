@@ -15,7 +15,6 @@ protocol PostDataDelegate {
 struct PostDataManager {
     var delegate: PostDataDelegate?
    
-    
     func requestPostData() {
         set.fs.collection(set.Table.post)
             .getDocuments { (querySanpshot, error) in

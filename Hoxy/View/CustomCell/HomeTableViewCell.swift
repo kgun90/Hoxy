@@ -59,7 +59,6 @@ class HomeTableViewCell: UITableViewCell {
     }
     
     lazy var attenderCountLabel = UILabel().then {
-      
         $0.text = "1/4"
         $0.font = .BasicFont(.medium, size: 12)
         $0.textColor = UIColor(hex: 0x6c6c6c)

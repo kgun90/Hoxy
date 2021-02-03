@@ -52,10 +52,16 @@ class EmailLoginVC: UIViewController {
     }
     
     @objc func loginAction() {
+        showIndicator()
         if let email = emailItem.tf.text, let pass = passItem.tf.text {
             Auth.auth().signIn(withEmail: email, password: pass) { [weak self] authResult, error in
                 if let e = error {
+                    let ok = UIAlertAction(title: "확인", style: .default, handler: nil)
+                    let alert = UIAlertController(title: "로그인 실패", message: "이메일과 패스워드를 확인해주세요.", preferredStyle: .alert)
+                    alert.addAction(ok)
+                    self?.present(alert, animated: true, completion: nil)
                     print(e.localizedDescription)
+                    self!.dismissIndicator()
                 } else {
                     let vc = TabBarController()
                     if let window = UIApplication.shared.windows.first {
@@ -65,6 +71,7 @@ class EmailLoginVC: UIViewController {
                         vc.modalPresentationStyle = .overFullScreen
                         self?.present(vc, animated: true, completion: nil)
                     }
+                    self?.dismissIndicator()
                 }
             }
         }
