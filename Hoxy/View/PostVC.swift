@@ -79,6 +79,7 @@ class PostVC: BaseViewController {
     lazy var writerProfileView = UIView().then {
         $0.backgroundColor = .white
     }
+    
     lazy var similarMeetingView = UIView().then {
         $0.backgroundColor = .white
     }
@@ -91,7 +92,7 @@ class PostVC: BaseViewController {
         super.viewDidLoad()
     }
     // MARK: - Selectors
-    햐
+    
     // MARK: - Helpers
     func layoutUI() {
         layoutTopView()

@@ -19,7 +19,6 @@ struct PostDataModel{
     var communication: Int = 0
     var start: Date = Date()
     var duration: Int = 0
-    var city: String = ""
     var town: String = ""
     var location: GeoPoint?
     var view: Int = 0

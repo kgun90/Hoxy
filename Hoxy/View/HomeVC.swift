@@ -10,8 +10,6 @@ import Firebase
 
 class HomeVC: BaseViewController, PostDataDelegate {
 
-
-    
     // MARK: - Properties
     lazy var listTableView = UITableView().then {
         $0.backgroundColor = .mainBackground
@@ -29,6 +27,7 @@ class HomeVC: BaseViewController, PostDataDelegate {
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        showIndicator()
         setting()
         layout()
         postDataManager.delegate = self
@@ -71,13 +70,9 @@ class HomeVC: BaseViewController, PostDataDelegate {
         posts = postData
         DispatchQueue.main.async {
             self.listTableView.reloadData()
-        }
-        for data in posts {
-            print(data.tag)
+            self.dismissIndicator()
         }
     }
-    
-    
     
     func menuHandler(action: UIAction) {
         Swift.debugPrint("Menu handler: \(action.title)")

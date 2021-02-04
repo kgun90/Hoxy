@@ -38,7 +38,6 @@ struct PostDataManager {
                                 communication: data["communication"] as! Int,
                                 start: startTime.dateValue(),
                                 duration: data["duration"] as! Int,
-                                city: data["city"] as! String,
                                 town: data["town"] as! String,
                                 location: data["location"] as! GeoPoint,
                                 view: data["view"] as! Int,
