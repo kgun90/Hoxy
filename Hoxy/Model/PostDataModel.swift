@@ -9,6 +9,7 @@ import Foundation
 import Firebase
 
 struct PostDataModel{
+    var id: String = ""
     var title: String = ""
     var content: String = ""
     var writer: DocumentReference?

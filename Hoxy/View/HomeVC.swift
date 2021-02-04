@@ -92,30 +92,38 @@ class HomeVC: BaseViewController, PostDataDelegate {
             // Fallback on earlier versions
         }
     }
-
+    
+    func readPost(_ id: String) {
+        let vc = PostVC()
+        vc.postID = id
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
 }
 extension HomeVC: UITableViewDataSource, UITableViewDelegate {
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return posts.count
-    }
+//    func numberOfSections(in tableView: UITableView) -> Int {
+//        return posts.count
+//    }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        return posts.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = self.listTableView.dequeueReusableCell(withIdentifier: "HomeTableViewCell", for: indexPath as IndexPath) as! HomeTableViewCell
-        cell.emojiLable.text = posts[indexPath.section].emoji
-        cell.titleLabel.text = posts[indexPath.section].title
-        cell.locationLabel.text = posts[indexPath.section].town
-        cell.writeTimeLabel.text = posts[indexPath.section].date.relativeTime_abbreviated
-        cell.viewsLabel.text = String(posts[indexPath.section].view)
+        cell.emojiLable.text = posts[indexPath.row].emoji
+        cell.titleLabel.text = posts[indexPath.row].title
+        cell.locationLabel.text = posts[indexPath.row].town
+        cell.writeTimeLabel.text = posts[indexPath.row].date.relativeTime_abbreviated
+        cell.viewsLabel.text = String(posts[indexPath.row].view)
 //        cell.meetingTimeLabel.text = posts[indexPath.section].start
-        cell.attenderCountLabel.text = String(posts[indexPath.section].headcount)
+        cell.attenderCountLabel.text = String(posts[indexPath.row].headcount)
         return cell
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return Device.heightScale(100)
+    }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        readPost(posts[indexPath.row].id)
     }
     
     

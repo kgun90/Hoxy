@@ -40,7 +40,6 @@
 		EB5D8E8625CB15B6003D957C /* UserDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5D8E8525CB15B6003D957C /* UserDataManager.swift */; };
 		EB5D8E8925CB183B003D957C /* MemberModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5D8E8825CB183B003D957C /* MemberModel.swift */; };
 		EB87AB7F25BC11EF00DF3BBB /* UnKnownVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB87AB7D25BC11EF00DF3BBB /* UnKnownVC.swift */; };
-		EB87AB8025BC11EF00DF3BBB /* UnKnownVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = EB87AB7E25BC11EF00DF3BBB /* UnKnownVC.xib */; };
 		EB87AB8425BC1A7A00DF3BBB /* MainLoginVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB87AB8325BC1A7A00DF3BBB /* MainLoginVC.swift */; };
 		EB87AB8725BC1B0A00DF3BBB /* UIFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB87AB8625BC1B0A00DF3BBB /* UIFont.swift */; };
 		EB87AB8A25BC728500DF3BBB /* Device.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB87AB8925BC728500DF3BBB /* Device.swift */; };
@@ -51,9 +50,7 @@
 		EBDA504E25BB37C300C6A122 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBDA504D25BB37C300C6A122 /* TabBarController.swift */; };
 		EBDA506A25BC03BC00C6A122 /* HomeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBDA506825BC03BB00C6A122 /* HomeVC.swift */; };
 		EBDA506F25BC03CA00C6A122 /* ChatVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBDA506D25BC03CA00C6A122 /* ChatVC.swift */; };
-		EBDA507025BC03CA00C6A122 /* ChatVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = EBDA506E25BC03CA00C6A122 /* ChatVC.xib */; };
 		EBDA507425BC03DC00C6A122 /* MyPageVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBDA507225BC03DC00C6A122 /* MyPageVC.swift */; };
-		EBDA507525BC03DC00C6A122 /* MyPageVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = EBDA507325BC03DC00C6A122 /* MyPageVC.xib */; };
 		EBDA507A25BC054100C6A122 /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBDA507925BC054100C6A122 /* UIColor.swift */; };
 /* End PBXBuildFile section */
 
@@ -94,7 +91,6 @@
 		EB5D8E8525CB15B6003D957C /* UserDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDataManager.swift; sourceTree = "<group>"; };
 		EB5D8E8825CB183B003D957C /* MemberModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberModel.swift; sourceTree = "<group>"; };
 		EB87AB7D25BC11EF00DF3BBB /* UnKnownVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnKnownVC.swift; sourceTree = "<group>"; };
-		EB87AB7E25BC11EF00DF3BBB /* UnKnownVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = UnKnownVC.xib; sourceTree = "<group>"; };
 		EB87AB8325BC1A7A00DF3BBB /* MainLoginVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainLoginVC.swift; sourceTree = "<group>"; };
 		EB87AB8625BC1B0A00DF3BBB /* UIFont.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIFont.swift; sourceTree = "<group>"; };
 		EB87AB8925BC728500DF3BBB /* Device.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Device.swift; sourceTree = "<group>"; };
@@ -105,9 +101,7 @@
 		EBDA504D25BB37C300C6A122 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		EBDA506825BC03BB00C6A122 /* HomeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeVC.swift; sourceTree = "<group>"; };
 		EBDA506D25BC03CA00C6A122 /* ChatVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatVC.swift; sourceTree = "<group>"; };
-		EBDA506E25BC03CA00C6A122 /* ChatVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ChatVC.xib; sourceTree = "<group>"; };
 		EBDA507225BC03DC00C6A122 /* MyPageVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageVC.swift; sourceTree = "<group>"; };
-		EBDA507325BC03DC00C6A122 /* MyPageVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MyPageVC.xib; sourceTree = "<group>"; };
 		EBDA507925BC054100C6A122 /* UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
 		F984CD5AE290D05D2906238D /* Pods_Hoxy.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Hoxy.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -192,6 +186,7 @@
 		EB25DCA025BB2C97006F4008 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				EB5D8E8B25CBD27D003D957C /* DataManager */,
 				EB38A76C25C12A9100516515 /* CustomCell */,
 				EB87AB8325BC1A7A00DF3BBB /* MainLoginVC.swift */,
 				EB11F0D525C55EB200EC9F6F /* EmailLoginVC.swift */,
@@ -199,16 +194,11 @@
 				EB38A72825BE72F800516515 /* PersonalSettingVC.swift */,
 				EBDA504D25BB37C300C6A122 /* TabBarController.swift */,
 				EBDA506825BC03BB00C6A122 /* HomeVC.swift */,
-				EB5D8E6A25C7D3E5003D957C /* PostDataManager.swift */,
 				EB5D8E5B25C7168C003D957C /* WriteVC.swift */,
 				EB5D8E7D25CA645A003D957C /* PostVC.swift */,
 				EB87AB7D25BC11EF00DF3BBB /* UnKnownVC.swift */,
-				EB87AB7E25BC11EF00DF3BBB /* UnKnownVC.xib */,
 				EBDA506D25BC03CA00C6A122 /* ChatVC.swift */,
-				EBDA506E25BC03CA00C6A122 /* ChatVC.xib */,
 				EBDA507225BC03DC00C6A122 /* MyPageVC.swift */,
-				EBDA507325BC03DC00C6A122 /* MyPageVC.xib */,
-				EB5D8E8525CB15B6003D957C /* UserDataManager.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -227,6 +217,15 @@
 				EB38A76E25C12AB500516515 /* HomeTableViewCell.xib */,
 			);
 			path = CustomCell;
+			sourceTree = "<group>";
+		};
+		EB5D8E8B25CBD27D003D957C /* DataManager */ = {
+			isa = PBXGroup;
+			children = (
+				EB5D8E6A25C7D3E5003D957C /* PostDataManager.swift */,
+				EB5D8E8525CB15B6003D957C /* UserDataManager.swift */,
+			);
+			path = DataManager;
 			sourceTree = "<group>";
 		};
 		EBDA507725BC051D00C6A122 /* Extension */ = {
@@ -322,13 +321,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				EB25DC9425B9C1E6006F4008 /* LaunchScreen.storyboard in Resources */,
-				EBDA507525BC03DC00C6A122 /* MyPageVC.xib in Resources */,
 				EBDA504B25BB325A00C6A122 /* GoogleService-Info.plist in Resources */,
 				EB38A77025C12AB500516515 /* HomeTableViewCell.xib in Resources */,
 				EB25DC9125B9C1E6006F4008 /* Assets.xcassets in Resources */,
-				EBDA507025BC03CA00C6A122 /* ChatVC.xib in Resources */,
 				EB25DC8F25B9C1E5006F4008 /* Main.storyboard in Resources */,
-				EB87AB8025BC11EF00DF3BBB /* UnKnownVC.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
