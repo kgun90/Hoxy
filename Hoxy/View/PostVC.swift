@@ -8,7 +8,8 @@
 import UIKit
 import Firebase
 
-class PostVC: BaseViewController, SingleDataDelegate {
+class PostVC: BaseViewController, SingleDataDelegate, PostDataDelegate {
+
 
     
     // MARK: - Properties
@@ -31,7 +32,7 @@ class PostVC: BaseViewController, SingleDataDelegate {
     }
         
     lazy var meetingTimeLabel = UILabel().then {
-        $0.font = .BasicFont(.medium, size: 14)
+        $0.font = .BasicFont(.medium, size: 12)
         $0.textColor = .meetingTimeOrange
         $0.text = "만남 예정시간"
     }
@@ -47,12 +48,13 @@ class PostVC: BaseViewController, SingleDataDelegate {
         $0.textColor = .labelGray
     }
      lazy var viewsLabel = UILabel().then {
-        $0.text = "􀋭 191"
+//        $0.imag
+        $0.text = "191"
         $0.font = .BasicFont(.medium, size: 12)
         $0.textColor = .labelGray
     }
     
-    var gradeButton = GradeButton(mode: .tableCell, 1990)
+    lazy var gradeButton = GradeButton(mode: .tableCell)
     
     
     lazy var attenderCountView = UIView().then {
@@ -82,8 +84,13 @@ class PostVC: BaseViewController, SingleDataDelegate {
         $0.backgroundColor = .white
     }
     
+    lazy var hashtagImage = UIImageView().then {
+        $0.image = UIImage(systemName: "tag")
+        $0.tintColor = UIColor(hex: 0x7b7b7b)
+    }
+    
     lazy var hashtagLabel = UILabel().then {
-        $0.font = .BasicFont(.medium, size: 12)
+        $0.font = .BasicFont(.medium, size: 15)
         $0.textColor = .hashtagBlue
     }
     
@@ -125,6 +132,11 @@ class PostVC: BaseViewController, SingleDataDelegate {
         $0.text = "연관모임"
     }
     
+    lazy var relatedMeetingTag = UILabel().then {
+        $0.font = .BasicFont(.light, size: 13)
+        $0.textColor = UIColor(hex: 0x5a5a5a)
+    }
+    
     lazy var listTableView = UITableView().then {
         $0.backgroundColor = .mainBackground
     }
@@ -133,30 +145,102 @@ class PostVC: BaseViewController, SingleDataDelegate {
         $0.backgroundColor = .white
     }
     
+    lazy var bottomMeetingTimeLabel = UILabel().then {
+        $0.font = .BasicFont(.medium, size: 14)
+        $0.textColor = UIColor(hex: 0x1a3bc4)
+        $0.text = "예정시간"
+    }
+    
+    lazy var bottomMeetingLocationLabel = UILabel().then {
+        $0.font = .BasicFont(.medium, size: 15)
+        $0.textColor = UIColor(hex: 0x5a5a5a)
+        $0.text = "000동"
+    }
+    
+    lazy var bottomWriterInfoLabel = UILabel().then {
+        $0.font = .BasicFont(.semiBold, size: 16)
+        $0.textColor = UIColor(hex: 0x2f2f2f)
+        $0.text = "00님의 모임"
+    }
+    
+    lazy var bottomSubmitButton = UIButton().then {
+        $0.setTitle("신청하기", for: .normal)
+        $0.titleLabel?.font = .BasicFont(.medium, size: 18)
+        $0.setTitleColor(.black, for: .normal)
+        $0.backgroundColor = .mainYellow
+        $0.layer.cornerRadius = 8
+    }
+    
     var postID = PostDataModel().id
     var postDataManager = PostDataManager()
+    var posts: [PostDataModel] = []
+    var commLevel = 0
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         showIndicator()
         postDataManager.singleDelegate = self
+        postDataManager.delegate = self
         postDataManager.requestSingleData(postID)
+        
+        setting()
         layoutUI()
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        tabBarController?.tabBar.isHidden = true
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        tabBarController?.tabBar.isHidden = false
+    }
+    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         topView.addBorder(toSide: .bottom, color: .mainBackground, borderWidth: 0.5)
+        hashtagView.addBorder(toSide: .bottom, color: .mainBackground, borderWidth: 0.5)
+        writerProfileView.addBorder(toSide: .bottom, color: .mainBackground, borderWidth: 0.5)
         bottomView.addBorder(toSide: .bottom, color: .mainBackground, borderWidth: 0.5)
+        relatedMeetingView.addBorder(toSide: .bottom, color: .mainBackground, borderWidth: 0.5)
+        bottomView.addBorder(toSide: .top, color: .mainBackground, borderWidth: 0.5)
     }
     // MARK: - Selectors
     
     // MARK: - Helpers
+    override func configureUI() {
+        super.configureUI()
+        let moreButton = UIBarButtonItem().then {
+            $0.image = UIImage(systemName: "ellipsis")
+            $0.target = self
+            $0.action = #selector(barButtonAction)
+        }
+  
+        navigationItem.rightBarButtonItem = moreButton
+        
+        let backButton = UIBarButtonItem().then {
+            $0.image = UIImage(systemName: "arrow.left")
+            $0.title = ""
+            $0.style = .plain
+            $0.target = self
+            $0.action = #selector(backButtonAction)
+        }
+        navigationItem.backBarButtonItem = backButton
+        
+    }
+    @objc func barButtonAction() {
+        let ok = UIAlertAction(title: "test", style: .default, handler: nil)
+        presentAlert(title: "", isCancelActionIncluded: true, preferredStyle: .actionSheet, with: ok)
+    }
+    
+    @objc func backButtonAction() {
+        self.navigationController?.popToRootViewController(animated: true)
+    }
+ 
     func layoutUI() {
         layoutTopView()
         layoutMiddleView()
         view.addSubview(mainScroll)
-        view.addSubview(bottomView)
-        
+        layoutBottomView()
     }
     
     func layoutTopView() {
@@ -186,7 +270,7 @@ class PostVC: BaseViewController, SingleDataDelegate {
         
         meetingTitleLabel.snp.makeConstraints {
             $0.top.equalToSuperview().offset(Device.heightScale(18))
-            $0.leading.equalToSuperview().offset(Device.widthScale(85))
+            $0.leading.equalToSuperview().offset(Device.widthScale(90))
         }
         meetingTimeLabel.snp.makeConstraints {
             $0.top.equalTo(meetingTitleLabel.snp.bottom).offset(2)
@@ -238,14 +322,31 @@ class PostVC: BaseViewController, SingleDataDelegate {
             $0.bottom.equalToSuperview().offset(Device.heightScale(-10))
         }
         
+        hashtagView.addSubview(hashtagImage)
+        hashtagView.addSubview(hashtagLabel)
         mainScroll.addSubview(hashtagView)
+        
         hashtagView.snp.makeConstraints {
             $0.top.equalTo(contentView.snp.bottom)
             $0.centerX.equalToSuperview()
             $0.width.equalToSuperview()
             $0.height.equalTo(Device.heightScale(35))
         }
+        hashtagImage.snp.makeConstraints {
+            $0.centerY.equalToSuperview()
+            $0.leading.equalToSuperview().offset(Device.widthScale(19))
+            $0.width.equalTo(Device.widthScale(22))
+            $0.height.equalTo(Device.heightScale(22))
+        }
+        hashtagLabel.snp.makeConstraints {
+            $0.centerY.equalToSuperview()
+            $0.leading.equalToSuperview().offset(Device.widthScale(48))
+        }
         
+        writerProfileView.addSubview(writerNicknameLable)
+        writerProfileView.addSubview(writerLocationLabel)
+        writerProfileView.addSubview(writerLevelTitleLabel)
+        writerProfileView.addSubview(writerAttendCountLabel)
         mainScroll.addSubview(writerProfileView)
         writerProfileView.snp.makeConstraints {
             $0.top.equalTo(hashtagView.snp.bottom)
@@ -253,7 +354,24 @@ class PostVC: BaseViewController, SingleDataDelegate {
             $0.width.equalToSuperview()
             $0.height.equalTo(Device.heightScale(60))
         }
+        writerNicknameLable.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(Device.heightScale(10))
+            $0.leading.equalToSuperview().offset(Device.widthScale(23))
+        }
+        writerLocationLabel.snp.makeConstraints {
+            $0.bottom.equalTo(writerNicknameLable.snp.bottom)
+            $0.leading.equalTo(writerNicknameLable.snp.trailing).offset(Device.widthScale(3))
+        }
+        writerLevelTitleLabel.snp.makeConstraints {
+            $0.top.equalTo(writerNicknameLable.snp.bottom).offset(Device.heightScale(5))
+            $0.leading.equalTo(writerNicknameLable.snp.leading)
+        }
+        writerAttendCountLabel.snp.makeConstraints {
+            $0.centerY.equalToSuperview()
+            $0.trailing.equalToSuperview().offset(Device.widthScale(-21))
+        }
         
+        relatedMeetingView.addSubview(relatedMeetingTitle)
         mainScroll.addSubview(relatedMeetingView)
         relatedMeetingView.snp.makeConstraints {
             $0.top.equalTo(writerProfileView.snp.bottom)
@@ -261,33 +379,84 @@ class PostVC: BaseViewController, SingleDataDelegate {
             $0.width.equalToSuperview()
             $0.height.equalTo(Device.heightScale(50))
         }
+        relatedMeetingTitle.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(Device.heightScale(7))
+            $0.leading.equalToSuperview().offset(Device.widthScale(20))
+        }
+        
+        mainScroll.addSubview(listTableView)
+        listTableView.snp.makeConstraints {
+            $0.top.equalTo(relatedMeetingView.snp.bottom)
+            $0.centerX.equalToSuperview()
+            $0.width.equalToSuperview()
+            $0.height.equalTo(Device.heightScale(300))
+        }
+    }
+    
+    func layoutBottomView() {
+        bottomView.addSubview(bottomMeetingTimeLabel)
+        bottomView.addSubview(bottomWriterInfoLabel)
+        bottomView.addSubview(bottomMeetingLocationLabel)
+        bottomView.addSubview(bottomSubmitButton)
+        view.addSubview(bottomView)
+        
+        bottomView.snp.makeConstraints {
+            $0.bottom.equalToSuperview()
+            $0.centerX.equalToSuperview()
+            $0.width.equalToSuperview()
+            $0.height.equalTo(Device.heightScale(108))
+        }
+        
+        bottomSubmitButton.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(Device.heightScale(16))
+            $0.trailing.equalToSuperview().offset(Device.widthScale(-17))
+            $0.width.equalTo(Device.widthScale(142))
+            $0.height.equalTo(Device.heightScale(44))
+        }
+        
+        bottomMeetingTimeLabel.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(Device.heightScale(21))
+            $0.trailing.equalTo(bottomSubmitButton.snp.leading).offset(Device.widthScale(-7))
+        }
+        bottomWriterInfoLabel.snp.makeConstraints {
+            $0.top.equalTo(bottomMeetingTimeLabel.snp.bottom).offset(Device.heightScale(-1))
+            $0.trailing.equalTo(bottomMeetingTimeLabel.snp.trailing)
+        }
+        bottomMeetingLocationLabel.snp.makeConstraints {
+            $0.centerY.equalTo(bottomWriterInfoLabel.snp.centerY)
+            $0.trailing.equalTo(bottomWriterInfoLabel.snp.leading).offset(Device.widthScale(Device.widthScale(-4)))
+        }
     }
     
     func getSingleData(_ postData: PostDataModel) {
         navigationItem.title = postData.title
+        commLevel = postData.communication
+        print(postData.communication)
         commuicationLavelEmoji.text = postData.emoji
         meetingTimeLabel.text = getMeetingTime(postData.start, postData.duration)
         locationLabel.text = postData.town
         writeTimeLabel.text = postData.date.relativeTime_abbreviated
         viewsLabel.text = String(postData.view)
         
-        var birthYear = 0
-        postData.writer?.getDocument(completion: { (snapshot, error) in
-            if let e = error {
-                print(e.localizedDescription)
-            } else {
-                if let data = snapshot?.data() {
-                    birthYear = data["birth"] as! Int
-                }
-            }
-        })
-        
-        gradeButton = GradeButton(mode: .tableCell, birthYear)
+      
         attenderCountLabel.text = String(postData.headcount)
-        
         contentLabel.text = postData.content
-
+        
+        writerProfile(postData.chat!, postData.writer!)
+        hashtagLabel.text = postData.tag[0]
+        
+        bottomMeetingTimeLabel.text = getBottomTime(postData.start)
+        postDataManager.requestPostData()
         dismissIndicator()
+    }
+    
+    func getPostData(_ postData: [PostDataModel]) {
+        for post in postData {
+            if postID != post.id && commLevel == post.communication {
+                posts.append(post)
+            }
+        }
+        listTableView.reloadData()
     }
     
     func getMeetingTime(_ start: Date, _ duration: Int) -> String{
@@ -304,32 +473,97 @@ class PostVC: BaseViewController, SingleDataDelegate {
         let timedifference = Calendar.current.dateComponents([.hour, .minute], from: start, to: end)
         
         if let hour = timedifference.hour, let minute = timedifference.minute {
-            return  "\(startTime)~\(endTime) \(hour)시간\(minute)분"
+            return  "\(startTime)~\(endTime) \(hour)시간 \(minute)분"
         } else {
             return ""
         }
         
-       
     }
+    
+    func getBottomTime(_ start: Date) -> String {
+        let bottomTimeFormat = DateFormatter().then {
+            $0.dateFormat = "MM월 dd일 hh시 mm분 예정"
+        }
+        let bottomTime = bottomTimeFormat.string(from: start)
+        
+        return bottomTime
+    }
+    
+    func writerProfile(_ chat: DocumentReference,_ writer: DocumentReference) {
+        writer.getDocument { (snapshot, error) in
+            if let e = error {
+                print(e.localizedDescription)
+            } else {
+                if let data = snapshot?.data() {
+                    let location = data["town"] as! String
+                    self.writerLocationLabel.text = location
+                    let count = data["participation"] as! Int
+                    self.writerAttendCountLabel.text = "총 모임참여 \(count)회"
+                    
+                    self.gradeButton.getGrade(.tableCell,  data["birth"] as! Int)
+                    self.bottomMeetingLocationLabel.text = location
+
+                }
+              
+            }
+        }
+        chat.getDocument { (snapshot, error) in
+            if let e = error {
+                print(e.localizedDescription)
+            } else {
+                if let doc = snapshot?.data() {
+                    let member = doc["member"] as! [String : String]
+                    let nickname = member[writer.documentID] ?? ""
+                    self.writerNicknameLable.text = nickname
+                    self.bottomWriterInfoLabel.text = "\(nickname)의 모임"
+                }
+              
+            }
+        }
+    }
+    
     func setting() {
-//        listTableView.delegate = self
-//        listTableView.dataSource = self
+        listTableView.delegate = self
+        listTableView.dataSource = self
         listTableView.register(UINib(nibName: "HomeTableViewCell", bundle: nil), forCellReuseIdentifier: "HomeTableViewCell")
         listTableView.tableFooterView = UIView()
     }
+    
+    func readPost(_ id: String) {
+        let vc = PostVC()
+        vc.postID = id
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
+    
+   
 }
 
-//extension PostVC: UITableViewDataSource, UITableViewDelegate {
-//    func numberOfSections(in tableView: UITableView) -> Int {
-//        return 1
-//    }
-//    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        return 1
-//    }
-//
-//    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//
-//    }
-//
-//
-//}
+extension PostVC: UITableViewDataSource, UITableViewDelegate {
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return posts.count
+    }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = self.listTableView.dequeueReusableCell(withIdentifier: "HomeTableViewCell", for: indexPath as IndexPath) as! HomeTableViewCell
+        cell.emojiLable.text = posts[indexPath.row].emoji
+        cell.titleLabel.text = posts[indexPath.row].title
+        cell.locationLabel.text = posts[indexPath.row].town
+        cell.writeTimeLabel.text = posts[indexPath.row].date.relativeTime_abbreviated
+        cell.viewsLabel.text = String(posts[indexPath.row].view)
+//        cell.meetingTimeLabel.text = posts[indexPath.section].start
+        cell.attenderCountLabel.text = String(posts[indexPath.row].headcount)
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return Device.heightScale(100)
+    }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        readPost(posts[indexPath.row].id)
+    }
+
+
+}

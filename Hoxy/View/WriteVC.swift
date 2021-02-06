@@ -149,8 +149,22 @@ class WriteVC: BaseViewController, UserDataManagerDelegate {
     
     @objc func submitAction() {
         showIndicator()
-        createPost()
-        navigationController?.popViewController(animated: true)
+     
+        let ok = UIAlertAction(title: "확인", style: .default) { (action) in
+            self.createPost()
+            
+            let vc = TabBarController()
+            if let window = UIApplication.shared.windows.first {
+                window.rootViewController = vc
+                UIView.transition(with: window, duration: 0.3, options: .transitionCrossDissolve, animations: nil)
+            } else {
+                vc.modalPresentationStyle = .overFullScreen
+                self.present(vc, animated: true, completion: nil)
+            }
+        }
+        presentAlert(title: "글 작성하기", message: "글이 게시됩니다. \n계속하시겠습니까?",isCancelActionIncluded: true, with: ok)
+        
+       
     }
     // MARK: - Helpers
     func layout() {

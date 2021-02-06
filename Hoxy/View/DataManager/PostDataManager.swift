@@ -16,9 +16,14 @@ protocol SingleDataDelegate {
     func getSingleData(_ postData: PostDataModel)
 }
 
+protocol CommLevelDelegate {
+    func getFilteredData(_ postData: [PostDataModel])
+}
+
 struct PostDataManager {
     var delegate: PostDataDelegate?
     var singleDelegate: SingleDataDelegate?
+    var commLevelDelegate: CommLevelDelegate?
     
     func requestPostData() {
         set.fs.collection(set.Table.post).order(by: "date", descending: true)
@@ -88,6 +93,7 @@ struct PostDataManager {
                
             }
         }
-        
     }
+    
+//    func requestFilteredData(_ communicationLevel: Int, )
 }

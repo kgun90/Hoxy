@@ -32,6 +32,7 @@ class HomeVC: BaseViewController, PostDataDelegate {
         layout()
         postDataManager.delegate = self
         postDataManager.requestPostData()
+        initRefresh()
        
     }
     // MARK: - Selectors
@@ -73,7 +74,22 @@ class HomeVC: BaseViewController, PostDataDelegate {
             self.dismissIndicator()
         }
     }
-    
+    func initRefresh() {
+        let refresh = UIRefreshControl()
+        refresh.addTarget(self, action: #selector(updateUI(refresh: )), for: .valueChanged)
+        refresh.attributedTitle = NSAttributedString(string: "새로고침")
+        
+        if #available(iOS 10.0, *) {
+            listTableView.refreshControl = refresh
+        } else {
+            listTableView.addSubview(refresh)
+        }
+        
+    }
+    @objc func updateUI(refresh: UIRefreshControl) {
+        refresh.endRefreshing()
+        listTableView.reloadData()
+    }
     func menuHandler(action: UIAction) {
         Swift.debugPrint("Menu handler: \(action.title)")
     }
@@ -98,6 +114,8 @@ class HomeVC: BaseViewController, PostDataDelegate {
         vc.postID = id
         self.navigationController?.pushViewController(vc, animated: true)
     }
+    
+    
 }
 extension HomeVC: UITableViewDataSource, UITableViewDelegate {
 //    func numberOfSections(in tableView: UITableView) -> Int {
