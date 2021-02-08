@@ -354,7 +354,7 @@ class PersonalSettingVC: UIViewController {
     }
     
     func moveToHome() {
-        let vc = TabBarController()
+        let vc = LocationVC()
         if let window = UIApplication.shared.windows.first {
             window.rootViewController = vc
             UIView.transition(with: window, duration: 0.3, options: .transitionCrossDissolve, animations: nil)

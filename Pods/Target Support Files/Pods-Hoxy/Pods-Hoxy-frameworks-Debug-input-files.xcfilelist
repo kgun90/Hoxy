@@ -1,4 +1,5 @@
 ${PODS_ROOT}/Target Support Files/Pods-Hoxy/Pods-Hoxy-frameworks.sh
+${BUILT_PRODUCTS_DIR}/BTNavigationDropdownMenu/BTNavigationDropdownMenu.framework
 ${BUILT_PRODUCTS_DIR}/BonsaiController/BonsaiController.framework
 ${BUILT_PRODUCTS_DIR}/BoringSSL-GRPC/openssl_grpc.framework
 ${BUILT_PRODUCTS_DIR}/FirebaseAuth/FirebaseAuth.framework

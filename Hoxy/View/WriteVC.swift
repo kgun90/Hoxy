@@ -7,7 +7,6 @@
 
 import UIKit
 import Firebase
-import CoreLocation
 
 enum writeMenu {
     case location
@@ -17,9 +16,13 @@ enum writeMenu {
     case meetingDuration
 }
 
+enum writeMode {
+    case write
+    case update
+}
 
-class WriteVC: BaseViewController, UserDataManagerDelegate {
-  
+class WriteVC: BaseViewController {
+
     // MARK: - Properties
     lazy var titleTextFieldView = UIView().then {
         $0.backgroundColor = .white
@@ -48,11 +51,29 @@ class WriteVC: BaseViewController, UserDataManagerDelegate {
     
     lazy var hashTagView = UIView().then {
         $0.backgroundColor = .white
+        
+        let iv = UIImageView()
+        iv.image = UIImage(systemName: "tag")
+        iv.tintColor = UIColor(hex: 0x7b7b7b)
+        
+        $0.addSubview(iv)
+        
+        iv.snp.makeConstraints {
+            $0.centerY.equalToSuperview()
+            $0.leading.equalToSuperview().offset(Device.widthScale(20))
+            $0.width.equalTo(Device.widthScale(24))
+            $0.height.equalTo(Device.heightScale(24))
+        }
+        
+        $0.addSubview(hashTagTextField)
+        
+        hashTagTextField.snp.makeConstraints {
+            $0.centerY.equalToSuperview()
+            $0.leading.equalToSuperview().offset(Device.widthScale(47))
+            $0.trailing.equalToSuperview().offset(Device.widthScale(-10))
+        }
     }
-    lazy var hashTagImage = UIImageView().then {
-        $0.image = UIImage(systemName: "tag")
-        $0.tintColor = UIColor(hex: 0x7b7b7b)
-    }
+
     lazy var hashTagTextField = UITextField().then {
         $0.font = .BasicFont(.medium, size: 12)
         $0.textColor = .hashtagBlue
@@ -73,6 +94,7 @@ class WriteVC: BaseViewController, UserDataManagerDelegate {
     lazy var writeDescriptionView = UIView().then {
         $0.backgroundColor = .white
     }
+    
     lazy var writeDescriptionLabel = UILabel().then {
         $0.font = .BasicFont(.light, size: 11)
         $0.textColor = UIColor(hex: 0x003bff)
@@ -83,16 +105,17 @@ class WriteVC: BaseViewController, UserDataManagerDelegate {
     
     let submitButton = BottomButton("작성하기")
     var menu = writeMenu.meetingTime
+    var mode = writeMode.write
     var postModel = PostDataModel()
-    let locationManager = CLLocationManager()
-    var currentLocation = CLLocation()
     var userDataManager = UserDataManager()
-    var currentLatLon: GeoPoint?
+    var postDataManager = PostDataManager()
+    let locs = LocationService()
+
+    var uid: String?
     var writer = ""
-    var userLocation: GeoPoint?
-    var location: [String] = []
-    var hashTag: [String] = []
     var nickName = ""
+    
+    var hashTag: [String] = []
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -100,30 +123,44 @@ class WriteVC: BaseViewController, UserDataManagerDelegate {
         showIndicator()
         userDataManager.delegate = self
         userDataManager.requestUserData()
-        getCurrentLocation()
+        
+        postDataManager.singleDelegate = self
+        if let id = uid {
+            postDataManager.requestSingleData(id)
+            mode = .update
+        }
+   
         configureTextField()
         settingUI()
         layout()
     }
+    
     override func viewWillAppear(_ animated: Bool) {
         tabBarController?.tabBar.isHidden = true
     }
     override func viewWillDisappear(_ animated: Bool) {
         tabBarController?.tabBar.isHidden = false
     }
+    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         layoutViewsBorder()
     }
+    
     // MARK: - Selectors
-    @objc func editCheckAction() {
+    @objc func editCheckAction(sender: UITextField) {
+        switch sender {
+        case titleTextField:
+            <#code#>
+        default:
+            <#code#>
+        }
         if titleTextField.text!.count > 5,
            meetingLocationView.textField.text != nil,
            headCountView.textField.text != nil,
            communicationLevelView.textField.text != nil,
            meetingDurationView.textField.text != nil,
            contentTextView.text.count > 10 {
-
             submitButton.isEnabled = true
             submitButton.backgroundColor = .mainYellow
         }
@@ -144,7 +181,6 @@ class WriteVC: BaseViewController, UserDataManagerDelegate {
         let selectedDate = dateFormatter.string(from: sender.date)
         postModel.start = sender.date
         startTimeView.textField.text = selectedDate
-    
     }
     
     @objc func submitAction() {
@@ -162,10 +198,10 @@ class WriteVC: BaseViewController, UserDataManagerDelegate {
                 self.present(vc, animated: true, completion: nil)
             }
         }
-        presentAlert(title: "글 작성하기", message: "글이 게시됩니다. \n계속하시겠습니까?",isCancelActionIncluded: true, with: ok)
         
-       
+        presentAlert(title: "글 작성하기", message: "글이 게시됩니다. \n계속하시겠습니까?",isCancelActionIncluded: true, with: ok)
     }
+    
     // MARK: - Helpers
     func layout() {
         view.addSubview(titleTextFieldView)
@@ -242,26 +278,12 @@ class WriteVC: BaseViewController, UserDataManagerDelegate {
     }
     
     func layoutHashtag(){
-        hashTagView.addSubview(hashTagImage)
-        hashTagView.addSubview(hashTagTextField)
         view.addSubview(hashTagView)
-        
         hashTagView.snp.makeConstraints {
             $0.top.equalTo(contentTextView.snp.bottom)
             $0.centerX.equalToSuperview()
             $0.width.equalToSuperview()
             $0.height.equalTo(Device.heightScale(35))
-        }
-        hashTagImage.snp.makeConstraints {
-            $0.centerY.equalToSuperview()
-            $0.leading.equalToSuperview().offset(Device.widthScale(20))
-            $0.width.equalTo(Device.widthScale(24))
-            $0.height.equalTo(Device.heightScale(24))
-        }
-        hashTagTextField.snp.makeConstraints {
-            $0.centerY.equalToSuperview()
-            $0.leading.equalTo(hashTagImage.snp.trailing).offset(Device.widthScale(7))
-            $0.trailing.equalToSuperview().offset(Device.widthScale(-10))
         }
     }
     
@@ -310,14 +332,19 @@ class WriteVC: BaseViewController, UserDataManagerDelegate {
         nicknameView.addBorder(toSide: .bottom, color: .mainBackground, borderWidth: 0.5)
     }
     
-    func nicknameSetting() {
-        nickName = "\(set.title[Int.random(in: 0 ..< set.title.count)]) \(set.nickname[Int.random(in: 0 ..< set.nickname.count)])"
-        let description = "\(writer)님은 \n이번 모임에서 \(nickName)(으)로 활동합니다."
-        nicknameLabel.attributedText = description.attributedText(withString: description, boldString: "\(nickName)", font: .BasicFont(.light, size: 13))
+    func nicknameSetting(_ nickname: String) {
+        let description = "\(writer)님은 \n이번 모임에서 \(nickname)(으)로 활동합니다."
+        nicknameLabel.attributedText = description.attributedText(withString: description, boldString: "\(nickname)", font: .BasicFont(.light, size: 13))
     }
     
     override func configureNavigationBar() {
-        navigationItem.title = "모임글 작성"
+        if ((uid?.isEmpty) != nil) {
+            navigationItem.title = "작성글 수정"
+            submitButton.titleSet("수정하기")
+        } else {
+            navigationItem.title = "모임글 작성"
+        }
+      
     }
     
     func configureTextField() {
@@ -364,7 +391,6 @@ class WriteVC: BaseViewController, UserDataManagerDelegate {
 
     }
     
-
     func dismissPickerView() {
         let button = UIBarButtonItem(title: "선택", style: .plain, target: self, action: #selector(action))
         let toolBar = UIToolbar().then {
@@ -397,10 +423,8 @@ class WriteVC: BaseViewController, UserDataManagerDelegate {
     
     func postModelModify() {
         postModel.title = titleTextField.text!
-//        postModel.communication = set.communicationDic[communicationLevelView.textField.text!]!
         postModel.content = contentTextView.text
         postModel.date = Date()
-        postModel.location = currentLatLon
         postModel.town = meetingLocationView.textField.text!
     }
     
@@ -410,7 +434,7 @@ class WriteVC: BaseViewController, UserDataManagerDelegate {
             "content": postModel.content,
             "writer": postModel.writer! as DocumentReference,
             "headcount": postModel.headcount,
-            "location": postModel.location,
+            "location": postModel.location! as GeoPoint,
             "tag": postModel.tag,
             "date": postModel.date,
             "emoji":  postModel.emoji,
@@ -432,52 +456,26 @@ class WriteVC: BaseViewController, UserDataManagerDelegate {
         dismissIndicator()
     }
     
-    func getCurrentLocation() {
-        locationManager.delegate = self
-        locationManager.requestWhenInUseAuthorization()
-        locationManager.desiredAccuracy = kCLLocationAccuracyBest
-        locationManager.startUpdatingLocation()
-        
-        if CLLocationManager.locationServicesEnabled() {
-            locationManager.requestLocation()
-        }
-    }
-    
-    func getLocationName() {
-        let geocode = CLGeocoder()
-        geocode.reverseGeocodeLocation(currentLocation) { (placemark, error) in
-            guard
-                let mark = placemark,
-                let town = mark.first?.subLocality
-            else {
-                return
-            }
-            if self.location[0] != town {
-                self.location.insert(town, at: 0)
-            }
-            
-            DispatchQueue.main.async {
-                self.view.reloadInputViews()
-            }
-           
-        }
-    }
-    
-    func getUserData(_ userData: MemberModel) {
-        writer = userData.email
-        location.append(userData.town)
-        userLocation = userData.location
-        postModel.writer = set.fs.collection(set.Table.member).document(userData.uid)
-        nicknameSetting()
-        dismissIndicator()
-    }
-    
     func hashTagSet() {
-        if let original = hashTagTextField.text {
+        if !hashTagTextField.text!.isEmpty {
+            let original = hashTagTextField.text!
             let removeHash = original.replacingOccurrences(of: "#", with: "", options: NSString.CompareOptions.literal, range: nil).components(separatedBy: " ")
             hashTag = removeHash
-            hashTag.insert(communicationLevelView.textField.text ?? "", at: 0)
-            postModel.tag = hashTag
+        }
+        hashTag.insert(communicationLevelView.textField.text ?? "", at: 0)
+        postModel.tag = hashTag
+    }
+    
+    func updateSetting(_ data: PostDataModel) {
+        if mode == .update {
+            titleTextField.text = data.title
+            meetingLocationView.textField.isEnabled = false
+            meetingLocationView.textField.text = data.town
+            headCountView.textField.text = String(data.headcount)
+            communicationLevelView.textField.text = data.tag[0]
+            meetingDurationView.textField.text = "\(data.duration)분"
+            contentTextView.text = data.content
+            
         }
     }
 
@@ -485,21 +483,32 @@ class WriteVC: BaseViewController, UserDataManagerDelegate {
 
 extension WriteVC: UITextFieldDelegate {
     func textFieldDidBeginEditing(_ textField: UITextField) {
-        if textField.text?.isEmpty != nil {
+        if textField.text != nil {
             switch textField {
             case meetingLocationView.textField:
-                meetingLocationView.textField.text = location[0]
+                if meetingLocationView.textField.text == locs.towns[0] || meetingLocationView.textField.text?.isEmpty == true {
+                    meetingLocationView.textField.text = locs.towns[0]
+                    postModel.location = GeoPoint(latitude: LocationService.currentLocation!.coordinate.latitude, longitude: LocationService.currentLocation!.coordinate.longitude)
+                }
+                
             case headCountView.textField:
-                headCountView.textField.text = String(set.headCount[0])
+                if headCountView.textField.text?.isEmpty == true {
+                    headCountView.textField.text = String(set.headCount[0])
+                }
             case communicationLevelView.textField:
-                communicationLevelView.textField.text = set.communicationLevel[0]
-                let emojiRand = Int.random(in: 0...2)
-                postModel.emoji = set.communicationEmoji[0][emojiRand]
+                if communicationLevelView.textField.text?.isEmpty == true {
+                    communicationLevelView.textField.text = set.communicationLevel[0]
+                    let emojiRand = Int.random(in: 0...2)
+                    postModel.emoji = set.communicationEmoji[0][emojiRand]
+                }
+               
             case meetingDurationView.textField:
-                meetingDurationView.textField.text = set.meetingDuration[0]
-                postModel.duration = 30
+                if meetingDurationView.textField.text?.isEmpty == true {
+                    meetingDurationView.textField.text = set.meetingDuration[0]
+                    postModel.duration = 30
+                }
             default:
-                print("please")
+                return
             }
         }
     }
@@ -514,7 +523,7 @@ extension WriteVC: UITextFieldDelegate {
         case meetingDurationView.textField:
             menu = .meetingDuration
         default:
-            print("wrong")
+            return true
         }
         return true
     }
@@ -528,7 +537,7 @@ extension WriteVC: UIPickerViewDelegate, UIPickerViewDataSource {
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         switch menu {
         case .location:
-            return location.count
+            return locs.towns.count
         case .headCount:
             return set.headCount.count
         case .communicationLevel:
@@ -544,7 +553,7 @@ extension WriteVC: UIPickerViewDelegate, UIPickerViewDataSource {
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         switch menu {
         case .location:
-            return location[row]
+            return locs.towns[row]
         case .headCount:
             return String(set.headCount[row])
         case .communicationLevel:
@@ -560,13 +569,9 @@ extension WriteVC: UIPickerViewDelegate, UIPickerViewDataSource {
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         switch menu {
         case .location:
-            meetingLocationView.textField.text = location[row]
-//            postModel.location =.
-            if row == 0 {
-                postModel.location = currentLatLon
-            } else {
-                postModel.location = userLocation
-            }
+            meetingLocationView.textField.text = locs.towns[row]
+            postModel.location = GeoPoint(latitude: locs.locations[row].coordinate.latitude, longitude: locs.locations[row].coordinate.longitude)
+           
         case .headCount:
             headCountView.textField.text = String(set.headCount[row])
             postModel.headcount = set.headCount[row]
@@ -602,16 +607,34 @@ extension WriteVC: UITextViewDelegate {
 }
 
 
-extension WriteVC: CLLocationManagerDelegate {
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        if let location = locations.last {
-            locationManager.stopUpdatingLocation()
-            currentLocation = location
-            currentLatLon = GeoPoint(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
-            getLocationName()
+extension WriteVC: UserDataManagerDelegate {
+    func getUserData(_ userData: MemberModel) {
+        writer = userData.email
+        postModel.writer = set.fs.collection(set.Table.member).document(userData.uid)
+     
+        if mode == .write {
+            let name = "\(set.title[Int.random(in: 0 ..< set.title.count)]) \(set.nickname[Int.random(in: 0 ..< set.nickname.count)])"
+            nickName = name
+            nicknameSetting(name)
         }
+        dismissIndicator()
     }
-    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        print(error.localizedDescription)
+}
+
+extension WriteVC: SingleDataDelegate {
+    func getSingleData(_ postData: PostDataModel) {
+        updateSetting(postData)
+        postData.chat?.getDocument(completion: { (snapshot, error) in
+            if let e = error {
+                print(e.localizedDescription)
+            } else {
+                if let data = snapshot?.data() {
+                    let member = data["member"] as! [String : String]
+                    let nickname = member[self.postModel.writer!.documentID]!
+                    self.nicknameSetting(nickname)
+                }
+            }
+        })
+     
     }
 }

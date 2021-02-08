@@ -7,6 +7,8 @@
 
 import UIKit
 import Firebase
+import CoreLocation
+import BTNavigationDropdownMenu
 
 class HomeVC: BaseViewController, PostDataDelegate {
 
@@ -14,6 +16,7 @@ class HomeVC: BaseViewController, PostDataDelegate {
     lazy var listTableView = UITableView().then {
         $0.backgroundColor = .mainBackground
     }
+    
     lazy var writeButton = UIButton().then {
         $0.frame = CGRect(x: 0, y: 0, width: Device.widthScale(55), height:  Device.heightScale(55))
         $0.setImage(UIImage(systemName: "plus"), for: .normal)
@@ -22,24 +25,33 @@ class HomeVC: BaseViewController, PostDataDelegate {
         $0.tintColor = .white
         $0.addTarget(self, action: #selector(moveToWrite), for: .touchUpInside)
     }
+    
     var postDataManager = PostDataManager()
     var posts: [PostDataModel] = []
+    var id: String?
+//    var location = CLLocation()
+    
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         showIndicator()
-        setting()
-        layout()
         postDataManager.delegate = self
         postDataManager.requestPostData()
+        setting()
+        layout()
+        dropdownMenu()
         initRefresh()
        
     }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+         }
     // MARK: - Selectors
     @objc func moveToWrite() {
         let vc = WriteVC()
         self.navigationController?.pushViewController(vc, animated: true)
     }
+    
     // MARK: - Logics
     func setting() {
         listTableView.delegate = self
@@ -47,6 +59,40 @@ class HomeVC: BaseViewController, PostDataDelegate {
         listTableView.register(UINib(nibName: "HomeTableViewCell", bundle: nil), forCellReuseIdentifier: "HomeTableViewCell")
         listTableView.tableFooterView = UIView()
     }
+    
+    func dropdownMenu() {
+        let menuView = BTNavigationDropdownMenu(title: BTTitle.index(0), items: [LocationService.currentTown, LocationService.userTown])
+        self.navigationItem.titleView = menuView
+     
+        menuView.cellBackgroundColor = .white
+        menuView.arrowTintColor = .black
+        menuView.checkMarkImage.withTintColor(.black)
+        
+        menuView.didSelectItemAtIndexHandler = {[weak self] (indexPath: Int) -> () in
+            self!.locationChangeAction(indexPath)
+        }
+    }
+    
+    func locationChangeAction(_ index: Int) {
+        showIndicator()
+        listTableView.reloadData()
+        if index == 0 {
+            posts = posts.filter ({ (post: PostDataModel) -> Bool in
+                let location = CLLocation(latitude: post.location!.latitude, longitude: post.location!.longitude)
+                return location.distance(from: LocationService.currentLocation!) < 5000
+            })
+        } else {
+            posts = posts.filter ({ (post: PostDataModel) -> Bool in
+                let location = CLLocation(latitude: post.location!.latitude, longitude: post.location!.longitude)
+                return location.distance(from: LocationService.userLocation!) < 5000
+            })
+        }
+  
+
+        listTableView.reloadData()
+        dismissIndicator()
+    }
+    
     // MARK: - Helpers
     func layout() {
         view.addSubview(listTableView)
@@ -69,15 +115,14 @@ class HomeVC: BaseViewController, PostDataDelegate {
     
     func getPostData(_ postData: [PostDataModel]) {
         posts = postData
-        DispatchQueue.main.async {
-            self.listTableView.reloadData()
-            self.dismissIndicator()
-        }
+        self.listTableView.reloadData()
+        self.dismissIndicator()
     }
+    
     func initRefresh() {
         let refresh = UIRefreshControl()
         refresh.addTarget(self, action: #selector(updateUI(refresh: )), for: .valueChanged)
-        refresh.attributedTitle = NSAttributedString(string: "새로고침")
+        refresh.attributedTitle = NSAttributedString(string: "당겨서 새로고침")
         
         if #available(iOS 10.0, *) {
             listTableView.refreshControl = refresh
@@ -86,27 +131,10 @@ class HomeVC: BaseViewController, PostDataDelegate {
         }
         
     }
+    
     @objc func updateUI(refresh: UIRefreshControl) {
         refresh.endRefreshing()
         listTableView.reloadData()
-    }
-    func menuHandler(action: UIAction) {
-        Swift.debugPrint("Menu handler: \(action.title)")
-    }
-    
-    override func configureNavigationBar() {
-        super.configureNavigationBar()
-        let barButtonMenu = UIMenu(title: "", children: [
-            UIAction(title: NSLocalizedString("Copy", comment: ""), image: UIImage(systemName: "doc.on.doc"), handler: menuHandler),
-            UIAction(title: NSLocalizedString("Rename", comment: ""), image: UIImage(systemName: "pencil"), handler: menuHandler),
-            UIAction(title: NSLocalizedString("Duplicate", comment: ""), image: UIImage(systemName: "plus.square.on.square"), handler: menuHandler),
-            UIAction(title: NSLocalizedString("Move", comment: ""), image: UIImage(systemName: "folder"), handler: menuHandler)
-        ])
-        if #available(iOS 14.0, *) {
-            navigationController?.navigationItem.leftBarButtonItem?.menu = barButtonMenu
-        } else {
-            // Fallback on earlier versions
-        }
     }
     
     func readPost(_ id: String) {
@@ -118,22 +146,22 @@ class HomeVC: BaseViewController, PostDataDelegate {
     
 }
 extension HomeVC: UITableViewDataSource, UITableViewDelegate {
-//    func numberOfSections(in tableView: UITableView) -> Int {
-//        return posts.count
-//    }
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return posts.count
+    }
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 1
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = self.listTableView.dequeueReusableCell(withIdentifier: "HomeTableViewCell", for: indexPath as IndexPath) as! HomeTableViewCell
-        cell.emojiLable.text = posts[indexPath.row].emoji
-        cell.titleLabel.text = posts[indexPath.row].title
-        cell.locationLabel.text = posts[indexPath.row].town
-        cell.writeTimeLabel.text = posts[indexPath.row].date.relativeTime_abbreviated
-        cell.viewsLabel.text = String(posts[indexPath.row].view)
+        cell.emojiLable.text = posts[indexPath.section].emoji
+        cell.titleLabel.text = posts[indexPath.section].title
+        cell.locationLabel.text = posts[indexPath.section].town
+        cell.writeTimeLabel.text = posts[indexPath.section].date.relativeTime_abbreviated
+        cell.viewsLabel.text = String(posts[indexPath.section].view)
 //        cell.meetingTimeLabel.text = posts[indexPath.section].start
-        cell.attenderCountLabel.text = String(posts[indexPath.row].headcount)
+        cell.attenderCountLabel.text = String(posts[indexPath.section].headcount)
         return cell
     }
     
@@ -141,7 +169,11 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
         return Device.heightScale(100)
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        readPost(posts[indexPath.row].id)
+        readPost(posts[indexPath.section].id)
+        id = posts[indexPath.section].id
+        set.fs.collection(set.Table.post).document(posts[indexPath.section].id).updateData([
+            "view": posts[indexPath.section].view + 1
+        ])
     }
     
     

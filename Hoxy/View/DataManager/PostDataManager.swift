@@ -27,7 +27,7 @@ struct PostDataManager {
     
     func requestPostData() {
         set.fs.collection(set.Table.post).order(by: "date", descending: true)
-            .getDocuments { (querySanpshot, error) in
+            .addSnapshotListener { (querySanpshot, error ) in
                 var postList: [PostDataModel] = []
                 if let e = error {
                     print(e.localizedDescription)
@@ -50,9 +50,9 @@ struct PostDataManager {
                                 start: startTime.dateValue(),
                                 duration: data["duration"] as! Int,
                                 town: data["town"] as! String,
-                                location: data["location"] as! GeoPoint,
+                                location: data["location"] as? GeoPoint,
                                 view: data["view"] as! Int,
-                                chat: data["chat"] as! DocumentReference
+                                chat: data["chat"] as? DocumentReference
                             )
                             postList.append(postData)
                            
@@ -61,10 +61,13 @@ struct PostDataManager {
                     }
                 }
             }
+        
     }
     
     func requestSingleData(_ id: String) {
-        set.fs.collection(set.Table.post).document(id).getDocument { (snapshot, error) in
+        set.fs.collection(set.Table.post).document(id)
+//            .getDocument { (snapshot, error ) in
+            .addSnapshotListener { (snapshot, error ) in
             if let e = error {
                 print(e.localizedDescription)
             } else {

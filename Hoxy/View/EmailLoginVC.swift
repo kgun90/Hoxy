@@ -27,12 +27,10 @@ class EmailLoginVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-       
+        loginCheck()
         buttonTarget()
         layout()
     }
-    
-   
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
@@ -63,7 +61,7 @@ class EmailLoginVC: UIViewController {
                     print(e.localizedDescription)
                     self!.dismissIndicator()
                 } else {
-                    let vc = TabBarController()
+                    let vc = LocationVC()
                     if let window = UIApplication.shared.windows.first {
                         window.rootViewController = vc
                         UIView.transition(with: window, duration: 0.3, options: .transitionCrossDissolve, animations: nil)
@@ -76,6 +74,18 @@ class EmailLoginVC: UIViewController {
             }
         }
         
+    }
+    func loginCheck() {
+        if Auth.auth().currentUser?.uid != nil {
+            let vc = LocationVC()
+            if let window = UIApplication.shared.windows.first {
+                window.rootViewController = vc
+                UIView.transition(with: window, duration: 0.3, options: .transitionCrossDissolve, animations: nil)
+            } else {
+                vc.modalPresentationStyle = .overFullScreen
+                self.present(vc, animated: true, completion: nil)
+            }
+        }
     }
     
     // MARK: - Helpers

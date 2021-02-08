@@ -11,6 +11,8 @@
 		EB11F0CD25C5367100EC9F6F /* UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB11F0CC25C5367100EC9F6F /* UIView.swift */; };
 		EB11F0D125C54E9B00EC9F6F /* IndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB11F0D025C54E9B00EC9F6F /* IndicatorView.swift */; };
 		EB11F0D625C55EB200EC9F6F /* EmailLoginVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB11F0D525C55EB200EC9F6F /* EmailLoginVC.swift */; };
+		EB128D6025CFA55D004C0A66 /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB128D5F25CFA55D004C0A66 /* LocationService.swift */; };
+		EB128D6325CFA6BD004C0A66 /* LocationVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB128D6225CFA6BD004C0A66 /* LocationVC.swift */; };
 		EB25DC8825B9C1E5006F4008 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB25DC8725B9C1E5006F4008 /* AppDelegate.swift */; };
 		EB25DC8A25B9C1E5006F4008 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB25DC8925B9C1E5006F4008 /* SceneDelegate.swift */; };
 		EB25DC8C25B9C1E5006F4008 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB25DC8B25B9C1E5006F4008 /* ViewController.swift */; };
@@ -29,6 +31,7 @@
 		EB38A75125C07E1900516515 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB38A75025C07E1900516515 /* String.swift */; };
 		EB38A76F25C12AB500516515 /* HomeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB38A76D25C12AB500516515 /* HomeTableViewCell.swift */; };
 		EB38A77025C12AB500516515 /* HomeTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = EB38A76E25C12AB500516515 /* HomeTableViewCell.xib */; };
+		EB43F79425D1BA3700AFED54 /* PostViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB43F79325D1BA3700AFED54 /* PostViewModel.swift */; };
 		EB5D8E5825C70FB7003D957C /* LoginButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5D8E5725C70FB7003D957C /* LoginButton.swift */; };
 		EB5D8E5C25C7168C003D957C /* WriteVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5D8E5B25C7168C003D957C /* WriteVC.swift */; };
 		EB5D8E6025C7172D003D957C /* WriteOptionItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5D8E5F25C7172D003D957C /* WriteOptionItem.swift */; };
@@ -60,6 +63,8 @@
 		EB11F0CC25C5367100EC9F6F /* UIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIView.swift; sourceTree = "<group>"; };
 		EB11F0D025C54E9B00EC9F6F /* IndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IndicatorView.swift; sourceTree = "<group>"; };
 		EB11F0D525C55EB200EC9F6F /* EmailLoginVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailLoginVC.swift; sourceTree = "<group>"; };
+		EB128D5F25CFA55D004C0A66 /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
+		EB128D6225CFA6BD004C0A66 /* LocationVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationVC.swift; sourceTree = "<group>"; };
 		EB25DC8425B9C1E5006F4008 /* Hoxy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Hoxy.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB25DC8725B9C1E5006F4008 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		EB25DC8925B9C1E5006F4008 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -80,6 +85,7 @@
 		EB38A75025C07E1900516515 /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		EB38A76D25C12AB500516515 /* HomeTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTableViewCell.swift; sourceTree = "<group>"; };
 		EB38A76E25C12AB500516515 /* HomeTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HomeTableViewCell.xib; sourceTree = "<group>"; };
+		EB43F79325D1BA3700AFED54 /* PostViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostViewModel.swift; sourceTree = "<group>"; };
 		EB5D8E5725C70FB7003D957C /* LoginButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginButton.swift; sourceTree = "<group>"; };
 		EB5D8E5B25C7168C003D957C /* WriteVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WriteVC.swift; sourceTree = "<group>"; };
 		EB5D8E5F25C7172D003D957C /* WriteOptionItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WriteOptionItem.swift; sourceTree = "<group>"; };
@@ -161,8 +167,8 @@
 				EBDA507825BC052B00C6A122 /* CommonClass */,
 				EBDA507725BC051D00C6A122 /* Extension */,
 				EB25DC9F25BB2C87006F4008 /* Model */,
-				EB25DCA025BB2C97006F4008 /* View */,
 				EB25DCA125BB2C9D006F4008 /* ViewModel */,
+				EB25DCA025BB2C97006F4008 /* View */,
 				EB25DC8B25B9C1E5006F4008 /* ViewController.swift */,
 				EB25DC8D25B9C1E5006F4008 /* Main.storyboard */,
 				EB25DC9025B9C1E6006F4008 /* Assets.xcassets */,
@@ -192,6 +198,7 @@
 				EB11F0D525C55EB200EC9F6F /* EmailLoginVC.swift */,
 				EB38A71325BD707100516515 /* JoinVC.swift */,
 				EB38A72825BE72F800516515 /* PersonalSettingVC.swift */,
+				EB128D6225CFA6BD004C0A66 /* LocationVC.swift */,
 				EBDA504D25BB37C300C6A122 /* TabBarController.swift */,
 				EBDA506825BC03BB00C6A122 /* HomeVC.swift */,
 				EB5D8E5B25C7168C003D957C /* WriteVC.swift */,
@@ -206,6 +213,7 @@
 		EB25DCA125BB2C9D006F4008 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
+				EB43F79325D1BA3700AFED54 /* PostViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -257,6 +265,7 @@
 				EB11F0D025C54E9B00EC9F6F /* IndicatorView.swift */,
 				EB5D8E5725C70FB7003D957C /* LoginButton.swift */,
 				EB5D8E5F25C7172D003D957C /* WriteOptionItem.swift */,
+				EB128D5F25CFA55D004C0A66 /* LocationService.swift */,
 			);
 			path = CommonClass;
 			sourceTree = "<group>";
@@ -379,6 +388,8 @@
 			files = (
 				EBD9F3F925C3C61F004E18F1 /* UIViewController.swift in Sources */,
 				EB5D8E5825C70FB7003D957C /* LoginButton.swift in Sources */,
+				EB128D6025CFA55D004C0A66 /* LocationService.swift in Sources */,
+				EB128D6325CFA6BD004C0A66 /* LocationVC.swift in Sources */,
 				EB5D8E5C25C7168C003D957C /* WriteVC.swift in Sources */,
 				EB5D8E7225C7D629003D957C /* PostDataModel.swift in Sources */,
 				EB5D8E7825C7E999003D957C /* NSMutableAttrubutedString.swift in Sources */,
@@ -411,6 +422,7 @@
 				EB5D8E6B25C7D3E5003D957C /* PostDataManager.swift in Sources */,
 				EB87AB8725BC1B0A00DF3BBB /* UIFont.swift in Sources */,
 				EB5D8E8625CB15B6003D957C /* UserDataManager.swift in Sources */,
+				EB43F79425D1BA3700AFED54 /* PostViewModel.swift in Sources */,
 				EBC658A825C1AA2400CF9AA5 /* LoginModel.swift in Sources */,
 				EBDA507425BC03DC00C6A122 /* MyPageVC.swift in Sources */,
 				EBDA507A25BC054100C6A122 /* UIColor.swift in Sources */,

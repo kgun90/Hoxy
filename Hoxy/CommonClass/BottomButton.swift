@@ -11,12 +11,15 @@ class BottomButton: UIButton {
     init(_ buttonTitle: String,
          _ buttonBackgroundColor: UIColor = #colorLiteral(red: 0.5058823529, green: 0.5058823529, blue: 0.5058823529, alpha: 1)) {
         super.init(frame: .zero)
-        setTitle(buttonTitle, for: .normal)
+        titleSet(buttonTitle)
         titleLabel?.font = .BasicFont(.semiBold, size: 17)
         setTitleColor(.black, for: .normal)
         backgroundColor = buttonBackgroundColor
         titleEdgeInsets = UIEdgeInsets(top: 0,left: 0,bottom: 15,right: 0)
         
+    }
+    func titleSet(_ title: String) {
+        setTitle(title, for: .normal)
     }
     
     required init?(coder: NSCoder) {

@@ -10,6 +10,7 @@ target 'Hoxy' do
   pod 'Firebase/Firestore'
   pod 'SnapKit'
   pod 'Then'
+  pod 'BTNavigationDropdownMenu'
   # Pods for Hoxy
 
 end

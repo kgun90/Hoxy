@@ -12,11 +12,17 @@ class WriteOptionItem: UIView {
         $0.font = .BasicFont(.semiBold, size: 16)
         $0.tintColor = .clear
     }
-    init (placeholder: String) {
+    init (placeholder: String ) {
         super.init(frame: .zero)
         backgroundColor = .white
-        textField.attributedPlaceholder = NSAttributedString(string: "\(placeholder) >", attributes: [NSAttributedString.Key.foregroundColor: UIColor.black])
+        labelSetting(placeholder)
+    }
+    
+    func labelSetting(_ placeHolder: String) {
+        
+        textField.attributedPlaceholder = NSAttributedString(string: "\(placeHolder) >", attributes: [NSAttributedString.Key.foregroundColor: UIColor.black])
  
+        
         addSubview(textField)
         textField.snp.makeConstraints {
             $0.centerY.equalToSuperview()

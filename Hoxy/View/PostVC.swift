@@ -151,12 +151,6 @@ class PostVC: BaseViewController, SingleDataDelegate, PostDataDelegate {
         $0.text = "예정시간"
     }
     
-    lazy var bottomMeetingLocationLabel = UILabel().then {
-        $0.font = .BasicFont(.medium, size: 15)
-        $0.textColor = UIColor(hex: 0x5a5a5a)
-        $0.text = "000동"
-    }
-    
     lazy var bottomWriterInfoLabel = UILabel().then {
         $0.font = .BasicFont(.semiBold, size: 16)
         $0.textColor = UIColor(hex: 0x2f2f2f)
@@ -174,6 +168,7 @@ class PostVC: BaseViewController, SingleDataDelegate, PostDataDelegate {
     var postID = PostDataModel().id
     var postDataManager = PostDataManager()
     var posts: [PostDataModel] = []
+    var currentPost = PostDataModel()
     var commLevel = 0
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -209,13 +204,6 @@ class PostVC: BaseViewController, SingleDataDelegate, PostDataDelegate {
     // MARK: - Helpers
     override func configureUI() {
         super.configureUI()
-        let moreButton = UIBarButtonItem().then {
-            $0.image = UIImage(systemName: "ellipsis")
-            $0.target = self
-            $0.action = #selector(barButtonAction)
-        }
-  
-        navigationItem.rightBarButtonItem = moreButton
         
         let backButton = UIBarButtonItem().then {
             $0.image = UIImage(systemName: "arrow.left")
@@ -227,9 +215,42 @@ class PostVC: BaseViewController, SingleDataDelegate, PostDataDelegate {
         navigationItem.backBarButtonItem = backButton
         
     }
+    
     @objc func barButtonAction() {
-        let ok = UIAlertAction(title: "test", style: .default, handler: nil)
-        presentAlert(title: "", isCancelActionIncluded: true, preferredStyle: .actionSheet, with: ok)
+        let update = UIAlertAction(title: "수정", style: .default) { (action) in
+            self.updateAction()
+        }
+        let delete = UIAlertAction(title: "삭제", style: .default) { (action) in
+            self.deleteAction()
+        }
+        
+        presentAlert(isCancelActionIncluded: true, preferredStyle: .actionSheet, with:update, delete)
+        
+    }
+    func updateAction() {
+    
+        let vc = WriteVC()
+        vc.uid = postID
+        self.navigationController?.pushViewController(vc, animated: true)
+        
+    }
+    
+    func deleteAction() {
+        let ok = UIAlertAction(title: "예", style: .default) { (action) in
+            print("delete")
+            
+            self.currentPost.chat?.delete()
+            set.fs.collection(set.Table.post).document(self.currentPost.id).delete()
+            let vc = TabBarController()
+            if let window = UIApplication.shared.windows.first {
+                window.rootViewController = vc
+                UIView.transition(with: window, duration: 0.3, options: .transitionCrossDissolve, animations: nil)
+            } else {
+                vc.modalPresentationStyle = .overFullScreen
+                self.present(vc, animated: true, completion: nil)
+            }
+        }
+        presentAlert(title: "삭제하기", message: "현재 글을 삭제하시겠습니까?", isCancelActionIncluded: true, with: ok)
     }
     
     @objc func backButtonAction() {
@@ -396,7 +417,6 @@ class PostVC: BaseViewController, SingleDataDelegate, PostDataDelegate {
     func layoutBottomView() {
         bottomView.addSubview(bottomMeetingTimeLabel)
         bottomView.addSubview(bottomWriterInfoLabel)
-        bottomView.addSubview(bottomMeetingLocationLabel)
         bottomView.addSubview(bottomSubmitButton)
         view.addSubview(bottomView)
         
@@ -422,13 +442,11 @@ class PostVC: BaseViewController, SingleDataDelegate, PostDataDelegate {
             $0.top.equalTo(bottomMeetingTimeLabel.snp.bottom).offset(Device.heightScale(-1))
             $0.trailing.equalTo(bottomMeetingTimeLabel.snp.trailing)
         }
-        bottomMeetingLocationLabel.snp.makeConstraints {
-            $0.centerY.equalTo(bottomWriterInfoLabel.snp.centerY)
-            $0.trailing.equalTo(bottomWriterInfoLabel.snp.leading).offset(Device.widthScale(Device.widthScale(-4)))
-        }
     }
     
     func getSingleData(_ postData: PostDataModel) {
+ 
+        currentPost = postData
         navigationItem.title = postData.title
         commLevel = postData.communication
         print(postData.communication)
@@ -446,8 +464,22 @@ class PostVC: BaseViewController, SingleDataDelegate, PostDataDelegate {
         hashtagLabel.text = postData.tag[0]
         
         bottomMeetingTimeLabel.text = getBottomTime(postData.start)
+ 
         postDataManager.requestPostData()
+        addNaviButton()
         dismissIndicator()
+    }
+    
+    func addNaviButton() {
+        let moreButton = UIBarButtonItem().then {
+            $0.image = UIImage(systemName: "ellipsis")
+            $0.target = self
+            $0.action = #selector(barButtonAction)
+        }
+   
+        if currentPost.writer?.documentID == Auth.auth().currentUser?.uid {
+            navigationItem.rightBarButtonItem = moreButton
+        }
     }
     
     func getPostData(_ postData: [PostDataModel]) {
@@ -499,10 +531,7 @@ class PostVC: BaseViewController, SingleDataDelegate, PostDataDelegate {
                     self.writerLocationLabel.text = location
                     let count = data["participation"] as! Int
                     self.writerAttendCountLabel.text = "총 모임참여 \(count)회"
-                    
                     self.gradeButton.getGrade(.tableCell,  data["birth"] as! Int)
-                    self.bottomMeetingLocationLabel.text = location
-
                 }
               
             }
