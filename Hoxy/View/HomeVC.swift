@@ -160,8 +160,30 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
         cell.locationLabel.text = posts[indexPath.section].town
         cell.writeTimeLabel.text = posts[indexPath.section].date.relativeTime_abbreviated
         cell.viewsLabel.text = String(posts[indexPath.section].view)
-//        cell.meetingTimeLabel.text = posts[indexPath.section].start
-        cell.attenderCountLabel.text = String(posts[indexPath.section].headcount)
+        cell.meetingTimeLabel.text = getMeetingTime(posts[indexPath.section].start, posts[indexPath.section].duration)
+       
+        posts[indexPath.section].writer?.addSnapshotListener({ (snapshot, error) in
+            if let e = error {
+                print(e.localizedDescription)
+            } else {
+                if let data = snapshot?.data() {
+                    let birth = data["birth"] as! Int
+                    cell.gradeButton.getGrade(.tableCell, birth)
+                }
+            }
+        })
+
+        posts[indexPath.section].chat?.addSnapshotListener({ (snapshot, error) in
+            if let e = error {
+                print(e.localizedDescription)
+            } else {
+                if let data = snapshot?.data() {
+                    let memberCount = (data["member"] as! Dictionary<String, Any>).count
+                    cell.attenderCountLabel.text = " \(memberCount)/\(self.posts[indexPath.section].headcount)"
+                }
+            }
+        })
+
         return cell
     }
     

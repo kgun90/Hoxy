@@ -93,6 +93,15 @@ extension String {
         attributedString.addAttributes(boldFontAttribute, range: range)
         return attributedString
     }
+    
+    func attributedText(withString string: String, coloredString: String, font: UIFont) -> NSAttributedString {
+        let attributedString = NSMutableAttributedString(string: string,
+                                                     attributes: [NSAttributedString.Key.font: font])
+        let colorFontAttribute: [NSAttributedString.Key: Any] = [.foregroundColor: UIColor(hex: 0x707070)]
+        let range = (string as NSString).range(of: coloredString)
+        attributedString.addAttributes(colorFontAttribute, range: range)
+        return attributedString
+    }
 }
  
 

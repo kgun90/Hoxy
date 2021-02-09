@@ -7,6 +7,7 @@
 
 import UIKit
 import SnapKit
+import Firebase
 
 extension UIViewController {
     // MARK: 빈 화면을 눌렀을 때 키보드가 내려가도록 처리
@@ -101,4 +102,38 @@ extension UIViewController {
     @objc func dismissIndicator() {
         IndicatorView.shared.dismiss()
     }
+    
+    func getMeetingTime(_ start: Date, _ duration: Int) -> String{
+        let startTimeFormat = DateFormatter().then {
+            $0.dateFormat = "MM.dd hh시 mm분"
+        }
+        let startTime = startTimeFormat.string(from: start)
+        
+        let endTimeFormat = DateFormatter().then {
+            $0.dateFormat = "hh시 mm분"
+        }
+        let end = start.addingTimeInterval(TimeInterval(duration * 60))
+        let endTime = endTimeFormat.string(from: end)
+        let timedifference = Calendar.current.dateComponents([.hour, .minute], from: start, to: end)
+        
+        if let hour = timedifference.hour, let minute = timedifference.minute {
+            return  "\(startTime)~\(endTime) \(hour)시간 \(minute)분"
+        } else {
+            return ""
+        }
+    }
+    
+//    func headCount(_ chat: DocumentReference, _ headcount: Int) -> String {
+//        chat.addSnapshotListener { (snapshot, error) in
+//            if let e = error {
+//                print(e.localizedDescription)
+//            } else {
+//                if let data = snapshot?.data() {
+//                    let count = (data["member"] as! Dictionary<String, Any>).count
+//                }
+//            }
+//        }
+//        
+//        return ""
+//    }
 }

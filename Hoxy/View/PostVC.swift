@@ -479,26 +479,6 @@ class PostVC: BaseViewController, SingleDataDelegate, PostDataDelegate {
         listTableView.reloadData()
     }
     
-    func getMeetingTime(_ start: Date, _ duration: Int) -> String{
-        let startTimeFormat = DateFormatter().then {
-            $0.dateFormat = "MM.dd hh시 mm분"
-        }
-        let startTime = startTimeFormat.string(from: start)
-        
-        let endTimeFormat = DateFormatter().then {
-            $0.dateFormat = "hh시 mm분"
-        }
-        let end = start.addingTimeInterval(TimeInterval(duration * 60))
-        let endTime = endTimeFormat.string(from: end)
-        let timedifference = Calendar.current.dateComponents([.hour, .minute], from: start, to: end)
-        
-        if let hour = timedifference.hour, let minute = timedifference.minute {
-            return  "\(startTime)~\(endTime) \(hour)시간 \(minute)분"
-        } else {
-            return ""
-        }
-        
-    }
     
     func getBottomTime(_ start: Date) -> String {
         let bottomTimeFormat = DateFormatter().then {

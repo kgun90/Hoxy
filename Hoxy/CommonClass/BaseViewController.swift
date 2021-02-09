@@ -34,5 +34,7 @@ class BaseViewController: UIViewController {
         
         navigationController?.navigationBar.tintColor = .black
         navigationController?.navigationBar.isTranslucent = true
+        
+        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
     }
 }

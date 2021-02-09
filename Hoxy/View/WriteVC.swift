@@ -472,13 +472,13 @@ class WriteVC: BaseViewController {
             "content": postModel.content,
             "headcount": postModel.headcount,
             "location": postModel.location! as GeoPoint,
-            "tag": postModel.tag,
+//            "tag": postModel.tag,
             "date": postModel.date,
             "emoji":  postModel.emoji,
             "communication":  postModel.communication,
             "start": postModel.start,
             "duration":  postModel.duration,
-            "town":  postModel.town    
+            "town":  postModel.town
         ])
     }
     
@@ -511,7 +511,7 @@ class WriteVC: BaseViewController {
             
             updateStartTime(data.start)
             
-            meetingDurationView.textField.text = "\(data.duration)분"
+            meetingDurationView.textField.text = "\(data.duration / 60)시간 \(data.duration % 60)분"
             postModel.duration = data.duration
             
             contentTextView.text = data.content

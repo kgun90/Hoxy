@@ -38,6 +38,10 @@ class HomeTableViewCell: UITableViewCell {
         $0.font = .BasicFont(.medium, size: 12)
         $0.textColor = .labelGray
     }
+    lazy var viewIconImage = UIImageView().then {
+        $0.image = UIImage(systemName: "eye")
+        $0.tintColor = .labelGray
+    }
      lazy var viewsLabel = UILabel().then {
         $0.text = "􀋭 191"
         $0.font = .BasicFont(.medium, size: 12)
@@ -86,6 +90,7 @@ class HomeTableViewCell: UITableViewCell {
         contentView.addSubview(gradeButton)
         contentView.addSubview(locationLabel)
         contentView.addSubview(writeTimeLabel)
+        contentView.addSubview(viewIconImage)
         contentView.addSubview(viewsLabel)
         contentView.addSubview(hashTagLabel)
         attenderCountView.addSubview(attenderCountLabel)
@@ -124,9 +129,16 @@ class HomeTableViewCell: UITableViewCell {
             $0.leading.equalTo(locationLabel.snp.trailing).offset(Device.widthScale(2))
         }
         
-        viewsLabel.snp.makeConstraints {
-            $0.top.equalTo(locationLabel.snp.top)
+        viewIconImage.snp.makeConstraints {
             $0.leading.equalTo(writeTimeLabel.snp.trailing).offset(Device.widthScale(9))
+            $0.centerY.equalTo(locationLabel.snp.centerY)
+            $0.height.equalTo(Device.heightScale(15))
+            $0.width.equalTo(Device.widthScale(15))
+        }
+        
+        viewsLabel.snp.makeConstraints {
+            $0.centerY.equalTo(locationLabel.snp.centerY)
+            $0.leading.equalTo(viewIconImage.snp.trailing).offset(2)
         }
         
         hashTagLabel.snp.makeConstraints {
