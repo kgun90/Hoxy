@@ -9,5 +9,5 @@ import Foundation
 
 struct PostViewModel {
     var title: String?
-//    var 
+//    var
 }

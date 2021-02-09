@@ -262,14 +262,14 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "50A9E301-53BE-444D-8021-84A2E9CF5D1F"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Hoxy/View/WriteVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "634"
-            endingLineNumber = "634"
+            startingLineNumber = "700"
+            endingLineNumber = "700"
             landmarkName = "getSingleData(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -278,15 +278,15 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "903FB797-053C-4103-B95B-87067A2967DC"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Hoxy/View/WriteVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "158"
-            endingLineNumber = "158"
-            landmarkName = "editCheckAction(sender:)"
+            startingLineNumber = "153"
+            endingLineNumber = "153"
+            landmarkName = "editCheckAction()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

@@ -163,6 +163,7 @@ class PostVC: BaseViewController, SingleDataDelegate, PostDataDelegate {
         $0.setTitleColor(.black, for: .normal)
         $0.backgroundColor = .mainYellow
         $0.layer.cornerRadius = 8
+//        $0.addTarget(self, action: #selector(submitAction), for: .touchUpInside)
     }
     
     var postID = PostDataModel().id
@@ -202,19 +203,6 @@ class PostVC: BaseViewController, SingleDataDelegate, PostDataDelegate {
     // MARK: - Selectors
     
     // MARK: - Helpers
-    override func configureUI() {
-        super.configureUI()
-        
-        let backButton = UIBarButtonItem().then {
-            $0.image = UIImage(systemName: "arrow.left")
-            $0.title = ""
-            $0.style = .plain
-            $0.target = self
-            $0.action = #selector(backButtonAction)
-        }
-        navigationItem.backBarButtonItem = backButton
-        
-    }
     
     @objc func barButtonAction() {
         let update = UIAlertAction(title: "수정", style: .default) { (action) in

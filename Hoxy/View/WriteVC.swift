@@ -148,13 +148,8 @@ class WriteVC: BaseViewController {
     }
     
     // MARK: - Selectors
-    @objc func editCheckAction(sender: UITextField) {
-        switch sender {
-        case titleTextField:
-            <#code#>
-        default:
-            <#code#>
-        }
+    @objc func editCheckAction() {
+   
         if titleTextField.text!.count > 5,
            meetingLocationView.textField.text != nil,
            headCountView.textField.text != nil,
@@ -163,7 +158,11 @@ class WriteVC: BaseViewController {
            contentTextView.text.count > 10 {
             submitButton.isEnabled = true
             submitButton.backgroundColor = .mainYellow
+        } else {
+            submitButton.isEnabled = false
+            submitButton.backgroundColor = #colorLiteral(red: 0.5058823529, green: 0.5058823529, blue: 0.5058823529, alpha: 1)
         }
+        
         hashTag.insert(communicationLevelView.textField.text ?? "", at: 0)
         hashTagSet()
         postModelModify()
@@ -187,7 +186,11 @@ class WriteVC: BaseViewController {
         showIndicator()
      
         let ok = UIAlertAction(title: "확인", style: .default) { (action) in
-            self.createPost()
+            if self.mode == .write {
+                self.createPost()
+            } else {
+                self.updatePost()
+            }
             
             let vc = TabBarController()
             if let window = UIApplication.shared.windows.first {
@@ -407,7 +410,12 @@ class WriteVC: BaseViewController {
     }
     
     func settingUI() {
-        submitButton.isEnabled = false
+        if mode == .update {
+            submitButton.isEnabled = true
+        } else {
+            submitButton.isEnabled = false
+        }
+       
         contentTextView.delegate = self
         
         
@@ -425,7 +433,9 @@ class WriteVC: BaseViewController {
         postModel.title = titleTextField.text!
         postModel.content = contentTextView.text
         postModel.date = Date()
+        
         postModel.town = meetingLocationView.textField.text!
+        
     }
     
     func createPost() {
@@ -456,6 +466,22 @@ class WriteVC: BaseViewController {
         dismissIndicator()
     }
     
+    func updatePost() {
+        set.fs.collection(set.Table.post).document(uid!).updateData([
+            "title": postModel.title,
+            "content": postModel.content,
+            "headcount": postModel.headcount,
+            "location": postModel.location! as GeoPoint,
+            "tag": postModel.tag,
+            "date": postModel.date,
+            "emoji":  postModel.emoji,
+            "communication":  postModel.communication,
+            "start": postModel.start,
+            "duration":  postModel.duration,
+            "town":  postModel.town    
+        ])
+    }
+    
     func hashTagSet() {
         if !hashTagTextField.text!.isEmpty {
             let original = hashTagTextField.text!
@@ -469,16 +495,50 @@ class WriteVC: BaseViewController {
     func updateSetting(_ data: PostDataModel) {
         if mode == .update {
             titleTextField.text = data.title
+            postModel.title = data.title
+            
             meetingLocationView.textField.isEnabled = false
             meetingLocationView.textField.text = data.town
+            postModel.location = data.location
+            postModel.town = data.town
+            
             headCountView.textField.text = String(data.headcount)
+            postModel.headcount = data.headcount
+            
             communicationLevelView.textField.text = data.tag[0]
+            postModel.communication = data.communication
+            postModel.emoji = data.emoji
+            
+            updateStartTime(data.start)
+            
             meetingDurationView.textField.text = "\(data.duration)분"
+            postModel.duration = data.duration
+            
             contentTextView.text = data.content
+            postModel.content = data.content
+            
+            postModel.chat = data.chat
+            postModel.view = data.view
+            postModel.tag = data.tag
+            
+            print(postModel)
+         
+            
+            
             
         }
     }
 
+    func updateStartTime(_ start: Date) {
+        
+        startTimeView.textField.font = .BasicFont(.regular, size: 13)
+        let dateFormatter = DateFormatter().then {
+            $0.dateFormat = "yyyy년 MM월 dd일 HH시mm분"
+        }
+        let selectedDate = dateFormatter.string(from: start)
+        postModel.start = start
+        startTimeView.textField.text = selectedDate
+    }
 }
 
 extension WriteVC: UITextFieldDelegate {
@@ -513,6 +573,7 @@ extension WriteVC: UITextFieldDelegate {
         }
     }
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+        editCheckAction()
         switch textField {
         case meetingLocationView.textField:
             menu = .location
@@ -581,7 +642,10 @@ extension WriteVC: UIPickerViewDelegate, UIPickerViewDataSource {
             postModel.emoji = set.communicationEmoji[row][emojiRand]
             print(postModel.emoji)
             postModel.communication = row
-            postModel.tag.insert(set.communicationLevel[row], at: 0)
+            if postModel.tag[0] != set.communicationLevel[row] {
+                postModel.tag.insert(set.communicationLevel[row], at: 0)
+            }
+          
 
         case .meetingDuration:
             meetingDurationView.textField.text = set.meetingDuration[row]
@@ -589,6 +653,8 @@ extension WriteVC: UIPickerViewDelegate, UIPickerViewDataSource {
         default:
             return
         }
+        print(postModel)
+     
     }
     
 }
