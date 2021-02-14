@@ -7,7 +7,7 @@
 
 import UIKit
 import SnapKit
-import Firebase
+import CoreLocation
 
 extension UIViewController {
     // MARK: 빈 화면을 눌렀을 때 키보드가 내려가도록 처리
@@ -123,17 +123,5 @@ extension UIViewController {
         }
     }
     
-//    func headCount(_ chat: DocumentReference, _ headcount: Int) -> String {
-//        chat.addSnapshotListener { (snapshot, error) in
-//            if let e = error {
-//                print(e.localizedDescription)
-//            } else {
-//                if let data = snapshot?.data() {
-//                    let count = (data["member"] as! Dictionary<String, Any>).count
-//                }
-//            }
-//        }
-//        
-//        return ""
-//    }
+
 }

@@ -7,6 +7,7 @@
 
 import UIKit
 import Firebase
+import CoreLocation
 
 class MyPageVC: BaseViewController {
 
@@ -53,7 +54,9 @@ class MyPageVC: BaseViewController {
 
         grade.snp.makeConstraints {
             $0.centerY.equalTo(levelLabel.snp.centerY)
-            $0.trailing.equalTo(levelLabel.snp.leading).offset(Device.widthScale(5))
+            $0.trailing.equalTo(levelLabel.snp.leading).offset(Device.widthScale(-5))
+            $0.width.equalTo(Device.widthScale(28))
+            $0.height.equalTo(Device.heightScale(14))
         }
 
     }
@@ -61,7 +64,7 @@ class MyPageVC: BaseViewController {
     lazy var user = UILabel().then { user in
         user.font = .BasicFont(.medium, size: 18)
         user.textColor = .labelGray
-        user.text = "kgun90@gmail.com 님의 \n 인연지수는"
+//        user.text = "kgun90@gmail.com 님의 \n 인연지수는"
         user.numberOfLines = 0
         user.textAlignment = .right
     }
@@ -126,7 +129,7 @@ class MyPageVC: BaseViewController {
     lazy var currentLocationLabel = UILabel().then {
         $0.font = .BasicFont(.semiBold, size: 14)
         $0.textColor = .meetingTimeOrange
-        $0.text = "우리 동네 풍덕천동"
+        $0.text = "현재 동네"
     }
     
     lazy var userLocationView = UIView().then {
@@ -156,7 +159,7 @@ class MyPageVC: BaseViewController {
     lazy var userLocationLabel = UILabel().then {
         $0.font = .BasicFont(.semiBold, size: 14)
         $0.textColor = .black
-        $0.text = "우리 동네 풍덕천동"
+        $0.text = "우리 동네"
     }
     
     lazy var blockUserView = UIView().then {
@@ -189,13 +192,17 @@ class MyPageVC: BaseViewController {
         $0.text = "만남거부목록"
     }
     
+    let locationManager = CLLocationManager()
+    var currentLocation = CLLocation()
+    var currentTown = ""
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.title = "마이페이지"
         layout()
         getUserData()
-       
+        gesture()
+        getCurrentLocation()
     }
 
 
@@ -257,18 +264,95 @@ class MyPageVC: BaseViewController {
                     if let data = snapshot?.data() {
                         let email = data["email"] as! String
                         let exp = data["exp"] as! Float
+                        let town = data["town"] as! String
+                        
                         self.user.text = "\(email) 님의 \n 인연지수는"
                         self.emoji.text = data["emoji"] as? String
-                        self.progressView.progress = exp / 100
+                        self.progressView.progress = exp / 1000
+                        self.userLocationLabel.text = "우리 동네 \(town)"
                     }
                 }
                 
             }
         }
-//        var location = "양재동"
-//        let current = "현재동네 \(location)"
-//
-//        currentLocationLabel.attributedText = current.attributedText(withString: current , coloredString: "\(location)", font: .BasicFont(.semiBold, size: 14))
+    }
+        
+    func gesture() {
+        let curLocTapGesture = UITapGestureRecognizer(target: self, action: #selector(currentLocationTapAction))
+        curLocTapGesture.numberOfTouchesRequired = 1
+        
+        let userLocTapGesture = UITapGestureRecognizer(target: self, action: #selector(userLocationTapAction))
+        userLocTapGesture.numberOfTouchesRequired = 1
+        
+        currentLocationView.addGestureRecognizer(curLocTapGesture)
+        userLocationView.addGestureRecognizer(userLocTapGesture)
+    }
+        
+    @objc func currentLocationTapAction() {
+        let ok = UIAlertAction(title: "예", style: .default) { (action) in
+            self.getCurrentLocation()
+        }
+        
+        presentAlert(title: "현재 위치 설정하기", message: "현재 위치를 설정할까요?", isCancelActionIncluded: true, with: ok)
+    }
+    
+    @objc func userLocationTapAction() {
+        let ok = UIAlertAction(title: "예", style: .default) { (action) in
+            self.updateUserLocation()
+        }
+        
+        presentAlert(title: "우리동네 변경", message: "현재 위치를 우리동네로 변경하시겠습니까?", isCancelActionIncluded: true, with: ok)
     }
 
+    func getCurrentLocation() {
+        self.locationManager.delegate = self
+        self.locationManager.requestWhenInUseAuthorization()
+        self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        self.locationManager.startUpdatingLocation()
+        
+        if CLLocationManager.locationServicesEnabled() {
+            self.locationManager.requestLocation()
+        }
+    }
+    
+    func getLocationName() {
+        let geocode = CLGeocoder()
+        geocode.reverseGeocodeLocation(currentLocation) { (placemark, error) in
+            guard
+                let mark = placemark,
+                let town = mark.first?.subLocality
+            else {
+                return
+            }
+            self.currentTown = town
+            self.currentLocationLabel.text = "현재 동네 \(town)"
+        }
+    }
+    
+    func updateUserLocation() {
+        let location = GeoPoint(latitude: currentLocation.coordinate.latitude, longitude: currentLocation.coordinate.longitude)
+        let town = currentTown
+        if let id = Auth.auth().currentUser?.uid {
+            set.fs.collection(set.Table.member).document(id).updateData([
+                "location" : location,
+                "town": town
+            ])
+        }
+    }
+   
+
+}
+extension MyPageVC: CLLocationManagerDelegate {
+   func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+       if let location = locations.last {
+           locationManager.stopUpdatingLocation()
+           currentLocation = location
+           
+           getLocationName()
+       }
+   }
+   
+   func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+       print(error.localizedDescription)
+   }
 }
