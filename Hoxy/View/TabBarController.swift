@@ -11,7 +11,7 @@ import Then
 class TabBarController: UITabBarController, UITabBarControllerDelegate {
     let home = HomeVC()
     let unknown = UnKnownVC()
-    let chat = ChatVC()
+    let chat = ChatListVC()
     let myPage = MyPageVC()
     
     let homeItem = UITabBarItem().then{

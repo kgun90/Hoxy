@@ -190,6 +190,7 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return Device.heightScale(100)
     }
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         readPost(posts[indexPath.section].id)
         id = posts[indexPath.section].id

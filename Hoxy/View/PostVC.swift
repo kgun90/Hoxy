@@ -9,7 +9,12 @@ import UIKit
 import Firebase
 
 class PostVC: BaseViewController, SingleDataDelegate, PostDataDelegate {
-
+    enum buttonsStatus {
+        case on
+        case offOver
+        case offWriter
+        case offAlready
+    }
 
     
     // MARK: - Properties
@@ -158,12 +163,12 @@ class PostVC: BaseViewController, SingleDataDelegate, PostDataDelegate {
     }
     
     lazy var bottomSubmitButton = UIButton().then {
-        $0.setTitle("신청하기", for: .normal)
+//        $0.setTitle("신청하기", for: .normal)
         $0.titleLabel?.font = .BasicFont(.medium, size: 18)
         $0.setTitleColor(.black, for: .normal)
         $0.backgroundColor = .mainYellow
         $0.layer.cornerRadius = 8
-//        $0.addTarget(self, action: #selector(submitAction), for: .touchUpInside)
+        $0.addTarget(self, action: #selector(submitAction), for: .touchUpInside)
     }
     
     var postID = PostDataModel().id
@@ -171,6 +176,8 @@ class PostVC: BaseViewController, SingleDataDelegate, PostDataDelegate {
     var posts: [PostDataModel] = []
     var currentPost = PostDataModel()
     var commLevel = 0
+    var submitState: buttonsStatus = .on
+    
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -178,7 +185,7 @@ class PostVC: BaseViewController, SingleDataDelegate, PostDataDelegate {
         postDataManager.singleDelegate = self
         postDataManager.delegate = self
         postDataManager.requestSingleData(postID)
-        
+      
         setting()
         layoutUI()
     }
@@ -200,9 +207,11 @@ class PostVC: BaseViewController, SingleDataDelegate, PostDataDelegate {
         relatedMeetingView.addBorder(toSide: .bottom, color: .mainBackground, borderWidth: 0.5)
         bottomView.addBorder(toSide: .top, color: .mainBackground, borderWidth: 0.5)
     }
-    // MARK: - Selectors
     
-    // MARK: - Helpers
+    // MARK: - Selectors
+    @objc func backButtonAction() {
+        self.navigationController?.popToRootViewController(animated: true)
+    }
     
     @objc func barButtonAction() {
         let update = UIAlertAction(title: "수정", style: .default) { (action) in
@@ -211,16 +220,29 @@ class PostVC: BaseViewController, SingleDataDelegate, PostDataDelegate {
         let delete = UIAlertAction(title: "삭제", style: .default) { (action) in
             self.deleteAction()
         }
-        
         presentAlert(isCancelActionIncluded: true, preferredStyle: .actionSheet, with:update, delete)
+    }
+    
+    @objc func submitAction() {
+        let nickName = "".nicknameGenerate()
+        let ok = UIAlertAction(title: "네", style: .default) { (action) in
+            if let uid = Auth.auth().currentUser?.uid {
+                self.currentPost.chat?.updateData([
+                    "member.\(uid)" : nickName
+                ])
+            }
+  
+            self.navigationController?.popViewController(animated: true)
+        }
+        presentAlert(title: "모임 신청하기", message: "닉네임 \(nickName)(으)로 참가 하시겠습니까?", isCancelActionIncluded: true, with: ok)
         
     }
-    func updateAction() {
     
+    // MARK: - Helpers
+    func updateAction() {
         let vc = WriteVC()
         vc.uid = postID
         self.navigationController?.pushViewController(vc, animated: true)
-        
     }
     
     func deleteAction() {
@@ -241,9 +263,7 @@ class PostVC: BaseViewController, SingleDataDelegate, PostDataDelegate {
         presentAlert(title: "삭제하기", message: "현재 글을 삭제하시겠습니까?", isCancelActionIncluded: true, with: ok)
     }
     
-    @objc func backButtonAction() {
-        self.navigationController?.popToRootViewController(animated: true)
-    }
+    
  
     func layoutUI() {
         layoutTopView()
@@ -357,6 +377,7 @@ class PostVC: BaseViewController, SingleDataDelegate, PostDataDelegate {
         writerProfileView.addSubview(writerLevelTitleLabel)
         writerProfileView.addSubview(writerAttendCountLabel)
         mainScroll.addSubview(writerProfileView)
+        
         writerProfileView.snp.makeConstraints {
             $0.top.equalTo(hashtagView.snp.bottom)
             $0.centerX.equalToSuperview()
@@ -437,15 +458,13 @@ class PostVC: BaseViewController, SingleDataDelegate, PostDataDelegate {
         currentPost = postData
         navigationItem.title = postData.title
         commLevel = postData.communication
-        print(postData.communication)
         commuicationLavelEmoji.text = postData.emoji
         meetingTimeLabel.text = getMeetingTime(postData.start, postData.duration)
         locationLabel.text = postData.town
         writeTimeLabel.text = postData.date.relativeTime_abbreviated
         viewsLabel.text = String(postData.view)
         
-      
-        attenderCountLabel.text = String(postData.headcount)
+        
         contentLabel.text = postData.content
         
         writerProfile(postData.chat!, postData.writer!)
@@ -455,6 +474,7 @@ class PostVC: BaseViewController, SingleDataDelegate, PostDataDelegate {
  
         postDataManager.requestPostData()
         addNaviButton()
+        submitCheck()
         dismissIndicator()
     }
     
@@ -464,7 +484,7 @@ class PostVC: BaseViewController, SingleDataDelegate, PostDataDelegate {
             $0.target = self
             $0.action = #selector(barButtonAction)
         }
-   
+        
         if currentPost.writer?.documentID == Auth.auth().currentUser?.uid {
             navigationItem.rightBarButtonItem = moreButton
         }
@@ -524,6 +544,7 @@ class PostVC: BaseViewController, SingleDataDelegate, PostDataDelegate {
         listTableView.dataSource = self
         listTableView.register(UINib(nibName: "HomeTableViewCell", bundle: nil), forCellReuseIdentifier: "HomeTableViewCell")
         listTableView.tableFooterView = UIView()
+        
     }
     
     func readPost(_ id: String) {
@@ -532,7 +553,57 @@ class PostVC: BaseViewController, SingleDataDelegate, PostDataDelegate {
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
+    func submitCheck() {
+        if currentPost.writer?.documentID == Auth.auth().currentUser?.uid {
+            submitButtonCondition(.offWriter)
+            return
+        } else {
+            currentPost.chat?.addSnapshotListener({ (snapshot, error) in
+                if let e = error {
+                    print(e.localizedDescription)
+                } else {
+                    if let data = snapshot?.data() {
+                        let currentMember = data["member"] as! [String: String]//Dictionary<String, Any>
+                        self.attenderCountLabel.text = " \(currentMember.count)/\(self.currentPost.headcount)"
+                        print(currentMember)
+                        for (key, _) in currentMember {
+                            if Auth.auth().currentUser?.uid == key {
+                                self.submitButtonCondition(.offAlready)
+                                return
+                            }
+                        }
+                        if currentMember.count == self.currentPost.headcount {
+                            self.submitButtonCondition(.offOver)
+                            return
+                        }
+                    }
+                }
+            })
+        }
+        submitButtonCondition(.on)
+        
+    }
    
+    func submitButtonCondition(_ state: buttonsStatus) {
+        switch state {
+        case .on:
+            self.bottomSubmitButton.backgroundColor = .mainYellow
+            self.bottomSubmitButton.setTitle("신청하기", for: .normal)
+            self.bottomSubmitButton.isEnabled = true
+        case .offOver:
+            self.bottomSubmitButton.backgroundColor = .mainBackground
+            self.bottomSubmitButton.setTitle("인원마감", for: .normal)
+            self.bottomSubmitButton.isEnabled = false
+        case .offAlready:
+            self.bottomSubmitButton.backgroundColor = .mainBackground
+            self.bottomSubmitButton.setTitle("신청완료", for: .normal)
+            self.bottomSubmitButton.isEnabled = false
+        case .offWriter:
+            self.bottomSubmitButton.backgroundColor = .mainBackground
+            self.bottomSubmitButton.setTitle("나의 모임", for: .normal)
+            self.bottomSubmitButton.isEnabled = false
+        }
+    }
 }
 
 extension PostVC: UITableViewDataSource, UITableViewDelegate {
@@ -551,7 +622,17 @@ extension PostVC: UITableViewDataSource, UITableViewDelegate {
         cell.writeTimeLabel.text = posts[indexPath.row].date.relativeTime_abbreviated
         cell.viewsLabel.text = String(posts[indexPath.row].view)
 //        cell.meetingTimeLabel.text = posts[indexPath.section].start
-        cell.attenderCountLabel.text = String(posts[indexPath.row].headcount)
+        
+        posts[indexPath.row].chat?.addSnapshotListener({ (snapshot, error) in
+            if let e = error {
+                print(e.localizedDescription)
+            } else {
+                if let data = snapshot?.data() {
+                    let memberCount = (data["member"] as! Dictionary<String, Any>).count
+                    cell.attenderCountLabel.text = " \(memberCount)/\(self.posts[indexPath.row].headcount)"
+                }
+            }
+        })
         return cell
     }
     

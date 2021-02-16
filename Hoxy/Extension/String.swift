@@ -80,7 +80,7 @@ extension String {
     //랜덤 이모지 생성
     func randomEmoji()->String{
           let emojiStart = 0x1F601
-          let ascii = emojiStart + Int(arc4random_uniform(UInt32(35)))
+          let ascii = emojiStart + Int(arc4random_uniform(UInt32(100)))
           let emoji = UnicodeScalar(ascii)?.description
           return emoji ?? "😍"
       }
@@ -101,6 +101,10 @@ extension String {
         let range = (string as NSString).range(of: coloredString)
         attributedString.addAttributes(colorFontAttribute, range: range)
         return attributedString
+    }
+    
+    func nicknameGenerate() -> String{
+        return "\(set.title[Int.random(in: 0 ..< set.title.count)]) \(set.nickname[Int.random(in: 0 ..< set.nickname.count)])"
     }
 }
  

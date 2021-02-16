@@ -679,7 +679,8 @@ extension WriteVC: UserDataManagerDelegate {
         postModel.writer = set.fs.collection(set.Table.member).document(userData.uid)
      
         if mode == .write {
-            let name = "\(set.title[Int.random(in: 0 ..< set.title.count)]) \(set.nickname[Int.random(in: 0 ..< set.nickname.count)])"
+//            let name = "\(set.title[Int.random(in: 0 ..< set.title.count)]) \(set.nickname[Int.random(in: 0 ..< set.nickname.count)])"
+            let name:String = "".nicknameGenerate()
             nickName = name
             nicknameSetting(name)
         }

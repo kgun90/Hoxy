@@ -122,6 +122,15 @@ extension UIViewController {
             return ""
         }
     }
-    
+    func getMeetingTime(_ date: Date) -> String{
+        let startTimeFormat = DateFormatter().then {
+            $0.dateFormat = "MM/dd hh시mm분 예정"
+        }
+        let startTime = startTimeFormat.string(from: date)
+        
 
+        return startTime
+    
+    }
+    
 }
