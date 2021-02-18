@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		79FAD3914DD6BD3F19E9864C /* Pods_Hoxy.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F984CD5AE290D05D2906238D /* Pods_Hoxy.framework */; };
+		EB05FFC725DED9CD00A587BE /* ChatRoomProfileVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB05FFC625DED9CD00A587BE /* ChatRoomProfileVC.swift */; };
 		EB11F0CD25C5367100EC9F6F /* UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB11F0CC25C5367100EC9F6F /* UIView.swift */; };
 		EB11F0D125C54E9B00EC9F6F /* IndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB11F0D025C54E9B00EC9F6F /* IndicatorView.swift */; };
 		EB11F0D625C55EB200EC9F6F /* EmailLoginVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB11F0D525C55EB200EC9F6F /* EmailLoginVC.swift */; };
@@ -24,6 +25,9 @@
 		EB2968FC25D9790400DAE55B /* ChatListTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = EB2968FA25D9790400DAE55B /* ChatListTableViewCell.xib */; };
 		EB2968FF25D98DEB00DAE55B /* ChatDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2968FE25D98DEB00DAE55B /* ChatDataManager.swift */; };
 		EB29690225D991D400DAE55B /* ChatListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB29690125D991D400DAE55B /* ChatListModel.swift */; };
+		EB29691A25DCC16400DAE55B /* ChattingModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB29691925DCC16400DAE55B /* ChattingModel.swift */; };
+		EB29691E25DCD9FD00DAE55B /* ChatMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB29691C25DCD9FD00DAE55B /* ChatMessageCell.swift */; };
+		EB29691F25DCD9FD00DAE55B /* ChatMessageCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = EB29691D25DCD9FD00DAE55B /* ChatMessageCell.xib */; };
 		EB38A71125BD5DEE00516515 /* UIButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB38A71025BD5DEE00516515 /* UIButton.swift */; };
 		EB38A71425BD707100516515 /* JoinVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB38A71325BD707100516515 /* JoinVC.swift */; };
 		EB38A71A25BD760500516515 /* TopView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB38A71925BD760500516515 /* TopView.swift */; };
@@ -65,6 +69,7 @@
 /* Begin PBXFileReference section */
 		A74370B774BB4905B3B6108B /* Pods-Hoxy.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Hoxy.release.xcconfig"; path = "Target Support Files/Pods-Hoxy/Pods-Hoxy.release.xcconfig"; sourceTree = "<group>"; };
 		CCEA5CB1BB645FCD82AB47CB /* Pods-Hoxy.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Hoxy.debug.xcconfig"; path = "Target Support Files/Pods-Hoxy/Pods-Hoxy.debug.xcconfig"; sourceTree = "<group>"; };
+		EB05FFC625DED9CD00A587BE /* ChatRoomProfileVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomProfileVC.swift; sourceTree = "<group>"; };
 		EB11F0CC25C5367100EC9F6F /* UIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIView.swift; sourceTree = "<group>"; };
 		EB11F0D025C54E9B00EC9F6F /* IndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IndicatorView.swift; sourceTree = "<group>"; };
 		EB11F0D525C55EB200EC9F6F /* EmailLoginVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailLoginVC.swift; sourceTree = "<group>"; };
@@ -83,6 +88,9 @@
 		EB2968FA25D9790400DAE55B /* ChatListTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ChatListTableViewCell.xib; sourceTree = "<group>"; };
 		EB2968FE25D98DEB00DAE55B /* ChatDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatDataManager.swift; sourceTree = "<group>"; };
 		EB29690125D991D400DAE55B /* ChatListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatListModel.swift; sourceTree = "<group>"; };
+		EB29691925DCC16400DAE55B /* ChattingModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChattingModel.swift; sourceTree = "<group>"; };
+		EB29691C25DCD9FD00DAE55B /* ChatMessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMessageCell.swift; sourceTree = "<group>"; };
+		EB29691D25DCD9FD00DAE55B /* ChatMessageCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ChatMessageCell.xib; sourceTree = "<group>"; };
 		EB38A71025BD5DEE00516515 /* UIButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIButton.swift; sourceTree = "<group>"; };
 		EB38A71325BD707100516515 /* JoinVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinVC.swift; sourceTree = "<group>"; };
 		EB38A71925BD760500516515 /* TopView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopView.swift; sourceTree = "<group>"; };
@@ -196,6 +204,7 @@
 				EB5D8E7125C7D629003D957C /* PostDataModel.swift */,
 				EB5D8E8825CB183B003D957C /* MemberModel.swift */,
 				EB29690125D991D400DAE55B /* ChatListModel.swift */,
+				EB29691925DCC16400DAE55B /* ChattingModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -217,6 +226,7 @@
 				EB87AB7D25BC11EF00DF3BBB /* UnKnownVC.swift */,
 				EBDA506D25BC03CA00C6A122 /* ChatListVC.swift */,
 				EB2968EB25D962D600DAE55B /* ChatRoomVC.swift */,
+				EB05FFC625DED9CD00A587BE /* ChatRoomProfileVC.swift */,
 				EBDA507225BC03DC00C6A122 /* MyPageVC.swift */,
 			);
 			path = View;
@@ -237,6 +247,8 @@
 				EB38A76E25C12AB500516515 /* HomeTableViewCell.xib */,
 				EB2968F925D9790400DAE55B /* ChatListTableViewCell.swift */,
 				EB2968FA25D9790400DAE55B /* ChatListTableViewCell.xib */,
+				EB29691C25DCD9FD00DAE55B /* ChatMessageCell.swift */,
+				EB29691D25DCD9FD00DAE55B /* ChatMessageCell.xib */,
 			);
 			path = CustomCell;
 			sourceTree = "<group>";
@@ -347,6 +359,7 @@
 				EB25DC9425B9C1E6006F4008 /* LaunchScreen.storyboard in Resources */,
 				EBDA504B25BB325A00C6A122 /* GoogleService-Info.plist in Resources */,
 				EB38A77025C12AB500516515 /* HomeTableViewCell.xib in Resources */,
+				EB29691F25DCD9FD00DAE55B /* ChatMessageCell.xib in Resources */,
 				EB25DC9125B9C1E6006F4008 /* Assets.xcassets in Resources */,
 				EB25DC8F25B9C1E5006F4008 /* Main.storyboard in Resources */,
 				EB2968FC25D9790400DAE55B /* ChatListTableViewCell.xib in Resources */,
@@ -417,11 +430,14 @@
 				EB5D8E7525C7E1BF003D957C /* Date.swift in Sources */,
 				EB11F0CD25C5367100EC9F6F /* UIView.swift in Sources */,
 				EB87AB7F25BC11EF00DF3BBB /* UnKnownVC.swift in Sources */,
+				EB05FFC725DED9CD00A587BE /* ChatRoomProfileVC.swift in Sources */,
 				EB25DC8C25B9C1E5006F4008 /* ViewController.swift in Sources */,
 				EB11F0D625C55EB200EC9F6F /* EmailLoginVC.swift in Sources */,
 				EBD9F3F625C3C5BF004E18F1 /* BaseViewController.swift in Sources */,
 				EB87AB8A25BC728500DF3BBB /* Device.swift in Sources */,
+				EB29691A25DCC16400DAE55B /* ChattingModel.swift in Sources */,
 				EB38A75125C07E1900516515 /* String.swift in Sources */,
+				EB29691E25DCD9FD00DAE55B /* ChatMessageCell.swift in Sources */,
 				EB38A71A25BD760500516515 /* TopView.swift in Sources */,
 				EBDA506A25BC03BC00C6A122 /* HomeVC.swift in Sources */,
 				EB38A72C25BE745A00516515 /* Contants.swift in Sources */,

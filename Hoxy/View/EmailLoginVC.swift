@@ -32,6 +32,7 @@ class EmailLoginVC: UIViewController {
         layout()
     }
     
+    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         emailItem.tf.addUnderLine()
@@ -42,7 +43,7 @@ class EmailLoginVC: UIViewController {
 
     @objc func textFieldDidChange() {
         // textField 입력 실시간 감지
-        enableLogin()
+        loginCheck()
     }
 
     @objc func backAction() {
@@ -77,10 +78,12 @@ class EmailLoginVC: UIViewController {
     }
     func loginCheck() {
         if Auth.auth().currentUser?.uid != nil {
+            showIndicator()
             let vc = LocationVC()
             if let window = UIApplication.shared.windows.first {
                 window.rootViewController = vc
                 UIView.transition(with: window, duration: 0.3, options: .transitionCrossDissolve, animations: nil)
+                dismissIndicator()
             } else {
                 vc.modalPresentationStyle = .overFullScreen
                 self.present(vc, animated: true, completion: nil)

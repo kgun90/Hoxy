@@ -529,7 +529,7 @@ class PostVC: BaseViewController, SingleDataDelegate, PostDataDelegate {
                 print(e.localizedDescription)
             } else {
                 if let doc = snapshot?.data() {
-                    let member = doc["member"] as! [String : String]
+                    let member = doc["nickname"] as! [String : String]
                     let nickname = member[writer.documentID] ?? ""
                     self.writerNicknameLable.text = nickname
                     self.bottomWriterInfoLabel.text = "\(nickname)의 모임"
@@ -563,7 +563,7 @@ class PostVC: BaseViewController, SingleDataDelegate, PostDataDelegate {
                     print(e.localizedDescription)
                 } else {
                     if let data = snapshot?.data() {
-                        let currentMember = data["member"] as! [String: String]//Dictionary<String, Any>
+                        let currentMember = data["nickname"] as! [String: String]//Dictionary<String, Any>
                         self.attenderCountLabel.text = " \(currentMember.count)/\(self.currentPost.headcount)"
                         print(currentMember)
                         for (key, _) in currentMember {

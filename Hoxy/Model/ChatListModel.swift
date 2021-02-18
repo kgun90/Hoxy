@@ -10,5 +10,7 @@ import Firebase
 
 struct ChatListModel {
     var post: DocumentReference?
-    var member: Dictionary<String, Any> = [:]
+    var member: [String] = []
+    var nickname: Dictionary<String, Any> = [:]
+    var chatID: String = ""
 }

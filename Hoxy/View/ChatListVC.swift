@@ -73,11 +73,7 @@ extension ChatListVC: UITableViewDataSource, UITableViewDelegate {
                 print(e.localizedDescription)
             } else {
                 if let data = snapshot?.data() {
-                    
-                    let writer = data["writer"] as! DocumentReference
-                    let nickname = self.listData[indexPath.section].member[writer.documentID] ?? ""
-                    
-                    cell.chatTitleLabel.text = "\(nickname)님의 모임"
+                    cell.chatTitleLabel.text = data["title"] as? String
                     cell.meetingPlaceLabel.text = data["town"] as? String
                     
                     let meetingTime = data["start"] as! Timestamp
@@ -92,5 +88,11 @@ extension ChatListVC: UITableViewDataSource, UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return Device.heightScale(80)
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let vc = ChatRoomVC()
+        vc.chatID = listData[indexPath.section].chatID
+        navigationController?.pushViewController(vc, animated: true)
     }
 }
