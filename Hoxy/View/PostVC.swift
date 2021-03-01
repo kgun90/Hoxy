@@ -22,6 +22,45 @@ class PostVC: BaseViewController, SingleDataDelegate, PostDataDelegate {
         $0.frame = CGRect(x: 0, y: 0, width: Device.screenWidth, height: Device.screenHeight)
         $0.contentSize = CGSize(width: Device.screenWidth, height: Device.screenHeight*2)
     }
+    lazy var modalTopView = UIView().then {
+        $0.backgroundColor = .mainYellow
+        $0.addSubview(dismissButton)
+        $0.addSubview(modalTitleLabel)
+        $0.addSubview(modalMoreButton)
+        
+        dismissButton.snp.makeConstraints {
+            $0.centerY.equalTo(modalTitleLabel.snp.centerY)
+            $0.leading.equalToSuperview().offset(Device.widthScale(20))
+            $0.height.equalTo(Device.heightScale(30))
+            $0.width.equalTo(Device.widthScale(30))
+        }
+        modalTitleLabel.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.bottom.equalToSuperview().offset(Device.heightScale(-10))
+        }
+        modalMoreButton.snp.makeConstraints {
+            $0.centerY.equalTo(modalTitleLabel.snp.centerY)
+            $0.trailing.equalToSuperview().offset(Device.widthScale(-20))
+            $0.width.equalTo(Device.widthScale(30))
+            $0.height.equalTo(Device.heightScale(30))
+        }
+    }
+    lazy var modalTitleLabel = UILabel().then {
+        $0.font = .BasicFont(.medium, size: 18)
+        $0.textColor = .black
+        $0.text = "test Title"
+    }
+    lazy var dismissButton = UIButton().then {
+        $0.setImage(UIImage(systemName: "multiply"), for: .normal)
+        $0.tintColor = .black
+        $0.addTarget(self, action: #selector(dismissAction), for: .touchUpInside)
+    }
+    lazy var modalMoreButton = UIButton().then {
+        $0.setImage(UIImage(systemName: "ellipsis"), for: .normal)
+        $0.tintColor = .black
+        $0.addTarget(self, action: #selector(barButtonAction), for: .touchUpInside)
+    }
+    
     lazy var topView = UIView().then {
         $0.backgroundColor = .white
     }
@@ -214,28 +253,55 @@ class PostVC: BaseViewController, SingleDataDelegate, PostDataDelegate {
     }
     
     @objc func barButtonAction() {
-        let update = UIAlertAction(title: "수정", style: .default) { (action) in
-            self.updateAction()
+        if currentPost.writer?.documentID == Auth.auth().currentUser?.uid {
+            let update = UIAlertAction(title: "수정", style: .default) { (action) in
+                self.updateAction()
+            }
+            let delete = UIAlertAction(title: "삭제", style: .default) { (action) in
+                self.deleteAction()
+            }
+            presentAlert(isCancelActionIncluded: true, preferredStyle: .actionSheet, with:update, delete)
+        } else {
+            let report = UIAlertAction(title: "모임 신고하기", style: .default) { (action) in
+                self.reportAction()
+            }
+            let block = UIAlertAction(title: "주최자와 만나지 않기", style: .default) { (action) in
+                self.blockAction()
+            }
+            presentAlert(isCancelActionIncluded: true, preferredStyle: .actionSheet, with:report, block)
         }
-        let delete = UIAlertAction(title: "삭제", style: .default) { (action) in
-            self.deleteAction()
-        }
-        presentAlert(isCancelActionIncluded: true, preferredStyle: .actionSheet, with:update, delete)
     }
     
     @objc func submitAction() {
         let nickName = "".nicknameGenerate()
         let ok = UIAlertAction(title: "네", style: .default) { (action) in
-            if let uid = Auth.auth().currentUser?.uid {
-                self.currentPost.chat?.updateData([
-                    "member.\(uid)" : nickName
-                ])
+            var member: [String] = []
+            self.currentPost.chat?.getDocument{ (snapshot, error) in
+                if let e = error {
+                    print(e.localizedDescription)
+                } else {
+                    if let data = snapshot?.data() {
+                        member = data["member"] as! [String]
+                        if let uid = Auth.auth().currentUser?.uid {
+                            member.append(uid)
+                            self.currentPost.chat?.updateData([
+                                "member": member,
+                                "nickname.\(uid)" : nickName
+                            ])
+                        }
+                    }
+                    
+                }
             }
-  
+            
             self.navigationController?.popViewController(animated: true)
         }
         presentAlert(title: "모임 신청하기", message: "닉네임 \(nickName)(으)로 참가 하시겠습니까?", isCancelActionIncluded: true, with: ok)
         
+    }
+    
+    @objc func dismissAction() {
+        self.dismiss(animated: true, completion: nil)
     }
     
     // MARK: - Helpers
@@ -263,13 +329,81 @@ class PostVC: BaseViewController, SingleDataDelegate, PostDataDelegate {
         presentAlert(title: "삭제하기", message: "현재 글을 삭제하시겠습니까?", isCancelActionIncluded: true, with: ok)
     }
     
+    func reportAction() {
+        var reportData = ReportModel(content: "", date: Date(), post: set.fs.collection(set.Table.post).document(currentPost.id), writer: currentPost.writer)
+        let alert = UIAlertController(title: "모임 신고하기", message: "해당 모임을 신고하는 사유를 입력바랍니다.", preferredStyle: .alert)
+        let ok = UIAlertAction(title: "확인", style: .default) { (action) in
+            reportData.content = (alert.textFields?[0].text)!
+            self.reportCheck(reportData)
+        }
+        let actionCancel = UIAlertAction(title: "취소", style: .cancel, handler: nil)
+        alert.addAction(ok)
+        alert.addAction(actionCancel)
+        alert.addTextField {
+            $0.placeholder = "100자 이내입력"
+        }
+        
+        self.present(alert, animated: true, completion: nil)
+        
+    }
     
- 
+    func reportCheck(_ reportData: ReportModel) {
+        let ok = UIAlertAction(title: "네", style: .default) { (action) in
+            self.reportPost(reportData)
+        }
+        presentAlert(title: "모임 신고", message: "신고를 진행 하시겠습니까?", isCancelActionIncluded: true, with: ok)
+
+    }
+    
+    func reportPost(_ reportData: ReportModel) {
+        set.fs.collection(set.Table.report).addDocument(data: [
+            "content": reportData.content,
+            "date": reportData.date,
+            "post": reportData.post! as DocumentReference,
+            "writer": reportData.writer! as DocumentReference
+        ])
+        
+        let alert = UIAlertController(title: "모임 신고하기", message: "신고가 완료 되었습니다.", preferredStyle: .alert)
+        let actionCancel = UIAlertAction(title: "확인", style: .cancel, handler: nil)
+        alert.addAction(actionCancel)
+        self.present(alert, animated: true, completion: nil)
+    }
+        
+    func blockAction() {
+        let me = set.fs.collection(set.Table.member).document(Auth.auth().currentUser!.uid)
+        let user = currentPost.writer
+        let chatting = currentPost.chat
+
+        let blockedData = BlockModel(user: me, date: Date(), chatting: chatting, pair: nil, active: false)
+        
+        let ban = set.fs.collection(set.Table.member).document(user!.documentID)
+            .collection("ban").addDocument(data: blockedData.toDic() as [String : Any])
+        
+       
+        let blockData = BlockModel(user: user, date: Date(), chatting: chatting, pair: ban, active: true)
+        
+        set.fs.collection(set.Table.member).document(me.documentID).collection("ban").addDocument(data: blockData.toDic() as [String : Any])
+    }
+     
     func layoutUI() {
+        view.addSubview(mainScroll)
+        if isModal {
+            modalLayout()
+        }
         layoutTopView()
         layoutMiddleView()
-        view.addSubview(mainScroll)
         layoutBottomView()
+    }
+    
+    func modalLayout() {
+        view.addSubview(modalTopView)
+        
+        modalTopView.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.top.equalToSuperview()
+            $0.width.equalToSuperview()
+            $0.height.equalTo(Device.topHeight)
+        }
     }
     
     func layoutTopView() {
@@ -284,10 +418,10 @@ class PostVC: BaseViewController, SingleDataDelegate, PostDataDelegate {
         attenderCountView.addSubview(attenderCountLabel)
         topView.addSubview(attenderCountView)
         mainScroll.addSubview(topView)
-    
+      
         topView.snp.makeConstraints {
             $0.centerX.equalToSuperview()
-            $0.top.equalToSuperview()
+            $0.top.equalToSuperview().offset(isModal ? Device.navigationBarHeight : 0)
             $0.width.equalToSuperview()
             $0.height.equalTo(Device.heightScale(80))
         }
@@ -457,6 +591,7 @@ class PostVC: BaseViewController, SingleDataDelegate, PostDataDelegate {
  
         currentPost = postData
         navigationItem.title = postData.title
+        modalTitleLabel.text = postData.title
         commLevel = postData.communication
         commuicationLavelEmoji.text = postData.emoji
         meetingTimeLabel.text = getMeetingTime(postData.start, postData.duration)
@@ -485,9 +620,8 @@ class PostVC: BaseViewController, SingleDataDelegate, PostDataDelegate {
             $0.action = #selector(barButtonAction)
         }
         
-        if currentPost.writer?.documentID == Auth.auth().currentUser?.uid {
-            navigationItem.rightBarButtonItem = moreButton
-        }
+        navigationItem.rightBarButtonItem = moreButton
+     
     }
     
     func getPostData(_ postData: [PostDataModel]) {
@@ -563,16 +697,13 @@ class PostVC: BaseViewController, SingleDataDelegate, PostDataDelegate {
                     print(e.localizedDescription)
                 } else {
                     if let data = snapshot?.data() {
-                        let currentMember = data["nickname"] as! [String: String]//Dictionary<String, Any>
+                        let currentMember = data["member"] as! [String]
                         self.attenderCountLabel.text = " \(currentMember.count)/\(self.currentPost.headcount)"
                         print(currentMember)
-                        for (key, _) in currentMember {
-                            if Auth.auth().currentUser?.uid == key {
-                                self.submitButtonCondition(.offAlready)
-                                return
-                            }
-                        }
-                        if currentMember.count == self.currentPost.headcount {
+                        if currentMember.contains(Auth.auth().currentUser!.uid) {
+                            self.submitButtonCondition(.offAlready)
+                            return
+                        } else if currentMember.count == self.currentPost.headcount {
                             self.submitButtonCondition(.offOver)
                             return
                         }

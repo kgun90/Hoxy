@@ -52,7 +52,7 @@ extension UIViewController {
         }
         self.present(alert, animated: true, completion: nil)
     }
-    
+
     // MARK: 커스텀 하단 경고창
     func presentBottomAlert(message: String, target: ConstraintRelatableTarget? = nil, offset: Double? = -12) {
         let alertSuperview = UIView()
@@ -122,6 +122,7 @@ extension UIViewController {
             return ""
         }
     }
+    
     func getMeetingTime(_ date: Date) -> String{
         let startTimeFormat = DateFormatter().then {
             $0.dateFormat = "MM/dd hh시mm분 예정"
@@ -132,5 +133,12 @@ extension UIViewController {
         return startTime
     
     }
-    
+    var isModal: Bool {
+
+           let presentingIsModal = presentingViewController != nil
+           let presentingIsNavigation = navigationController?.presentingViewController?.presentedViewController == navigationController
+           let presentingIsTabBar = tabBarController?.presentingViewController is UITabBarController
+
+           return presentingIsModal || presentingIsNavigation  || presentingIsTabBar
+    }
 }

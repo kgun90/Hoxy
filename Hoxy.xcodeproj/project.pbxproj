@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		79FAD3914DD6BD3F19E9864C /* Pods_Hoxy.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F984CD5AE290D05D2906238D /* Pods_Hoxy.framework */; };
 		EB05FFC725DED9CD00A587BE /* ChatRoomProfileVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB05FFC625DED9CD00A587BE /* ChatRoomProfileVC.swift */; };
+		EB05FFCB25E3762900A587BE /* ChatRoomMenuVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB05FFCA25E3762900A587BE /* ChatRoomMenuVC.swift */; };
+		EB05FFD325E3943C00A587BE /* ChatMemberTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB05FFD125E3943C00A587BE /* ChatMemberTableViewCell.swift */; };
+		EB05FFD425E3943C00A587BE /* ChatMemberTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = EB05FFD225E3943C00A587BE /* ChatMemberTableViewCell.xib */; };
 		EB11F0CD25C5367100EC9F6F /* UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB11F0CC25C5367100EC9F6F /* UIView.swift */; };
 		EB11F0D125C54E9B00EC9F6F /* IndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB11F0D025C54E9B00EC9F6F /* IndicatorView.swift */; };
 		EB11F0D625C55EB200EC9F6F /* EmailLoginVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB11F0D525C55EB200EC9F6F /* EmailLoginVC.swift */; };
@@ -51,6 +54,15 @@
 		EB5D8E7E25CA645A003D957C /* PostVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5D8E7D25CA645A003D957C /* PostVC.swift */; };
 		EB5D8E8625CB15B6003D957C /* UserDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5D8E8525CB15B6003D957C /* UserDataManager.swift */; };
 		EB5D8E8925CB183B003D957C /* MemberModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5D8E8825CB183B003D957C /* MemberModel.swift */; };
+		EB78A36525E40CE500E4C538 /* ChatMemberView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB78A36425E40CE500E4C538 /* ChatMemberView.swift */; };
+		EB78A36925E55D0200E4C538 /* ChatMenuItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB78A36825E55D0200E4C538 /* ChatMenuItem.swift */; };
+		EB78A37125E755EC00E4C538 /* UITableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB78A37025E755EC00E4C538 /* UITableView.swift */; };
+		EB78A37425E75DBF00E4C538 /* ProfileBackTop.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB78A37325E75DBF00E4C538 /* ProfileBackTop.swift */; };
+		EB78A37925E7E9EF00E4C538 /* MyMessageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB78A37725E7E9EF00E4C538 /* MyMessageTableViewCell.swift */; };
+		EB78A37A25E7E9EF00E4C538 /* MyMessageTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = EB78A37825E7E9EF00E4C538 /* MyMessageTableViewCell.xib */; };
+		EB78A37D25E88C8700E4C538 /* ProfileBackBottom.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB78A37C25E88C8700E4C538 /* ProfileBackBottom.swift */; };
+		EB78A38025E8AE2C00E4C538 /* ReportModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB78A37F25E8AE2C00E4C538 /* ReportModel.swift */; };
+		EB78A38325EAB2AC00E4C538 /* BlockModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB78A38225EAB2AC00E4C538 /* BlockModel.swift */; };
 		EB87AB7F25BC11EF00DF3BBB /* UnKnownVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB87AB7D25BC11EF00DF3BBB /* UnKnownVC.swift */; };
 		EB87AB8425BC1A7A00DF3BBB /* MainLoginVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB87AB8325BC1A7A00DF3BBB /* MainLoginVC.swift */; };
 		EB87AB8725BC1B0A00DF3BBB /* UIFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB87AB8625BC1B0A00DF3BBB /* UIFont.swift */; };
@@ -70,6 +82,9 @@
 		A74370B774BB4905B3B6108B /* Pods-Hoxy.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Hoxy.release.xcconfig"; path = "Target Support Files/Pods-Hoxy/Pods-Hoxy.release.xcconfig"; sourceTree = "<group>"; };
 		CCEA5CB1BB645FCD82AB47CB /* Pods-Hoxy.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Hoxy.debug.xcconfig"; path = "Target Support Files/Pods-Hoxy/Pods-Hoxy.debug.xcconfig"; sourceTree = "<group>"; };
 		EB05FFC625DED9CD00A587BE /* ChatRoomProfileVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomProfileVC.swift; sourceTree = "<group>"; };
+		EB05FFCA25E3762900A587BE /* ChatRoomMenuVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomMenuVC.swift; sourceTree = "<group>"; };
+		EB05FFD125E3943C00A587BE /* ChatMemberTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMemberTableViewCell.swift; sourceTree = "<group>"; };
+		EB05FFD225E3943C00A587BE /* ChatMemberTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ChatMemberTableViewCell.xib; sourceTree = "<group>"; };
 		EB11F0CC25C5367100EC9F6F /* UIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIView.swift; sourceTree = "<group>"; };
 		EB11F0D025C54E9B00EC9F6F /* IndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IndicatorView.swift; sourceTree = "<group>"; };
 		EB11F0D525C55EB200EC9F6F /* EmailLoginVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailLoginVC.swift; sourceTree = "<group>"; };
@@ -114,6 +129,15 @@
 		EB5D8E7D25CA645A003D957C /* PostVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostVC.swift; sourceTree = "<group>"; };
 		EB5D8E8525CB15B6003D957C /* UserDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDataManager.swift; sourceTree = "<group>"; };
 		EB5D8E8825CB183B003D957C /* MemberModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberModel.swift; sourceTree = "<group>"; };
+		EB78A36425E40CE500E4C538 /* ChatMemberView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMemberView.swift; sourceTree = "<group>"; };
+		EB78A36825E55D0200E4C538 /* ChatMenuItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMenuItem.swift; sourceTree = "<group>"; };
+		EB78A37025E755EC00E4C538 /* UITableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITableView.swift; sourceTree = "<group>"; };
+		EB78A37325E75DBF00E4C538 /* ProfileBackTop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileBackTop.swift; sourceTree = "<group>"; };
+		EB78A37725E7E9EF00E4C538 /* MyMessageTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyMessageTableViewCell.swift; sourceTree = "<group>"; };
+		EB78A37825E7E9EF00E4C538 /* MyMessageTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MyMessageTableViewCell.xib; sourceTree = "<group>"; };
+		EB78A37C25E88C8700E4C538 /* ProfileBackBottom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileBackBottom.swift; sourceTree = "<group>"; };
+		EB78A37F25E8AE2C00E4C538 /* ReportModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportModel.swift; sourceTree = "<group>"; };
+		EB78A38225EAB2AC00E4C538 /* BlockModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockModel.swift; sourceTree = "<group>"; };
 		EB87AB7D25BC11EF00DF3BBB /* UnKnownVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnKnownVC.swift; sourceTree = "<group>"; };
 		EB87AB8325BC1A7A00DF3BBB /* MainLoginVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainLoginVC.swift; sourceTree = "<group>"; };
 		EB87AB8625BC1B0A00DF3BBB /* UIFont.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIFont.swift; sourceTree = "<group>"; };
@@ -205,6 +229,8 @@
 				EB5D8E8825CB183B003D957C /* MemberModel.swift */,
 				EB29690125D991D400DAE55B /* ChatListModel.swift */,
 				EB29691925DCC16400DAE55B /* ChattingModel.swift */,
+				EB78A37F25E8AE2C00E4C538 /* ReportModel.swift */,
+				EB78A38225EAB2AC00E4C538 /* BlockModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -228,6 +254,7 @@
 				EB2968EB25D962D600DAE55B /* ChatRoomVC.swift */,
 				EB05FFC625DED9CD00A587BE /* ChatRoomProfileVC.swift */,
 				EBDA507225BC03DC00C6A122 /* MyPageVC.swift */,
+				EB05FFCA25E3762900A587BE /* ChatRoomMenuVC.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -249,6 +276,10 @@
 				EB2968FA25D9790400DAE55B /* ChatListTableViewCell.xib */,
 				EB29691C25DCD9FD00DAE55B /* ChatMessageCell.swift */,
 				EB29691D25DCD9FD00DAE55B /* ChatMessageCell.xib */,
+				EB78A37725E7E9EF00E4C538 /* MyMessageTableViewCell.swift */,
+				EB78A37825E7E9EF00E4C538 /* MyMessageTableViewCell.xib */,
+				EB05FFD125E3943C00A587BE /* ChatMemberTableViewCell.swift */,
+				EB05FFD225E3943C00A587BE /* ChatMemberTableViewCell.xib */,
 			);
 			path = CustomCell;
 			sourceTree = "<group>";
@@ -275,6 +306,7 @@
 				EBD9F3F825C3C61F004E18F1 /* UIViewController.swift */,
 				EB5D8E7425C7E1BF003D957C /* Date.swift */,
 				EB5D8E7725C7E999003D957C /* NSMutableAttrubutedString.swift */,
+				EB78A37025E755EC00E4C538 /* UITableView.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -292,7 +324,11 @@
 				EB11F0D025C54E9B00EC9F6F /* IndicatorView.swift */,
 				EB5D8E5725C70FB7003D957C /* LoginButton.swift */,
 				EB5D8E5F25C7172D003D957C /* WriteOptionItem.swift */,
+				EB78A36425E40CE500E4C538 /* ChatMemberView.swift */,
 				EB128D5F25CFA55D004C0A66 /* LocationService.swift */,
+				EB78A36825E55D0200E4C538 /* ChatMenuItem.swift */,
+				EB78A37325E75DBF00E4C538 /* ProfileBackTop.swift */,
+				EB78A37C25E88C8700E4C538 /* ProfileBackBottom.swift */,
 			);
 			path = CommonClass;
 			sourceTree = "<group>";
@@ -356,6 +392,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EB78A37A25E7E9EF00E4C538 /* MyMessageTableViewCell.xib in Resources */,
 				EB25DC9425B9C1E6006F4008 /* LaunchScreen.storyboard in Resources */,
 				EBDA504B25BB325A00C6A122 /* GoogleService-Info.plist in Resources */,
 				EB38A77025C12AB500516515 /* HomeTableViewCell.xib in Resources */,
@@ -363,6 +400,7 @@
 				EB25DC9125B9C1E6006F4008 /* Assets.xcassets in Resources */,
 				EB25DC8F25B9C1E5006F4008 /* Main.storyboard in Resources */,
 				EB2968FC25D9790400DAE55B /* ChatListTableViewCell.xib in Resources */,
+				EB05FFD425E3943C00A587BE /* ChatMemberTableViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -417,16 +455,23 @@
 			files = (
 				EBD9F3F925C3C61F004E18F1 /* UIViewController.swift in Sources */,
 				EB5D8E5825C70FB7003D957C /* LoginButton.swift in Sources */,
+				EB78A37425E75DBF00E4C538 /* ProfileBackTop.swift in Sources */,
 				EB128D6025CFA55D004C0A66 /* LocationService.swift in Sources */,
 				EB128D6325CFA6BD004C0A66 /* LocationVC.swift in Sources */,
 				EB5D8E5C25C7168C003D957C /* WriteVC.swift in Sources */,
 				EB5D8E7225C7D629003D957C /* PostDataModel.swift in Sources */,
 				EB5D8E7825C7E999003D957C /* NSMutableAttrubutedString.swift in Sources */,
+				EB78A37125E755EC00E4C538 /* UITableView.swift in Sources */,
 				EB29690225D991D400DAE55B /* ChatListModel.swift in Sources */,
+				EB78A36525E40CE500E4C538 /* ChatMemberView.swift in Sources */,
+				EB05FFCB25E3762900A587BE /* ChatRoomMenuVC.swift in Sources */,
 				EBDA506F25BC03CA00C6A122 /* ChatListVC.swift in Sources */,
 				EB38A71125BD5DEE00516515 /* UIButton.swift in Sources */,
 				EB2968FB25D9790400DAE55B /* ChatListTableViewCell.swift in Sources */,
+				EB78A38025E8AE2C00E4C538 /* ReportModel.swift in Sources */,
+				EB78A36925E55D0200E4C538 /* ChatMenuItem.swift in Sources */,
 				EB11F0D125C54E9B00EC9F6F /* IndicatorView.swift in Sources */,
+				EB05FFD325E3943C00A587BE /* ChatMemberTableViewCell.swift in Sources */,
 				EB5D8E7525C7E1BF003D957C /* Date.swift in Sources */,
 				EB11F0CD25C5367100EC9F6F /* UIView.swift in Sources */,
 				EB87AB7F25BC11EF00DF3BBB /* UnKnownVC.swift in Sources */,
@@ -436,9 +481,11 @@
 				EBD9F3F625C3C5BF004E18F1 /* BaseViewController.swift in Sources */,
 				EB87AB8A25BC728500DF3BBB /* Device.swift in Sources */,
 				EB29691A25DCC16400DAE55B /* ChattingModel.swift in Sources */,
+				EB78A37D25E88C8700E4C538 /* ProfileBackBottom.swift in Sources */,
 				EB38A75125C07E1900516515 /* String.swift in Sources */,
 				EB29691E25DCD9FD00DAE55B /* ChatMessageCell.swift in Sources */,
 				EB38A71A25BD760500516515 /* TopView.swift in Sources */,
+				EB78A38325EAB2AC00E4C538 /* BlockModel.swift in Sources */,
 				EBDA506A25BC03BC00C6A122 /* HomeVC.swift in Sources */,
 				EB38A72C25BE745A00516515 /* Contants.swift in Sources */,
 				EB2968EC25D962D600DAE55B /* ChatRoomVC.swift in Sources */,
@@ -446,6 +493,7 @@
 				EB87AB8425BC1A7A00DF3BBB /* MainLoginVC.swift in Sources */,
 				EBDA504E25BB37C300C6A122 /* TabBarController.swift in Sources */,
 				EB38A72325BE62C200516515 /* UITextField.swift in Sources */,
+				EB78A37925E7E9EF00E4C538 /* MyMessageTableViewCell.swift in Sources */,
 				EB38A71425BD707100516515 /* JoinVC.swift in Sources */,
 				EB5D8E7E25CA645A003D957C /* PostVC.swift in Sources */,
 				EB5D8E8925CB183B003D957C /* MemberModel.swift in Sources */,

@@ -7,10 +7,17 @@
 
 import UIKit
 import Firebase
+import BonsaiController
 
-class ChatRoomVC: BaseViewController, ChatRoomDataDelegate {
 
+
+class ChatRoomVC: BaseViewController, ChatRoomDataDelegate, ChatRoomDelegate {
+    func dismiss() {
+        print("delegate")
+        self.navigationController?.popViewController(animated: true)
+    }
     
+
     // MARK: - Properties
     lazy var topInstructionView = UIView().then {
         $0.backgroundColor = .white
@@ -30,6 +37,7 @@ class ChatRoomVC: BaseViewController, ChatRoomDataDelegate {
     lazy var chatTableView = UITableView().then {
         $0.backgroundColor = .mainBackground
         $0.allowsSelection = false
+        $0.separatorStyle = .none
     }
     
     lazy var chatInputView = UIView().then {
@@ -67,7 +75,11 @@ class ChatRoomVC: BaseViewController, ChatRoomDataDelegate {
     }
     var chatDataManager = ChatDataManager()
     var chatID: String = ""
+    var postID: String = ""
     var chatData: [ChattingModel] = []
+    var memberID = ""
+    var nickname = ""
+    var chatRoomMenu = ChatRoomMenuVC()
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -75,9 +87,9 @@ class ChatRoomVC: BaseViewController, ChatRoomDataDelegate {
         chatDataManager.contentDelegate = self
         chatDataManager.getChattingData(chatID)
         setting()
+        chatRoomMenu.delegate = self
         layout()
-       
-        
+        addNaviButton()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -110,7 +122,7 @@ class ChatRoomVC: BaseViewController, ChatRoomDataDelegate {
             let keyboardRectangle = keyboardFrame.cgRectValue
             let keyboardHeight = keyboardRectangle.height
             self.view.frame.origin.y = -keyboardRectangle.height
-//            self.chatInputView.frame.origin.y = -keyboardRectangle.height
+//            self.chatInputView.frame.origin.y = -keyboardRectaingle.height
         }
         
     }
@@ -118,6 +130,15 @@ class ChatRoomVC: BaseViewController, ChatRoomDataDelegate {
     @objc func keyboardWillHide(note: NSNotification) {
         self.view.frame.origin.y = 0
     }
+    
+    @objc func barButtonAction() {
+        let vc = chatRoomMenu//ChatRoomMenuVC()
+        vc.transitioningDelegate = self
+        vc.modalPresentationStyle = .custom
+        vc.postID = self.postID
+        present(vc, animated: true, completion: nil)
+    }
+    
     // MARK: - Selectors
     @objc func sendButtonAction() {
         if let content = self.chatInputTextField.text, let uid = Auth.auth().currentUser?.uid {
@@ -157,28 +178,59 @@ class ChatRoomVC: BaseViewController, ChatRoomDataDelegate {
         }
     }
     
+    func addNaviButton() {
+        let moreButton = UIBarButtonItem().then {
+            $0.image = UIImage(systemName: "ellipsis")
+            $0.target = self
+            $0.action = #selector(barButtonAction)
+        }
+        
+        navigationItem.rightBarButtonItem = moreButton
+        
+    }
+    
     func setting() {
         chatTableView.delegate = self
         chatTableView.dataSource = self
         chatTableView.register(UINib(nibName: "ChatMessageCell", bundle: nil), forCellReuseIdentifier: "ChatMessageCell")
-        chatTableView.tableFooterView = UIView()
     }
     
     func getChatContentData(_ chatData: [ChattingModel]) {
-        self.chatData =  chatData
+        set.fs.collection(set.Table.post).document(postID).addSnapshotListener { (snapshot, error) in
+            if let e = error {
+                print(e.localizedDescription)
+            } else {
+                if let data = snapshot?.data() {
+                    self.navigationItem.title = data["title"] as? String
+                }
+            }
+        }
+        self.chatData = chatData
         self.chatTableView.reloadData()
+
+        self.chatTableView.scrollToBottom()
     }
-    @objc func cellButtonAction(_ message: String) {
-        let vc = ChatRoomProfileVC()
-        vc.modalPresentationStyle = .overFullScreen
-        present(vc, animated: true, completion: nil)
-    }
+    
+    
 }
 
 extension ChatRoomVC: UITableViewDataSource, UITableViewDelegate {
+    @objc func cellButtonAction(sender: UIButton) {
+        let content = sender.superview?.superview
+        let cell = content?.superview as! ChatMessageCell
+       
+        let vc = ChatRoomProfileVC()
+        vc.modalPresentationStyle = .overFullScreen
+        vc.userID = cell.senderID
+        vc.nickname = cell.senderNickname
+        vc.chatID = self.chatID
+        present(vc, animated: true, completion: nil)
+    }
+    
     func numberOfSections(in tableView: UITableView) -> Int {
         return chatData.count
     }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 1
     }
@@ -187,40 +239,56 @@ extension ChatRoomVC: UITableViewDataSource, UITableViewDelegate {
         let cell = self.chatTableView.dequeueReusableCell(withIdentifier: "ChatMessageCell", for: indexPath as IndexPath) as! ChatMessageCell
         cell.contentLabel.text = chatData[indexPath.section].content
 
-        chatData[indexPath.section].sender?.addSnapshotListener({ (snapshot, error) in
+       chatData[indexPath.section].sender?.addSnapshotListener({ (snapshot, error) in
             if let e = error {
                 print(e.localizedDescription)
             } else {
                 let id = snapshot?.documentID
-                let sender = Auth.auth().currentUser?.uid
-                
-                if id == sender {
-                    cell.emojiLabel.setTitle("", for: .normal)
-                    cell.nicknameLabel.text = ""
+        
+                if id == Auth.auth().currentUser?.uid {
+                    cell.contentFrameView.backgroundColor = .mainYellow
+                    cell.emojiButton.isHidden = true
+                    cell.nicknameLabel.isHidden = true
+
                 } else {
-                    if let data = snapshot?.data() {
-                        cell.emojiLabel.setTitle(data["emoji"] as! String, for: .normal)
-//                        cell.emojiLabel.addTarget(self, action: #selector(self.cellButtonAction(id!)), for: .touchUpInside)
-                    }
-                    set.fs.collection(set.Table.chatting)
-                        .document(self.chatID)
-                        .addSnapshotListener { (snapshot, error) in
-                            if let e = error {
-                                print(e.localizedDescription)
-                            } else {
-                                if let data = snapshot?.data() {
-                                    let member = data["nickname"] as! [String: String]
-                                    cell.nicknameLabel.text = member[id ?? ""]
-                                }
+                    cell.contentFrameView.backgroundColor = .white
+                    cell.emojiButton.isHidden = false
+                    cell.nicknameLabel.isHidden = false
+
+                }
+                
+                if let data = snapshot?.data() {
+                    cell.emojiButton.setTitle(data["emoji"] as? String, for: .normal)
+                    cell.emojiButton.addTarget(self, action: #selector(self.cellButtonAction(sender:)), for: .touchUpInside)
+                }
+                set.fs.collection(set.Table.chatting)
+                    .document(self.chatID)
+                    .addSnapshotListener { (snapshot, error) in
+                        if let e = error {
+                            print(e.localizedDescription)
+                        } else {
+                            if let data = snapshot?.data() {
+                                let member = data["nickname"] as! [String: String]
+                                cell.nicknameLabel.text = member[id ?? ""]
+                                cell.senderNickname = member[id!]!
+                                cell.senderID = id!
                             }
                         }
                 }
             }
         })
-        
         return cell
     }
-    
- 
-    
+}
+
+extension ChatRoomVC: BonsaiControllerDelegate {
+    func frameOfPresentedView(in containerViewFrame: CGRect) -> CGRect {
+        return CGRect(origin: CGPoint(x: Device.widthScale(88), y: containerViewFrame.height * 0.11), size: CGSize(width: Device.widthScale(287), height: containerViewFrame.height ))
+    }
+    func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
+        let blurEffectStyle = UIBlurEffect.Style.systemThinMaterialDark
+        
+        return BonsaiController(fromDirection: .right, blurEffectStyle: blurEffectStyle, presentedViewController: presented, delegate: self)
+        
+    }
 }

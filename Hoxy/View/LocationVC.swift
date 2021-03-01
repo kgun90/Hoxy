@@ -22,7 +22,6 @@ class LocationVC: BaseViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -30,9 +29,17 @@ class LocationVC: BaseViewController {
     }
     
     func moveToHome() {
+//        let vc = TabBarController()
+//        vc.modalPresentationStyle = .overFullScreen
+//        present(vc, animated: true, completion: nil)
         let vc = TabBarController()
-        vc.modalPresentationStyle = .overFullScreen
-        present(vc, animated: true, completion: nil)
+        if let window = UIApplication.shared.windows.first {
+            window.rootViewController = vc
+            UIView.transition(with: window, duration: 0.3, options: .transitionCrossDissolve, animations: nil)
+        } else {
+            vc.modalPresentationStyle = .overFullScreen
+            self.present(vc, animated: true, completion: nil)
+        }
     }
     
     func getCurrentLocation() {

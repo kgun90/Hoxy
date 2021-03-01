@@ -178,7 +178,7 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
                 print(e.localizedDescription)
             } else {
                 if let data = snapshot?.data() {
-                    let memberCount = (data["nickname"] as! Dictionary<String, Any>).count
+                    let memberCount = (data["nickname"] as! [String : String]).count
                     cell.attenderCountLabel.text = " \(memberCount)/\(self.posts[indexPath.section].headcount)"
                 }
             }

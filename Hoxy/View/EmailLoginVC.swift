@@ -18,7 +18,6 @@ class EmailLoginVC: UIViewController {
 
     let emailItem = JoinInputItem("이메일", "양식에 맞게 입력 바랍니다.", false)
     let passItem = JoinInputItem("비밀번호", "영문/숫자/기호를 모두 포함한 8~16자리 입력", true)
-   
     let loginButton = BottomButton("로그인", #colorLiteral(red: 0.5058823529, green: 0.5058823529, blue: 0.5058823529, alpha: 1))
     
     
@@ -27,6 +26,7 @@ class EmailLoginVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
+    
         loginCheck()
         buttonTarget()
         layout()
@@ -76,6 +76,7 @@ class EmailLoginVC: UIViewController {
         }
         
     }
+    
     func loginCheck() {
         if Auth.auth().currentUser?.uid != nil {
             showIndicator()
@@ -158,8 +159,6 @@ class EmailLoginVC: UIViewController {
             loginButton.backgroundColor = .mainYellow
         }
     }
-    
-  
     
 }
 

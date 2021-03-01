@@ -50,11 +50,9 @@ class ChatListVC: BaseViewController, ChatListDataDelegate {
    
     func getChatListData(_ chatListData: [ChatListModel]) {
         listData = chatListData
-        print(listData)
+     
         chatListTableView.reloadData()
     }
-   
-
 }
 
 extension ChatListVC: UITableViewDataSource, UITableViewDelegate {
@@ -93,6 +91,7 @@ extension ChatListVC: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let vc = ChatRoomVC()
         vc.chatID = listData[indexPath.section].chatID
+        vc.postID = listData[indexPath.section].post?.documentID ?? ""
         navigationController?.pushViewController(vc, animated: true)
     }
 }

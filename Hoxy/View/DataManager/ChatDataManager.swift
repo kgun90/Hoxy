@@ -22,8 +22,7 @@ struct ChatDataManager {
     func getChats() {
         if let uid = Auth.auth().currentUser?.uid {
             set.fs.collection(set.Table.chatting)
-                .whereField("nickname.\(uid)", isNotEqualTo: "")
-//                .order(by: "date", descending: true)
+                .whereField("member", arrayContains: uid)
                 .addSnapshotListener { (snapshot, error) in
                 var listData: [ChatListModel] = []
                 if let e = error {
