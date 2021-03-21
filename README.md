@@ -3,7 +3,7 @@
 
 익명 만남 플랫폼
 
-- 진행기간 : 2021. 01. 18 ~ 2021. 02. 21
+- 진행기간 : 2021. 01. ~ 2021. 03. 
 
 ## 서비스 소개
 <img src="https://user-images.githubusercontent.com/30033658/111910515-08fd7f80-8aa5-11eb-9a49-9b04f93bc30d.png" width="40%"> <img src="https://user-images.githubusercontent.com/30033658/111910531-1ca8e600-8aa5-11eb-8719-5599e9f98192.png" width="40%">
