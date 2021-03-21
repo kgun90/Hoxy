@@ -7,8 +7,7 @@
 
 ## 서비스 소개
 
-![Simulator Screen Shot - iPhone 11 Pro - 2021-03-22 at 00 11 37](https://user-images.githubusercontent.com/30033658/111910515-08fd7f80-8aa5-11eb-9a49-9b04f93bc30d.png)![title](/img/myImg.png){: width="375" height="812"){: .center}
-
+![Simulator Screen Shot - iPhone 11 Pro - 2021-03-22 at 00 11 37](https://user-images.githubusercontent.com/30033658/111910515-08fd7f80-8aa5-11eb-9a49-9b04f93bc30d.png)
 ![Simulator Screen Shot - iPhone 11 Pro - 2021-03-22 at 00 11 41](https://user-images.githubusercontent.com/30033658/111910531-1ca8e600-8aa5-11eb-8719-5599e9f98192.png)
 - HOXY는 사람이 필요한 사람들을 위해 모임을 개설하고 주변 사람들을 쉽게 모을 수 있도록 도와주는 Flutter/iOS 기반의 플랫폼 앱 입니다.
 - 사용자의 위치정보를 통해 주변에서 개설된 모임 목록을 확인하고 이에 참여하거나 직접 모임을 개설합니다.
