@@ -20,7 +20,7 @@
 ### 1. 회원가입
 
 ### 1-1. 회원가입
-<img src="https://user-images.githubusercontent.com/30033658/111910586-50840b80-8aa5-11eb-9bd2-354abec1563c.png" width="40%"> <img src="https://user-images.githubusercontent.com/30033658/111910584-4f52de80-8aa5-11eb-88a5-6eb6f87f092f.png" width="100%">
+<img src="https://user-images.githubusercontent.com/30033658/111910586-50840b80-8aa5-11eb-9bd2-354abec1563c.png" width="40%"> <img src="https://user-images.githubusercontent.com/30033658/111910584-4f52de80-8aa5-11eb-88a5-6eb6f87f092f.png" width="40%">
 
 - 로그인 화면에서 **회원가입** 선택시 해당 화면으로 이동하며, 현재 이메일 회원가입/로그인 기능 지원 (구글, 애플 로그인은 추후 예정)
 - 이메일로 회원가입 시 휴대폰 인증을 통해 중복 가입을 방지합니다.
@@ -47,7 +47,7 @@
 - 닉네임은 랜덤으로 생성됩니다.
 
 ### 2-2. 모집글 조회
-<img src="https://user-images.githubusercontent.com/30033658/111910742-f768a780-8aa5-11eb-9933-402d431a69bf.png" width="40%"> <img src="https://user-images.githubusercontent.com/30033658/111910741-f6377a80-8aa5-11eb-9c20-a743ced6b55d.png" width="40%"> <img src="https://user-images.githubusercontent.com/30033658/111910738-f33c8a00-8aa5-11eb-9af7-57cdf0e9db88.png" width="40%">
+<img src="https://user-images.githubusercontent.com/30033658/111910742-f768a780-8aa5-11eb-9933-402d431a69bf.png" width="35%"> <img src="https://user-images.githubusercontent.com/30033658/111910741-f6377a80-8aa5-11eb-9c20-a743ced6b55d.png" width="35%"> <img src="https://user-images.githubusercontent.com/30033658/111910738-f33c8a00-8aa5-11eb-9af7-57cdf0e9db88.png" width="35%">
 
 - 모임 글 목록에서 글을 선택하면 모임의 내용이 표시됩니다.
 - 본인의 글일 경우 상단바 우측 버튼을 통해  수정, 삭제가 가능합니다.
