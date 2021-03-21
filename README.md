@@ -47,7 +47,7 @@
 - 닉네임은 랜덤으로 생성됩니다.
 
 ### 2-2. 모집글 조회
-<img src="https://user-images.githubusercontent.com/30033658/111910742-f768a780-8aa5-11eb-9933-402d431a69bf.png" width="35%"> <img src="https://user-images.githubusercontent.com/30033658/111910741-f6377a80-8aa5-11eb-9c20-a743ced6b55d.png" width="35%"> <img src="https://user-images.githubusercontent.com/30033658/111910738-f33c8a00-8aa5-11eb-9af7-57cdf0e9db88.png" width="35%">
+<img src="https://user-images.githubusercontent.com/30033658/111910742-f768a780-8aa5-11eb-9933-402d431a69bf.png" width="33%"> <img src="https://user-images.githubusercontent.com/30033658/111910741-f6377a80-8aa5-11eb-9c20-a743ced6b55d.png" width="33%"> <img src="https://user-images.githubusercontent.com/30033658/111910738-f33c8a00-8aa5-11eb-9af7-57cdf0e9db88.png" width="33%">
 
 - 모임 글 목록에서 글을 선택하면 모임의 내용이 표시됩니다.
 - 본인의 글일 경우 상단바 우측 버튼을 통해  수정, 삭제가 가능합니다.
