@@ -759,7 +759,7 @@ extension PostVC: UITableViewDataSource, UITableViewDelegate {
                 print(e.localizedDescription)
             } else {
                 if let data = snapshot?.data() {
-                    let memberCount = (data["member"] as! Dictionary<String, Any>).count
+                    let memberCount = (data["member"] as! [String]).count
                     cell.attenderCountLabel.text = " \(memberCount)/\(self.posts[indexPath.row].headcount)"
                 }
             }

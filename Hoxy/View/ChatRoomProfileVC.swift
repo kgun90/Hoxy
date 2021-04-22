@@ -179,6 +179,10 @@ class ChatRoomProfileVC: UIViewController {
     }
     
     func profileDataSet() {
+        if userID == Auth.auth().currentUser?.uid {
+            moreButton.isHidden = true
+        }        
+        
         set.fs.collection(set.Table.member).document(userID).addSnapshotListener { (snapshot, error) in
             if let e = error {
                 print(e.localizedDescription)

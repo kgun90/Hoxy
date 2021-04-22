@@ -12,6 +12,7 @@ extension UITableView {
 
     func scrollToBottom(){
         DispatchQueue.main.async { [self] in
+            
             let indexPath = IndexPath(
                 row: self.numberOfRows(inSection:  self.numberOfSections-1) - 1,
                 section: self.numberOfSections - 1)

@@ -456,7 +456,8 @@ class WriteVC: BaseViewController {
         ])
         
         let chat = set.fs.collection(set.Table.chatting).addDocument(data: [
-            "member": [ Auth.auth().currentUser?.uid : nickName],
+            "member": [Auth.auth().currentUser?.uid],
+            "nickname": [ Auth.auth().currentUser?.uid : nickName],
             "post" : post
         ])
         
@@ -520,12 +521,7 @@ class WriteVC: BaseViewController {
             postModel.chat = data.chat
             postModel.view = data.view
             postModel.tag = data.tag
-            
-            print(postModel)
-         
-            
-            
-            
+              
         }
     }
 
@@ -636,6 +632,7 @@ extension WriteVC: UIPickerViewDelegate, UIPickerViewDataSource {
         case .headCount:
             headCountView.textField.text = String(set.headCount[row])
             postModel.headcount = set.headCount[row]
+            
         case .communicationLevel:
             communicationLevelView.textField.text = set.communicationLevel[row]
             let emojiRand = Int.random(in: 0...2)
@@ -644,17 +641,17 @@ extension WriteVC: UIPickerViewDelegate, UIPickerViewDataSource {
             postModel.communication = row
             if postModel.tag[0] != set.communicationLevel[row] {
                 postModel.tag.insert(set.communicationLevel[row], at: 0)
+//                postModel.tag.append(set.communicationLevel[row])
             }
           
-
         case .meetingDuration:
             meetingDurationView.textField.text = set.meetingDuration[row]
             postModel.duration = (row+1)*30
+            
         default:
             return
+            
         }
-        print(postModel)
-     
     }
     
 }
@@ -664,6 +661,7 @@ extension WriteVC: UITextViewDelegate {
         editCheckAction()
         contentCountLabel.text = "\(textView.text.count) / 400"
     }
+    
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         let newText = (textView.text as NSString).replacingCharacters(in: range, with: text)
         let numberOfChars = newText.count
@@ -696,7 +694,7 @@ extension WriteVC: SingleDataDelegate {
                 print(e.localizedDescription)
             } else {
                 if let data = snapshot?.data() {
-                    let member = data["member"] as! [String : String]
+                    let member = data["nickname"] as! [String : String]
                     let nickname = member[self.postModel.writer!.documentID]!
                     self.nicknameSetting(nickname)
                 }

@@ -18,12 +18,16 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo" translatesAutoresizingMaskIntoConstraints="NO" id="LMK-ye-F8p">
-                                <rect key="frame" x="82" y="412" width="250" height="72"/>
+                                <rect key="frame" x="41.5" y="400.5" width="331" height="95"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="LMK-ye-F8p" secondAttribute="height" multiplier="125:36" id="kti-98-eQD"/>
+                                </constraints>
                             </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstItem="LMK-ye-F8p" firstAttribute="width" secondItem="Ze5-6b-2t3" secondAttribute="width" multiplier="0.8" id="FNo-A8-urV"/>
                             <constraint firstItem="LMK-ye-F8p" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="KBB-f3-XoN"/>
                             <constraint firstItem="LMK-ye-F8p" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="vke-f9-Kva"/>
                         </constraints>
