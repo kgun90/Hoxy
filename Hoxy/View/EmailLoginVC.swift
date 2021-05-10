@@ -8,9 +8,16 @@
 import UIKit
 import Firebase
 
+protocol AuthenticationControllerProtocol {
+    func checkFormStatus()
+}
+
+
 class EmailLoginVC: UIViewController {
     // MARK: - Properties
     let topView = TopView("이메일로 로그인")
+    
+    private var viewModel = EmailLoginViewModel()
 
     lazy var logoImage = UIImageView().then {
         $0.image = UIImage(named: "logo")
@@ -41,9 +48,15 @@ class EmailLoginVC: UIViewController {
     
     // MARK: - Selectors
 
-    @objc func textFieldDidChange() {
+    @objc func textFieldDidChange(sener: UITextField) {
+        if sener == emailItem.tf {
+            viewModel.email = sener.text
+        } else {
+            viewModel.password = sener.text
+        }
+        checkFormStatus()
         // textField 입력 실시간 감지
-        loginCheck()
+//        loginCheck()
     }
 
     @objc func backAction() {
@@ -55,12 +68,14 @@ class EmailLoginVC: UIViewController {
         if let email = emailItem.tf.text, let pass = passItem.tf.text {
             Auth.auth().signIn(withEmail: email, password: pass) { [weak self] authResult, error in
                 if let e = error {
-                    let ok = UIAlertAction(title: "확인", style: .default, handler: nil)
-                    let alert = UIAlertController(title: "로그인 실패", message: "이메일과 패스워드를 확인해주세요.", preferredStyle: .alert)
-                    alert.addAction(ok)
-                    self?.present(alert, animated: true, completion: nil)
                     print(e.localizedDescription)
-                    self!.dismissIndicator()
+                    self?.dismissIndicator()
+                    let ok = UIAlertAction(title: "확인", style: .default) { action in
+                        return
+                    }
+                    self?.presentAlert(title: "로그인 실패", message: "이메일과 패스워드를 확인해주세요.", isCancelActionIncluded: true, preferredStyle: .alert, with: ok)
+
+                    
                 } else {
                     let vc = LocationVC()
                     if let window = UIApplication.shared.windows.first {
@@ -151,15 +166,18 @@ class EmailLoginVC: UIViewController {
         emailItem.tf.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
        
     }
-    
-    func enableLogin() {
-        if self.emailItem.tf.text?.validateEmail() ?? false,
-           self.passItem.tf.text?.validatePassword() ?? false{
+}
+
+extension EmailLoginVC: AuthenticationControllerProtocol {
+    func checkFormStatus() {
+        if viewModel.formIsValid {
             loginButton.isEnabled = true
             loginButton.backgroundColor = .mainYellow
+        } else {
+            loginButton.isEnabled = false
+            loginButton.backgroundColor = #colorLiteral(red: 0.5058823529, green: 0.5058823529, blue: 0.5058823529, alpha: 1)
         }
     }
-    
 }
 
 extension EmailLoginVC: UITextFieldDelegate {

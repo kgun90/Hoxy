@@ -132,6 +132,14 @@ class MyPageVC: BaseViewController {
         $0.text = "현재 동네"
     }
     
+    lazy var logoutButton = UIButton().then {
+        $0.setTitle("logout", for: .normal)
+        $0.setTitleColor(.white, for: .normal)
+        $0.addTarget(self, action: #selector(logoutAction), for: .touchUpInside)
+
+    }
+    
+    
     lazy var userLocationView = UIView().then {
         $0.backgroundColor = .white
         
@@ -222,12 +230,33 @@ class MyPageVC: BaseViewController {
         presentAlert(title: "프로필 이모티콘 바꾸기", message: emoji, with: ok, again, cancel)
     }
     
+    @objc func logoutAction() {
+        self.showIndicator()
+        let firebaseAuth = Auth.auth()
+        do {
+            try firebaseAuth.signOut()
+        } catch let signOutError as NSError {
+            print ("Error signing out: %@", signOutError)
+        }
+        
+        let vc = MainLoginVC()
+        if let window = UIApplication.shared.windows.first {
+            window.rootViewController = vc
+            UIView.transition(with: window, duration: 0.3, options: .transitionCrossDissolve, animations: nil)
+        } else {
+            vc.modalPresentationStyle = .overFullScreen
+            present(vc, animated: true, completion: nil)
+        }
+        self.dismissIndicator()
+    }
+    
     // MARK: - Helpers
     func layout() {
         view.addSubview(topView)
         view.addSubview(currentLocationView)
         view.addSubview(userLocationView)
         view.addSubview(blockUserView)
+        view.addSubview(logoutButton)
         
         topView.snp.makeConstraints {
             $0.top.equalToSuperview().offset(Device.topHeight)
@@ -252,6 +281,9 @@ class MyPageVC: BaseViewController {
             $0.centerX.equalToSuperview()
             $0.width.equalToSuperview()
             $0.height.equalTo(Device.heightScale(50))
+        }
+        logoutButton.snp.makeConstraints {
+            $0.center.equalToSuperview()
         }
     }
     

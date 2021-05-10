@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		79FAD3914DD6BD3F19E9864C /* Pods_Hoxy.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F984CD5AE290D05D2906238D /* Pods_Hoxy.framework */; };
+		E0ED10D626492EE800661094 /* EmailLoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ED10D526492EE800661094 /* EmailLoginViewModel.swift */; };
+		E0ED10D826492F0C00661094 /* Observable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ED10D726492F0C00661094 /* Observable.swift */; };
 		EB05FFC725DED9CD00A587BE /* ChatRoomProfileVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB05FFC625DED9CD00A587BE /* ChatRoomProfileVC.swift */; };
 		EB05FFCB25E3762900A587BE /* ChatRoomMenuVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB05FFCA25E3762900A587BE /* ChatRoomMenuVC.swift */; };
 		EB05FFD325E3943C00A587BE /* ChatMemberTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB05FFD125E3943C00A587BE /* ChatMemberTableViewCell.swift */; };
@@ -81,6 +83,8 @@
 /* Begin PBXFileReference section */
 		A74370B774BB4905B3B6108B /* Pods-Hoxy.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Hoxy.release.xcconfig"; path = "Target Support Files/Pods-Hoxy/Pods-Hoxy.release.xcconfig"; sourceTree = "<group>"; };
 		CCEA5CB1BB645FCD82AB47CB /* Pods-Hoxy.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Hoxy.debug.xcconfig"; path = "Target Support Files/Pods-Hoxy/Pods-Hoxy.debug.xcconfig"; sourceTree = "<group>"; };
+		E0ED10D526492EE800661094 /* EmailLoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailLoginViewModel.swift; sourceTree = "<group>"; };
+		E0ED10D726492F0C00661094 /* Observable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Observable.swift; sourceTree = "<group>"; };
 		EB05FFC625DED9CD00A587BE /* ChatRoomProfileVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomProfileVC.swift; sourceTree = "<group>"; };
 		EB05FFCA25E3762900A587BE /* ChatRoomMenuVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomMenuVC.swift; sourceTree = "<group>"; };
 		EB05FFD125E3943C00A587BE /* ChatMemberTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMemberTableViewCell.swift; sourceTree = "<group>"; };
@@ -183,6 +187,14 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		E0ED10D426492ED600661094 /* Util */ = {
+			isa = PBXGroup;
+			children = (
+				E0ED10D726492F0C00661094 /* Observable.swift */,
+			);
+			path = Util;
+			sourceTree = "<group>";
+		};
 		EB25DC7B25B9C1E5006F4008 = {
 			isa = PBXGroup;
 			children = (
@@ -204,6 +216,7 @@
 		EB25DC8625B9C1E5006F4008 /* Hoxy */ = {
 			isa = PBXGroup;
 			children = (
+				E0ED10D426492ED600661094 /* Util */,
 				EB25DC8725B9C1E5006F4008 /* AppDelegate.swift */,
 				EB25DC8925B9C1E5006F4008 /* SceneDelegate.swift */,
 				EBDA507825BC052B00C6A122 /* CommonClass */,
@@ -263,6 +276,7 @@
 			isa = PBXGroup;
 			children = (
 				EB43F79325D1BA3700AFED54 /* PostViewModel.swift */,
+				E0ED10D526492EE800661094 /* EmailLoginViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -477,6 +491,7 @@
 				EB87AB7F25BC11EF00DF3BBB /* UnKnownVC.swift in Sources */,
 				EB05FFC725DED9CD00A587BE /* ChatRoomProfileVC.swift in Sources */,
 				EB25DC8C25B9C1E5006F4008 /* ViewController.swift in Sources */,
+				E0ED10D826492F0C00661094 /* Observable.swift in Sources */,
 				EB11F0D625C55EB200EC9F6F /* EmailLoginVC.swift in Sources */,
 				EBD9F3F625C3C5BF004E18F1 /* BaseViewController.swift in Sources */,
 				EB87AB8A25BC728500DF3BBB /* Device.swift in Sources */,
@@ -494,6 +509,7 @@
 				EBDA504E25BB37C300C6A122 /* TabBarController.swift in Sources */,
 				EB38A72325BE62C200516515 /* UITextField.swift in Sources */,
 				EB78A37925E7E9EF00E4C538 /* MyMessageTableViewCell.swift in Sources */,
+				E0ED10D626492EE800661094 /* EmailLoginViewModel.swift in Sources */,
 				EB38A71425BD707100516515 /* JoinVC.swift in Sources */,
 				EB5D8E7E25CA645A003D957C /* PostVC.swift in Sources */,
 				EB5D8E8925CB183B003D957C /* MemberModel.swift in Sources */,
