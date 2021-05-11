@@ -33,10 +33,28 @@ class EmailLoginVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-    
-        loginCheck()
         buttonTarget()
         layout()
+        
+        viewModel.observableEmail.bind { [weak self] email in
+            self?.emailItem.tf.text = email
+        }
+        viewModel.observablePassword.bind { [weak self] password in
+            self?.passItem.tf.text = password
+        }
+        
+        viewModel.emailDescriptionLabel.bind { [weak self] label in
+            self?.emailItem.descriptionLabel.text = label
+        }
+        
+        viewModel.passwordDescriptionLabel.bind { [weak self] label in
+            self?.passItem.descriptionLabel.text = label
+        }
+        
+        
+    
+//        loginCheck()
+
     }
     
     
@@ -48,16 +66,6 @@ class EmailLoginVC: UIViewController {
     
     // MARK: - Selectors
 
-    @objc func textFieldDidChange(sener: UITextField) {
-        if sener == emailItem.tf {
-            viewModel.email = sener.text
-        } else {
-            viewModel.password = sener.text
-        }
-        checkFormStatus()
-        // textField 입력 실시간 감지
-//        loginCheck()
-    }
 
     @objc func backAction() {
         self.dismiss(animated: true, completion: nil)
@@ -71,11 +79,12 @@ class EmailLoginVC: UIViewController {
                     print(e.localizedDescription)
                     self?.dismissIndicator()
                     let ok = UIAlertAction(title: "확인", style: .default) { action in
+                        self?.viewModel.loginCheck()
                         return
                     }
                     self?.presentAlert(title: "로그인 실패", message: "이메일과 패스워드를 확인해주세요.", isCancelActionIncluded: true, preferredStyle: .alert, with: ok)
 
-                    
+
                 } else {
                     let vc = LocationVC()
                     if let window = UIApplication.shared.windows.first {
@@ -89,7 +98,6 @@ class EmailLoginVC: UIViewController {
                 }
             }
         }
-        
     }
     
     func loginCheck() {
@@ -191,34 +199,23 @@ extension EmailLoginVC: UITextFieldDelegate {
         return true
     }
     
-    
-    func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
-        if textField.text != "" {
-            switch textField {
-            case emailItem.tf:
-                if emailItem.tf.text?.validateEmail() ?? false {
-                    emailItem.descriptionLabel.text = "올바른 양식 입니다."
-                    emailItem.descriptionLabel.textColor = .green
-                } else {
-                    emailItem.descriptionLabel.text = "올바른 양식으로 입력 바랍니다."
-                    emailItem.descriptionLabel.textColor = .red
-                }
-            case passItem.tf:
-                if passItem.tf.text?.validatePassword() ?? false {
-                    passItem.descriptionLabel.text = "올바른 양식 입니다."
-                    passItem.descriptionLabel.textColor = .green
-                } else {
-                    passItem.descriptionLabel.text = "올바른 양식으로 입력 바랍니다."
-                    passItem.descriptionLabel.textColor = .red
-                }
-            default:
-                print("?")
-            }
-            return true
+    @objc func textFieldDidChange(textField: UITextField) {
+        if textField == emailItem.tf {
+            viewModel.email = textField.text
         } else {
-            
-            return true
+            viewModel.password = textField.text
         }
-
+        
+        checkFormStatus()
+        switch textField {
+        case emailItem.tf:
+            self.viewModel.validation((textField.text?.validateEmail())!)
+        case passItem.tf:
+            self.viewModel.validation((textField.text?.validatePassword())!)
+        default:
+            return
+        }
     }
+    
+   
 }

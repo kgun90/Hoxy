@@ -9,7 +9,7 @@ import UIKit
 
 class JoinInputItem: UIView {
     let tf = UITextField()
-    let descriptionLabel = UILabel()
+    var descriptionLabel = UILabel()
     init( _ headText: String,
           _ placeholder: String,
           _ secureTextType: Bool = false,

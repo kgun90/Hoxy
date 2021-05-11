@@ -20,7 +20,7 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate {
     }
     
     let unknownItem = UITabBarItem().then{
-        $0.image = UIImage(systemName: "questionmark")
+        $0.image = UIImage(systemName: "bell")
         $0.tag = 0
     }
     
@@ -33,6 +33,7 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate {
         $0.image = UIImage(systemName: "person")
         $0.tag = 0
     }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         let homeNetworkController = UINavigationController(rootViewController: home)
