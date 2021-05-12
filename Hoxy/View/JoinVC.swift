@@ -132,7 +132,7 @@ class JoinVC: UIViewController {
         let vc = PersonalSettingVC()
         vc.modalPresentationStyle = .overFullScreen
            
-        let joinData = LoginModel(email: emailItem.tf.text!, pass: passItem.tf.text!, phone: phoneNumTextfield.text!, uid: uid)
+        let joinData = JoinModel(email: emailItem.tf.text!, pass: passItem.tf.text!, phone: phoneNumTextfield.text!, uid: uid)
         
         vc.joinInfo = joinData
         

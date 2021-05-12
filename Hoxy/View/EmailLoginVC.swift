@@ -23,10 +23,9 @@ class EmailLoginVC: UIViewController {
         $0.image = UIImage(named: "logo")
     }
 
-    let emailItem = JoinInputItem("이메일", "양식에 맞게 입력 바랍니다.", false)
+    let emailItem = JoinInputItem("이메일", "id1234@hoxy.com", false)
     let passItem = JoinInputItem("비밀번호", "영문/숫자/기호를 모두 포함한 8~16자리 입력", true)
     let loginButton = BottomButton("로그인", #colorLiteral(red: 0.5058823529, green: 0.5058823529, blue: 0.5058823529, alpha: 1))
-    
     
     
     // MARK: - Lifecycle
@@ -51,7 +50,13 @@ class EmailLoginVC: UIViewController {
             self?.passItem.descriptionLabel.text = label
         }
         
+        viewModel.emailDC.bind { [weak self] color in
+            self?.emailItem.descriptionLabel.textColor = color
+        }
         
+        viewModel.passDC.bind { [weak self] color in
+            self?.passItem.descriptionLabel.textColor = color
+        }
     
 //        loginCheck()
 
@@ -79,7 +84,7 @@ class EmailLoginVC: UIViewController {
                     print(e.localizedDescription)
                     self?.dismissIndicator()
                     let ok = UIAlertAction(title: "확인", style: .default) { action in
-                        self?.viewModel.loginCheck()
+                        self?.viewModel.passwordInitialize()
                         return
                     }
                     self?.presentAlert(title: "로그인 실패", message: "이메일과 패스워드를 확인해주세요.", isCancelActionIncluded: true, preferredStyle: .alert, with: ok)
@@ -101,6 +106,7 @@ class EmailLoginVC: UIViewController {
     }
     
     func loginCheck() {
+//        로그인 상태 여부를 판단하여 자동로그인을 한다.
         if Auth.auth().currentUser?.uid != nil {
             showIndicator()
             let vc = LocationVC()
@@ -207,14 +213,7 @@ extension EmailLoginVC: UITextFieldDelegate {
         }
         
         checkFormStatus()
-        switch textField {
-        case emailItem.tf:
-            self.viewModel.validation((textField.text?.validateEmail())!)
-        case passItem.tf:
-            self.viewModel.validation((textField.text?.validatePassword())!)
-        default:
-            return
-        }
+        viewModel.descriptionText()
     }
     
    

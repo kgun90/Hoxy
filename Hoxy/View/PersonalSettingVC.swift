@@ -92,7 +92,7 @@ class PersonalSettingVC: UIViewController {
     let locationManager = CLLocationManager()
     var currentLocation = CLLocation()
     var years: [String] = []
-    var joinInfo = LoginModel()
+    var joinInfo = JoinModel()
     var currentLatLon: GeoPoint?
     
     // MARK: - Lifecycle

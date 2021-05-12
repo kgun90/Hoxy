@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit.UIColor
 
 protocol AutenticationProtocol {
     var formIsValid: Bool { get }
@@ -17,18 +18,32 @@ struct EmailLoginViewModel {
     
     let observableEmail = Observable("")
     let observablePassword = Observable("")
+    
     let emailDescriptionLabel = Observable("")
     let passwordDescriptionLabel = Observable("")
+    
+    let emailDC: Observable<UIColor?> = Observable(nil)
+    let passDC: Observable<UIColor?> = Observable(nil)
     
     var formIsValid: Bool {
         return self.email?.validateEmail() == true && self.password?.validatePassword() == true
     }
-    
-    func validation(_ valid: Bool) {
-        if valid {
-            emailDescriptionLabel.value = "올바른 이메일 주소 양식입니다."
+
+    func descriptionText() {
+        if self.email?.validateEmail() == true {
+            emailDescriptionLabel.value = "올바른 양식입니다"
+            emailDC.value = .green
         } else {
-            emailDescriptionLabel.value = "올바른 양식으로 입력 바랍니다"
+            emailDescriptionLabel.value = "양식에 맞게 입력해주세요"
+            emailDC.value = .red
+        }
+        
+        if self.password?.validatePassword() == true {
+            passwordDescriptionLabel.value = "올바른 양식입니다"
+            passDC.value = .green
+        } else {
+            passwordDescriptionLabel.value = "양식에 맞게 입력해주세요"
+            passDC.value = .red
         }
     }
     
@@ -37,7 +52,7 @@ struct EmailLoginViewModel {
     }
 
     
-    func loginCheck() {
+    func passwordInitialize() {
         observablePassword.value = ""
     }
 }
