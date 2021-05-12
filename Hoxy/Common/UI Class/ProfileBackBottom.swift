@@ -7,9 +7,6 @@
 
 import UIKit
 
-
-import UIKit
-
 class ProfileBackBottom : UIView {
     var path: UIBezierPath!
     

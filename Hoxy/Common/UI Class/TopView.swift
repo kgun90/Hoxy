@@ -7,7 +7,6 @@
 
 import UIKit
 
-
 class TopView: UIView {
     let back = UIButton()
     

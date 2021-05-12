@@ -29,7 +29,7 @@ struct EmailLoginViewModel {
         return self.email?.validateEmail() == true && self.password?.validatePassword() == true
     }
 
-    func descriptionText() {
+    func descriptionEmailText() {
         if self.email?.validateEmail() == true {
             emailDescriptionLabel.value = "올바른 양식입니다"
             emailDC.value = .green
@@ -37,7 +37,9 @@ struct EmailLoginViewModel {
             emailDescriptionLabel.value = "양식에 맞게 입력해주세요"
             emailDC.value = .red
         }
-        
+    }
+
+    func descriptionPassText() {
         if self.password?.validatePassword() == true {
             passwordDescriptionLabel.value = "올바른 양식입니다"
             passDC.value = .green
@@ -46,12 +48,6 @@ struct EmailLoginViewModel {
             passDC.value = .red
         }
     }
-    
-    func changeText() {
-        self.observableEmail.value = "changed"
-    }
-
-    
     func passwordInitialize() {
         observablePassword.value = ""
     }

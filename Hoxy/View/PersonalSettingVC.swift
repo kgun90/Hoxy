@@ -158,7 +158,7 @@ class PersonalSettingVC: UIViewController {
             "uid": joinInfo.uid
         ])
         dismissIndicator()
-        moveToHome()
+        moveToRoot(LocationVC())
     }
     
     // MARK: - UI Layout
@@ -352,18 +352,6 @@ class PersonalSettingVC: UIViewController {
         gradeView.isHidden = false
        
     }
-    
-    func moveToHome() {
-        let vc = LocationVC()
-        if let window = UIApplication.shared.windows.first {
-            window.rootViewController = vc
-            UIView.transition(with: window, duration: 0.3, options: .transitionCrossDissolve, animations: nil)
-        } else {
-            vc.modalPresentationStyle = .overFullScreen
-            self.present(vc, animated: true, completion: nil)
-        }
-    }
-  
 }
 
 extension PersonalSettingVC: CLLocationManagerDelegate {

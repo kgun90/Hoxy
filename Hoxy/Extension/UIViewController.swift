@@ -8,17 +8,18 @@
 import UIKit
 import SnapKit
 import CoreLocation
+import Firebase
 
 extension UIViewController {
     // MARK: 빈 화면을 눌렀을 때 키보드가 내려가도록 처리
-    func dismissKeyboardWhenTappedAround() {
+    func dismissKeyboard() {
         let tap: UITapGestureRecognizer =
-            UITapGestureRecognizer(target: self, action: #selector(self.dismissKeyboard))
-//        tap.cancelsTouchesInView = false
+            UITapGestureRecognizer(target: self, action: #selector(self.endEditing))
+        tap.cancelsTouchesInView = true
         self.view.addGestureRecognizer(tap)
     }
     
-    @objc func dismissKeyboard() {
+    @objc func endEditing() {
         self.view.endEditing(false)
     }
     
@@ -93,13 +94,13 @@ extension UIViewController {
     }
     
     // MARK: 인디케이터 표시
-    func showIndicator() {
+     func showIndicator() {
         IndicatorView.shared.show()
         IndicatorView.shared.showIndicator()
     }
     
     // MARK: 인디케이터 숨김
-    @objc func dismissIndicator() {
+    func dismissIndicator() {
         IndicatorView.shared.dismiss()
     }
     
@@ -129,16 +130,33 @@ extension UIViewController {
         }
         let startTime = startTimeFormat.string(from: date)
         
-
         return startTime
-    
     }
+    
+    //MARK:   현재 화면에 그려지고있는 ViewController가 Modal인지 여부 판단
     var isModal: Bool {
-
-           let presentingIsModal = presentingViewController != nil
-           let presentingIsNavigation = navigationController?.presentingViewController?.presentedViewController == navigationController
-           let presentingIsTabBar = tabBarController?.presentingViewController is UITabBarController
-
-           return presentingIsModal || presentingIsNavigation  || presentingIsTabBar
+        let presentingIsModal = presentingViewController != nil
+        let presentingIsNavigation = navigationController?.presentingViewController?.presentedViewController == navigationController
+        let presentingIsTabBar = tabBarController?.presentingViewController is UITabBarController
+        
+        return presentingIsModal || presentingIsNavigation  || presentingIsTabBar
+    }
+    
+    //MARK:   파라미터로 들어온 VC를 Root로 하는 화면으로 갱신하는 함수
+    func moveToRoot(_ vc: UIViewController) {
+        if let window = UIApplication.shared.windows.first {
+            window.rootViewController = vc
+            UIView.transition(with: window, duration: 0.2, options: .transitionCrossDissolve, animations: nil)
+        } else {
+            vc.modalPresentationStyle = .overFullScreen
+            self.present(vc, animated: true, completion: nil)
+        }
+    }
+    
+    //MARK:    로그인 상태 여부를 판단하여 자동로그인을 한다.
+    func loginCheck() {
+        if Auth.auth().currentUser?.uid != nil {
+            self.moveToRoot(LocationVC())
+        }
     }
 }

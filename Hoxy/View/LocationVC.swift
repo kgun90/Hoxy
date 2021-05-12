@@ -27,21 +27,7 @@ class LocationVC: BaseViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
     }
-    
-    func moveToHome() {
-//        let vc = TabBarController()
-//        vc.modalPresentationStyle = .overFullScreen
-//        present(vc, animated: true, completion: nil)
-        let vc = TabBarController()
-        if let window = UIApplication.shared.windows.first {
-            window.rootViewController = vc
-            UIView.transition(with: window, duration: 0.3, options: .transitionCrossDissolve, animations: nil)
-        } else {
-            vc.modalPresentationStyle = .overFullScreen
-            self.present(vc, animated: true, completion: nil)
-        }
-    }
-    
+        
     func getCurrentLocation() {
         self.locationManager.delegate = self
         self.locationManager.requestWhenInUseAuthorization()
@@ -65,7 +51,7 @@ class LocationVC: BaseViewController {
             LocationService.currentTown = town
         
             if !LocationService.userTown.isEmpty {
-                self.moveToHome()
+                self.moveToRoot(TabBarController())
             }
         }
     }
@@ -83,7 +69,7 @@ class LocationVC: BaseViewController {
                         LocationService.userLocation = CLLocation(latitude: location.latitude, longitude: location.longitude)
     
                         if !LocationService.currentTown.isEmpty {
-                            self.moveToHome()
+                            self.moveToRoot(TabBarController())
                         }
                     }
                 }

@@ -24,7 +24,7 @@ class EmailLoginVC: UIViewController {
     }
 
     let emailItem = JoinInputItem("이메일", "id1234@hoxy.com", false)
-    let passItem = JoinInputItem("비밀번호", "영문/숫자/기호를 모두 포함한 8~16자리 입력", true)
+    let passItem = JoinInputItem("비밀번호", "영문 대소문자/숫자/기호를 모두 포함한 8~16자리 입력", true)
     let loginButton = BottomButton("로그인", #colorLiteral(red: 0.5058823529, green: 0.5058823529, blue: 0.5058823529, alpha: 1))
     
     
@@ -32,6 +32,7 @@ class EmailLoginVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
+        loginCheck()
         buttonTarget()
         layout()
         
@@ -58,11 +59,8 @@ class EmailLoginVC: UIViewController {
             self?.passItem.descriptionLabel.textColor = color
         }
     
-//        loginCheck()
-
     }
-    
-    
+        
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         emailItem.tf.addUnderLine()
@@ -70,14 +68,11 @@ class EmailLoginVC: UIViewController {
     }
     
     // MARK: - Selectors
-
-
     @objc func backAction() {
         self.dismiss(animated: true, completion: nil)
     }
     
     @objc func loginAction() {
-        showIndicator()
         if let email = emailItem.tf.text, let pass = passItem.tf.text {
             Auth.auth().signIn(withEmail: email, password: pass) { [weak self] authResult, error in
                 if let e = error {
@@ -87,40 +82,14 @@ class EmailLoginVC: UIViewController {
                         self?.viewModel.passwordInitialize()
                         return
                     }
-                    self?.presentAlert(title: "로그인 실패", message: "이메일과 패스워드를 확인해주세요.", isCancelActionIncluded: true, preferredStyle: .alert, with: ok)
-
-
+                    self?.presentAlert(title: "로그인 실패", message: "이메일과 패스워드를 확인해주세요.", isCancelActionIncluded: false, preferredStyle: .alert, with: ok)
                 } else {
-                    let vc = LocationVC()
-                    if let window = UIApplication.shared.windows.first {
-                        window.rootViewController = vc
-                        UIView.transition(with: window, duration: 0.3, options: .transitionCrossDissolve, animations: nil)
-                    } else {
-                        vc.modalPresentationStyle = .overFullScreen
-                        self?.present(vc, animated: true, completion: nil)
-                    }
-                    self?.dismissIndicator()
+                    self?.moveToRoot(LocationVC())
                 }
             }
         }
     }
-    
-    func loginCheck() {
-//        로그인 상태 여부를 판단하여 자동로그인을 한다.
-        if Auth.auth().currentUser?.uid != nil {
-            showIndicator()
-            let vc = LocationVC()
-            if let window = UIApplication.shared.windows.first {
-                window.rootViewController = vc
-                UIView.transition(with: window, duration: 0.3, options: .transitionCrossDissolve, animations: nil)
-                dismissIndicator()
-            } else {
-                vc.modalPresentationStyle = .overFullScreen
-                self.present(vc, animated: true, completion: nil)
-            }
-        }
-    }
-    
+        
     // MARK: - Helpers
     func layout() {
         view.addSubview(topView)
@@ -135,12 +104,14 @@ class EmailLoginVC: UIViewController {
             $0.width.equalToSuperview()
             $0.height.equalTo(Device.heightScale(88))
         }
+        
         logoImage.snp.makeConstraints {
             $0.centerX.equalToSuperview()
             $0.top.equalTo(topView.snp.bottom).offset(Device.heightScale(30))
             $0.width.equalTo(Device.widthScale(300))
             $0.height.equalTo(Device.heightScale(86.4))
         }
+        
         emailItem.snp.makeConstraints {
             $0.centerX.equalToSuperview()
             $0.top.equalTo(logoImage.snp.bottom).offset(Device.heightScale(40))
@@ -148,6 +119,7 @@ class EmailLoginVC: UIViewController {
             $0.height.equalTo(Device.heightScale(60))
             
         }
+        
         passItem.snp.makeConstraints {
             $0.centerX.equalToSuperview()
             $0.top.equalTo(emailItem.snp.bottom).offset(Device.heightScale(20))
@@ -162,11 +134,10 @@ class EmailLoginVC: UIViewController {
             $0.height.equalTo(Device.heightScale(85))
         }
     }
-    
-    
+        
     // MARK: - Logic
     func buttonTarget() {
-        
+
         emailItem.tf.delegate = self
         passItem.tf.delegate = self
        
@@ -196,7 +167,7 @@ extension EmailLoginVC: AuthenticationControllerProtocol {
 
 extension EmailLoginVC: UITextFieldDelegate {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        view.endEditing(true)
+        self.dismissKeyboard()
     }
     // 키보드 영역 이외 터치시 키보드 해제
     
@@ -213,7 +184,8 @@ extension EmailLoginVC: UITextFieldDelegate {
         }
         
         checkFormStatus()
-        viewModel.descriptionText()
+        viewModel.descriptionEmailText()
+        viewModel.descriptionPassText()
     }
     
    

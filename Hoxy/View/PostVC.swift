@@ -317,14 +317,7 @@ class PostVC: BaseViewController, SingleDataDelegate, PostDataDelegate {
             
             self.currentPost.chat?.delete()
             set.fs.collection(set.Table.post).document(self.currentPost.id).delete()
-            let vc = TabBarController()
-            if let window = UIApplication.shared.windows.first {
-                window.rootViewController = vc
-                UIView.transition(with: window, duration: 0.3, options: .transitionCrossDissolve, animations: nil)
-            } else {
-                vc.modalPresentationStyle = .overFullScreen
-                self.present(vc, animated: true, completion: nil)
-            }
+            self.moveToRoot(TabBarController())
         }
         presentAlert(title: "삭제하기", message: "현재 글을 삭제하시겠습니까?", isCancelActionIncluded: true, with: ok)
     }

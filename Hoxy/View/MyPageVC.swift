@@ -239,14 +239,7 @@ class MyPageVC: BaseViewController {
             print ("Error signing out: %@", signOutError)
         }
         
-        let vc = MainLoginVC()
-        if let window = UIApplication.shared.windows.first {
-            window.rootViewController = vc
-            UIView.transition(with: window, duration: 0.3, options: .transitionCrossDissolve, animations: nil)
-        } else {
-            vc.modalPresentationStyle = .overFullScreen
-            present(vc, animated: true, completion: nil)
-        }
+        self.moveToRoot(MainLoginVC())
         self.dismissIndicator()
     }
     

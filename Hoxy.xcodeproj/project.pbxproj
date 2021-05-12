@@ -12,6 +12,7 @@
 		E0ED10D826492F0C00661094 /* Observable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ED10D726492F0C00661094 /* Observable.swift */; };
 		E0ED10DA264B5D9E00661094 /* PostModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ED10D9264B5D9E00661094 /* PostModel.swift */; };
 		E0ED10DC264B63A800661094 /* JoinModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ED10DB264B63A800661094 /* JoinModel.swift */; };
+		E0ED10DF264BBD3700661094 /* MoveToRoot.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ED10DE264BBD3700661094 /* MoveToRoot.swift */; };
 		EB05FFC725DED9CD00A587BE /* ChatRoomProfileVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB05FFC625DED9CD00A587BE /* ChatRoomProfileVC.swift */; };
 		EB05FFCB25E3762900A587BE /* ChatRoomMenuVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB05FFCA25E3762900A587BE /* ChatRoomMenuVC.swift */; };
 		EB05FFD325E3943C00A587BE /* ChatMemberTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB05FFD125E3943C00A587BE /* ChatMemberTableViewCell.swift */; };
@@ -89,6 +90,7 @@
 		E0ED10D726492F0C00661094 /* Observable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Observable.swift; sourceTree = "<group>"; };
 		E0ED10D9264B5D9E00661094 /* PostModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostModel.swift; sourceTree = "<group>"; };
 		E0ED10DB264B63A800661094 /* JoinModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinModel.swift; sourceTree = "<group>"; };
+		E0ED10DE264BBD3700661094 /* MoveToRoot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveToRoot.swift; sourceTree = "<group>"; };
 		EB05FFC625DED9CD00A587BE /* ChatRoomProfileVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomProfileVC.swift; sourceTree = "<group>"; };
 		EB05FFCA25E3762900A587BE /* ChatRoomMenuVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomMenuVC.swift; sourceTree = "<group>"; };
 		EB05FFD125E3943C00A587BE /* ChatMemberTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMemberTableViewCell.swift; sourceTree = "<group>"; };
@@ -199,6 +201,24 @@
 			path = Util;
 			sourceTree = "<group>";
 		};
+		E0ED10DD264BB9CC00661094 /* UI Class */ = {
+			isa = PBXGroup;
+			children = (
+				EB38A71F25BDA01600516515 /* BottomButton.swift */,
+				EB38A71C25BD89ED00516515 /* JoinInputItem.swift */,
+				EB11F0D025C54E9B00EC9F6F /* IndicatorView.swift */,
+				EB5D8E5F25C7172D003D957C /* WriteOptionItem.swift */,
+				EB38A74625BF0A9900516515 /* GradeButton.swift */,
+				EB38A71925BD760500516515 /* TopView.swift */,
+				EB5D8E5725C70FB7003D957C /* LoginButton.swift */,
+				EB78A36425E40CE500E4C538 /* ChatMemberView.swift */,
+				EB78A36825E55D0200E4C538 /* ChatMenuItem.swift */,
+				EB78A37325E75DBF00E4C538 /* ProfileBackTop.swift */,
+				EB78A37C25E88C8700E4C538 /* ProfileBackBottom.swift */,
+			);
+			path = "UI Class";
+			sourceTree = "<group>";
+		};
 		EB25DC7B25B9C1E5006F4008 = {
 			isa = PBXGroup;
 			children = (
@@ -223,7 +243,7 @@
 				E0ED10D426492ED600661094 /* Util */,
 				EB25DC8725B9C1E5006F4008 /* AppDelegate.swift */,
 				EB25DC8925B9C1E5006F4008 /* SceneDelegate.swift */,
-				EBDA507825BC052B00C6A122 /* CommonClass */,
+				EBDA507825BC052B00C6A122 /* Common */,
 				EBDA507725BC051D00C6A122 /* Extension */,
 				EB25DC9F25BB2C87006F4008 /* Model */,
 				EB25DCA125BB2C9D006F4008 /* ViewModel */,
@@ -331,26 +351,17 @@
 			path = Extension;
 			sourceTree = "<group>";
 		};
-		EBDA507825BC052B00C6A122 /* CommonClass */ = {
+		EBDA507825BC052B00C6A122 /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				E0ED10DD264BB9CC00661094 /* UI Class */,
 				EB38A72B25BE745A00516515 /* Contants.swift */,
 				EB87AB8925BC728500DF3BBB /* Device.swift */,
 				EBD9F3F525C3C5BF004E18F1 /* BaseViewController.swift */,
-				EB38A71925BD760500516515 /* TopView.swift */,
-				EB38A71C25BD89ED00516515 /* JoinInputItem.swift */,
-				EB38A71F25BDA01600516515 /* BottomButton.swift */,
-				EB38A74625BF0A9900516515 /* GradeButton.swift */,
-				EB11F0D025C54E9B00EC9F6F /* IndicatorView.swift */,
-				EB5D8E5725C70FB7003D957C /* LoginButton.swift */,
-				EB5D8E5F25C7172D003D957C /* WriteOptionItem.swift */,
-				EB78A36425E40CE500E4C538 /* ChatMemberView.swift */,
 				EB128D5F25CFA55D004C0A66 /* LocationService.swift */,
-				EB78A36825E55D0200E4C538 /* ChatMenuItem.swift */,
-				EB78A37325E75DBF00E4C538 /* ProfileBackTop.swift */,
-				EB78A37C25E88C8700E4C538 /* ProfileBackBottom.swift */,
+				E0ED10DE264BBD3700661094 /* MoveToRoot.swift */,
 			);
-			path = CommonClass;
+			path = Common;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -514,6 +525,7 @@
 				EB38A76F25C12AB500516515 /* HomeTableViewCell.swift in Sources */,
 				EB87AB8425BC1A7A00DF3BBB /* MainLoginVC.swift in Sources */,
 				EBDA504E25BB37C300C6A122 /* TabBarController.swift in Sources */,
+				E0ED10DF264BBD3700661094 /* MoveToRoot.swift in Sources */,
 				EB38A72325BE62C200516515 /* UITextField.swift in Sources */,
 				EB78A37925E7E9EF00E4C538 /* MyMessageTableViewCell.swift in Sources */,
 				E0ED10D626492EE800661094 /* EmailLoginViewModel.swift in Sources */,

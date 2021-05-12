@@ -7,6 +7,7 @@
 
 import Foundation
 import CoreLocation
+
 protocol TownList {
     var towns: [String] { get }
     var locations: [CLLocation] { get }

@@ -6,6 +6,7 @@
 //
 
 import UIKit
+
 enum ScreenMode {
     case tableCell
     case personalSetting
