@@ -29,7 +29,7 @@ class JoinInputItem: UIView {
    
         descriptionLabel.text = descriptionText
         descriptionLabel.font = .BasicFont(.medium, size: 10)
-        descriptionLabel.textColor = UIColor(hex: 0x918dff)
+        descriptionLabel.textColor = #colorLiteral(red: 0.568627451, green: 0.5529411765, blue: 1, alpha: 1)
         
         addSubview(itemLabel)
         addSubview(tf)

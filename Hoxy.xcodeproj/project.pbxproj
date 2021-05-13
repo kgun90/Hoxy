@@ -12,7 +12,7 @@
 		E0ED10D826492F0C00661094 /* Observable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ED10D726492F0C00661094 /* Observable.swift */; };
 		E0ED10DA264B5D9E00661094 /* PostModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ED10D9264B5D9E00661094 /* PostModel.swift */; };
 		E0ED10DC264B63A800661094 /* JoinModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ED10DB264B63A800661094 /* JoinModel.swift */; };
-		E0ED10DF264BBD3700661094 /* MoveToRoot.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ED10DE264BBD3700661094 /* MoveToRoot.swift */; };
+		E0ED10E3264CFCE600661094 /* JoinViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ED10E2264CFCE600661094 /* JoinViewModel.swift */; };
 		EB05FFC725DED9CD00A587BE /* ChatRoomProfileVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB05FFC625DED9CD00A587BE /* ChatRoomProfileVC.swift */; };
 		EB05FFCB25E3762900A587BE /* ChatRoomMenuVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB05FFCA25E3762900A587BE /* ChatRoomMenuVC.swift */; };
 		EB05FFD325E3943C00A587BE /* ChatMemberTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB05FFD125E3943C00A587BE /* ChatMemberTableViewCell.swift */; };
@@ -90,7 +90,7 @@
 		E0ED10D726492F0C00661094 /* Observable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Observable.swift; sourceTree = "<group>"; };
 		E0ED10D9264B5D9E00661094 /* PostModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostModel.swift; sourceTree = "<group>"; };
 		E0ED10DB264B63A800661094 /* JoinModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinModel.swift; sourceTree = "<group>"; };
-		E0ED10DE264BBD3700661094 /* MoveToRoot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveToRoot.swift; sourceTree = "<group>"; };
+		E0ED10E2264CFCE600661094 /* JoinViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinViewModel.swift; sourceTree = "<group>"; };
 		EB05FFC625DED9CD00A587BE /* ChatRoomProfileVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomProfileVC.swift; sourceTree = "<group>"; };
 		EB05FFCA25E3762900A587BE /* ChatRoomMenuVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomMenuVC.swift; sourceTree = "<group>"; };
 		EB05FFD125E3943C00A587BE /* ChatMemberTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMemberTableViewCell.swift; sourceTree = "<group>"; };
@@ -303,6 +303,7 @@
 			children = (
 				EB43F79325D1BA3700AFED54 /* PostViewModel.swift */,
 				E0ED10D526492EE800661094 /* EmailLoginViewModel.swift */,
+				E0ED10E2264CFCE600661094 /* JoinViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -359,7 +360,6 @@
 				EB87AB8925BC728500DF3BBB /* Device.swift */,
 				EBD9F3F525C3C5BF004E18F1 /* BaseViewController.swift */,
 				EB128D5F25CFA55D004C0A66 /* LocationService.swift */,
-				E0ED10DE264BBD3700661094 /* MoveToRoot.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -494,6 +494,7 @@
 				EB5D8E7825C7E999003D957C /* NSMutableAttrubutedString.swift in Sources */,
 				EB78A37125E755EC00E4C538 /* UITableView.swift in Sources */,
 				EB29690225D991D400DAE55B /* ChatListModel.swift in Sources */,
+				E0ED10E3264CFCE600661094 /* JoinViewModel.swift in Sources */,
 				EB78A36525E40CE500E4C538 /* ChatMemberView.swift in Sources */,
 				EB05FFCB25E3762900A587BE /* ChatRoomMenuVC.swift in Sources */,
 				EBDA506F25BC03CA00C6A122 /* ChatListVC.swift in Sources */,
@@ -525,7 +526,6 @@
 				EB38A76F25C12AB500516515 /* HomeTableViewCell.swift in Sources */,
 				EB87AB8425BC1A7A00DF3BBB /* MainLoginVC.swift in Sources */,
 				EBDA504E25BB37C300C6A122 /* TabBarController.swift in Sources */,
-				E0ED10DF264BBD3700661094 /* MoveToRoot.swift in Sources */,
 				EB38A72325BE62C200516515 /* UITextField.swift in Sources */,
 				EB78A37925E7E9EF00E4C538 /* MyMessageTableViewCell.swift in Sources */,
 				E0ED10D626492EE800661094 /* EmailLoginViewModel.swift in Sources */,

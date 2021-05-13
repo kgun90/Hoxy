@@ -11,15 +11,17 @@ import Firebase
 class JoinVC: UIViewController {
     // MARK: - Properties
     let topView = TopView("회원가입")
-
+    
+    private var viewModel = JoinViewModel()
+    
     lazy var logoImage = UIImageView().then {
         $0.image = UIImage(named: "logo")
     }
 
-    let emailItem = JoinInputItem("이메일", "양식에 맞게 입력 바랍니다.", false, "로그인, 비밀번호 찾기 등에 사용됩니다.")
-    let passItem = JoinInputItem("비밀번호", "영문/숫자/기호를 모두 포함한 8~16자리 입력", true, "특수문자는 (! @ # $ % ^ & ? _ ~) 만 가능합니다." )
+    let emailItem = JoinInputItem("이메일", "id1234@hoxy.com", false, "로그인, 비밀번호 찾기 등에 사용됩니다.")
+    let passItem = JoinInputItem("비밀번호", "대소문자/숫자/기호를 모두 포함한 8~16자리 입력", true, "특수문자는 (! @ # $ % ^ & ? _ ~) 만 가능합니다." )
     let passCheckItem = JoinInputItem("비밀번호 확인", "입력하신 비밀번호를 다시 한번 입력 해주세요.", true)
-    let progressButton = BottomButton("진행하기", #colorLiteral(red: 0.5058823529, green: 0.5058823529, blue: 0.5058823529, alpha: 1))
+    let progressButton = BottomButton("진행하기", .labelGray)
     
     lazy var phoneNumLabel = UILabel().then {
         $0.text = "휴대전화 번호"
@@ -93,24 +95,35 @@ class JoinVC: UIViewController {
     
     // MARK: - Selectors
 
-    @objc func textFieldDidChange() {
+    @objc func textFieldDidChange(sender: UITextField) {
         // textField 입력 실시간 감지
-        if phoneNumTextfield.text?.validatePhoneNum() ?? false {
-            phoneNumButton.backgroundColor = .mainYellow
-            phoneNumButton.isEnabled = true
-        } else {
-            phoneNumButton.backgroundColor = .lightGray
-            phoneNumButton.isEnabled = false
+        switch sender {
+        case emailItem.tf:
+            viewModel.email = sender.text
+        case passItem.tf:
+            viewModel.password = sender.text
+        case passCheckItem.tf:
+            viewModel.passCheck = sender.text
+            viewModel.descriptionPassCheckText()
+        case phoneNumTextfield:
+            if sender.text!.validatePhoneNum() {
+                phoneNumButton.backgroundColor = .mainYellow
+                phoneNumButton.isEnabled = true
+            } else {
+                phoneNumButton.backgroundColor = .labelGray
+                phoneNumButton.isEnabled = false
+            }
+        case authTextfield:
+            if sender.text!.validateAuthCode() {
+                authButton.backgroundColor = .mainYellow
+                authButton.isEnabled = true
+            } else {
+                authButton.backgroundColor = .labelGray
+                authButton.isEnabled = false
+            }
+        default:
+            return
         }
-        
-        if authTextfield.text?.validateAuthCode() ?? false {
-            authButton.backgroundColor = .mainYellow
-            authButton.isEnabled = true
-        } else {
-            authButton.backgroundColor = .lightGray
-            authButton.isEnabled = false
-        }
-        
         authComplete()
     }
     
@@ -140,6 +153,45 @@ class JoinVC: UIViewController {
     }
     
     // MARK: - Helpers
+    func binding() {
+        viewModel.emailText.bind { [weak self] email in
+            self?.emailItem.tf.text = email
+        }
+        viewModel.passText.bind { [weak self] password in
+            self?.passItem.tf.text = password
+        }
+        viewModel.passCheckText.bind { [weak self] password in
+            self?.passCheckItem.tf.text = password
+        }
+        
+        viewModel.emailDesText.bind { [weak self] text in
+            self?.emailItem.descriptionLabel.text = text
+        }
+        viewModel.passDesText.bind { [weak self] text in
+            self?.passItem.descriptionLabel.text = text
+        }
+        viewModel.passCheckDesText.bind { [weak self] text in
+            self?.passCheckItem.descriptionLabel.text = text
+        }
+        
+        viewModel.emailDesColor.bind { [weak self] color in
+            self?.emailItem.descriptionLabel.textColor = color
+        }
+        viewModel.passDesColor.bind { [weak self] color in
+            self?.passItem.descriptionLabel.textColor = color
+        }
+        viewModel.passCheckDesColor.bind { [weak self] color in
+            self?.passCheckItem.descriptionLabel.textColor = color
+        }
+        
+        viewModel.buttonEnable.bind { [weak self] button in
+            self?.progressButton.isEnabled = button
+        }
+        viewModel.buttonColor.bind { [weak self] color in
+            self?.progressButton.backgroundColor = color
+        }
+    }
+    
     func layout() {
         view.addSubview(topView)
         view.addSubview(logoImage)
@@ -248,8 +300,8 @@ class JoinVC: UIViewController {
         
         emailItem.tf.keyboardType = .emailAddress
         
-        phoneNumButton.backgroundColor = UIColor(hex: 0x989898)
-        authButton.backgroundColor = UIColor(hex: 0x989898)
+        phoneNumButton.backgroundColor = .labelGray
+        authButton.backgroundColor = .labelGray
         
         topView.back.addTarget(self, action: #selector(backAction), for: .touchUpInside)
         progressButton.addTarget(self, action: #selector(moveToSetting), for: .touchUpInside)
@@ -302,7 +354,7 @@ class JoinVC: UIViewController {
             self.dismissIndicator()
             self.authCompleteLabel.isHidden = false
             self.uid = authResult?.user.uid ?? ""
-            self.view.endEditing(true)
+            self.dismissKeyboard()
            
         }
     }
@@ -315,10 +367,10 @@ class JoinVC: UIViewController {
 }
 
 extension JoinVC: UITextFieldDelegate {
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        view.endEditing(true)
-    }
     // 키보드 영역 이외 터치시 키보드 해제
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.dismissKeyboard()
+    }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
@@ -339,35 +391,14 @@ extension JoinVC: UITextFieldDelegate {
         if textField.text != "" {
             switch textField {
             case emailItem.tf:
-                if emailItem.tf.text?.validateEmail() ?? false {
-                    emailItem.descriptionLabel.text = "올바른 양식 입니다."
-                    emailItem.descriptionLabel.textColor = .green
-                } else {
-                    emailItem.descriptionLabel.text = "올바른 양식으로 입력 바랍니다."
-                    emailItem.descriptionLabel.textColor = .red
-                }
+                viewModel.descriptionEmailText()
             case passItem.tf:
-                if passItem.tf.text?.validatePassword() ?? false {
-                    passItem.descriptionLabel.text = "올바른 양식 입니다."
-                    passItem.descriptionLabel.textColor = .green
-                } else {
-                    passItem.descriptionLabel.text = "올바른 양식으로 입력 바랍니다."
-                    passItem.descriptionLabel.textColor = .red
-                }
-            case passCheckItem.tf:
-                if passCheckItem.tf.text == passItem.tf.text {
-                    passCheckItem.descriptionLabel.text = "비밀번호와 일치합니다."
-                    passCheckItem.descriptionLabel.textColor = .green
-                } else {
-                    passCheckItem.descriptionLabel.text = "입력된 비밀번호와 일치하지 않습니다."
-                    passCheckItem.descriptionLabel.textColor = .red
-                }
+                viewModel.descriptionPassText()
             default:
                 print("?")
             }
             return true
         } else {
-            
             return true
         }
 

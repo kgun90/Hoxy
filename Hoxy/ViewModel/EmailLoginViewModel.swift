@@ -16,14 +16,14 @@ struct EmailLoginViewModel {
     var email: String?
     var password: String?
     
-    let observableEmail = Observable("")
-    let observablePassword = Observable("")
+    let emailText = Observable("")
+    let passText = Observable("")
     
-    let emailDescriptionLabel = Observable("")
-    let passwordDescriptionLabel = Observable("")
+    let emailDesText = Observable("")
+    let passDesText = Observable("")
     
-    let emailDC: Observable<UIColor?> = Observable(nil)
-    let passDC: Observable<UIColor?> = Observable(nil)
+    let emailDesColor: Observable<UIColor?> = Observable(nil)
+    let passDesColor: Observable<UIColor?> = Observable(nil)
     
     let buttonEnable = Observable(false)
     let buttonColor: Observable<UIColor?> = Observable(#colorLiteral(red: 0.5058823529, green: 0.5058823529, blue: 0.5058823529, alpha: 1))
@@ -34,30 +34,30 @@ struct EmailLoginViewModel {
 
     func descriptionEmailText() {
         if self.email == "" {
-            emailDescriptionLabel.value = ""
+            emailDesText.value = ""
         } else if self.email?.validateEmail() == true {
-            emailDescriptionLabel.value = "올바른 양식입니다"
-            emailDC.value = .green
+            emailDesText.value = "올바른 양식입니다"
+            emailDesColor.value = .green
         } else {
-            emailDescriptionLabel.value = "양식에 맞게 입력해주세요"
-            emailDC.value = .red
+            emailDesText.value = "양식에 맞게 입력해주세요"
+            emailDesColor.value = .red
         }
     }
 
     func descriptionPassText() {
         if self.password == "" {
-            passwordDescriptionLabel.value = ""
+            passDesText.value = ""
         } else if self.password?.validatePassword() == true {
-            passwordDescriptionLabel.value = "올바른 양식입니다"
-            passDC.value = .green
+            passDesText.value = "올바른 양식입니다"
+            passDesColor.value = .green
         } else {
-            passwordDescriptionLabel.value = "양식에 맞게 입력해주세요"
-            passDC.value = .red
+            passDesText.value = "양식에 맞게 입력해주세요"
+            passDesColor.value = .red
         }
     }
     
     func buttonEnableCheck() {
-        if self.email?.validateEmail() == true && self.password?.validatePassword() == true {
+        if formIsValid {
             buttonEnable.value = true
             buttonColor.value = .mainYellow
         } else {
@@ -67,9 +67,8 @@ struct EmailLoginViewModel {
     }
     
      func passwordInitialize() {
-
-        observablePassword.value = ""
-        passwordDescriptionLabel.value = ""
+        passText.value = ""
+        passDesText.value = ""
         
     }
 }

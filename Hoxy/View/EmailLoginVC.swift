@@ -20,7 +20,7 @@ class EmailLoginVC: UIViewController {
 
     let emailItem = JoinInputItem("이메일", "id1234@hoxy.com", false)
     let passItem = JoinInputItem("비밀번호", "영문 대소문자/숫자/기호를 모두 포함한 8~16자리 입력", true)
-    let loginButton = BottomButton("로그인", #colorLiteral(red: 0.5058823529, green: 0.5058823529, blue: 0.5058823529, alpha: 1))
+    let loginButton = BottomButton("로그인", .labelGray)
     
     
     // MARK: - Lifecycle
@@ -29,37 +29,8 @@ class EmailLoginVC: UIViewController {
         view.backgroundColor = .white
         loginCheck()
         buttonTarget()
+        binding()
         layout()
-        
-        viewModel.observableEmail.bind { [weak self] email in
-            self?.emailItem.tf.text = email
-        }
-        viewModel.observablePassword.bind { [weak self] password in
-            self?.passItem.tf.text = password
-        }
-        
-        viewModel.emailDescriptionLabel.bind { [weak self] label in
-            self?.emailItem.descriptionLabel.text = label
-        }
-        
-        viewModel.passwordDescriptionLabel.bind { [weak self] label in
-            self?.passItem.descriptionLabel.text = label
-        }
-        
-        viewModel.emailDC.bind { [weak self] color in
-            self?.emailItem.descriptionLabel.textColor = color
-        }
-        
-        viewModel.passDC.bind { [weak self] color in
-            self?.passItem.descriptionLabel.textColor = color
-        }
-        
-        viewModel.buttonEnable.bind { [weak self] button in
-            self?.loginButton.isEnabled = button
-        }
-        viewModel.buttonColor.bind { [weak self] color in
-            self?.loginButton.backgroundColor = color
-        }
     
     }
         
@@ -79,7 +50,6 @@ class EmailLoginVC: UIViewController {
             Auth.auth().signIn(withEmail: email, password: pass) { [weak self] authResult, error in
                 if let e = error {
                     print(e.localizedDescription)
-                    self?.dismissIndicator()
                     let ok = UIAlertAction(title: "확인", style: .default) { action in
                         self?.viewModel.passwordInitialize()
                         self?.viewModel.password = ""
@@ -95,6 +65,38 @@ class EmailLoginVC: UIViewController {
     }
         
     // MARK: - Helpers
+    func binding() {
+        viewModel.emailText.bind { [weak self] email in
+            self?.emailItem.tf.text = email
+        }
+        viewModel.passText.bind { [weak self] password in
+            self?.passItem.tf.text = password
+        }
+        
+        viewModel.emailDesText.bind { [weak self] label in
+            self?.emailItem.descriptionLabel.text = label
+        }
+        
+        viewModel.passDesText.bind { [weak self] label in
+            self?.passItem.descriptionLabel.text = label
+        }
+        
+        viewModel.emailDesColor.bind { [weak self] color in
+            self?.emailItem.descriptionLabel.textColor = color
+        }
+        
+        viewModel.passDesColor.bind { [weak self] color in
+            self?.passItem.descriptionLabel.textColor = color
+        }
+        
+        viewModel.buttonEnable.bind { [weak self] button in
+            self?.loginButton.isEnabled = button
+        }
+        viewModel.buttonColor.bind { [weak self] color in
+            self?.loginButton.backgroundColor = color
+        }
+    
+    }
     func layout() {
         view.addSubview(topView)
         view.addSubview(logoImage)
@@ -169,12 +171,12 @@ extension EmailLoginVC: UITextFieldDelegate {
         return true
     }
     
-    @objc func textFieldDidChange(textField: UITextField) {
-        if textField == emailItem.tf {
-            viewModel.email = textField.text
+    @objc func textFieldDidChange(sender: UITextField) {
+        if sender == emailItem.tf {
+            viewModel.email = sender.text
             viewModel.descriptionEmailText()
         } else {
-            viewModel.password = textField.text
+            viewModel.password = sender.text
             viewModel.descriptionPassText()
         }
         viewModel.buttonEnableCheck()
