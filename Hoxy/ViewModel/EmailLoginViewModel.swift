@@ -25,12 +25,17 @@ struct EmailLoginViewModel {
     let emailDC: Observable<UIColor?> = Observable(nil)
     let passDC: Observable<UIColor?> = Observable(nil)
     
+    let buttonEnable = Observable(false)
+    let buttonColor: Observable<UIColor?> = Observable(#colorLiteral(red: 0.5058823529, green: 0.5058823529, blue: 0.5058823529, alpha: 1))
+    
     var formIsValid: Bool {
         return self.email?.validateEmail() == true && self.password?.validatePassword() == true
     }
 
     func descriptionEmailText() {
-        if self.email?.validateEmail() == true {
+        if self.email == "" {
+            emailDescriptionLabel.value = ""
+        } else if self.email?.validateEmail() == true {
             emailDescriptionLabel.value = "올바른 양식입니다"
             emailDC.value = .green
         } else {
@@ -40,7 +45,9 @@ struct EmailLoginViewModel {
     }
 
     func descriptionPassText() {
-        if self.password?.validatePassword() == true {
+        if self.password == "" {
+            passwordDescriptionLabel.value = ""
+        } else if self.password?.validatePassword() == true {
             passwordDescriptionLabel.value = "올바른 양식입니다"
             passDC.value = .green
         } else {
@@ -48,7 +55,21 @@ struct EmailLoginViewModel {
             passDC.value = .red
         }
     }
-    func passwordInitialize() {
+    
+    func buttonEnableCheck() {
+        if self.email?.validateEmail() == true && self.password?.validatePassword() == true {
+            buttonEnable.value = true
+            buttonColor.value = .mainYellow
+        } else {
+            buttonEnable.value = false
+            buttonColor.value = #colorLiteral(red: 0.5058823529, green: 0.5058823529, blue: 0.5058823529, alpha: 1)
+        }
+    }
+    
+     func passwordInitialize() {
+
         observablePassword.value = ""
+        passwordDescriptionLabel.value = ""
+        
     }
 }

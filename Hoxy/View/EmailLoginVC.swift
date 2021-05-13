@@ -8,11 +8,6 @@
 import UIKit
 import Firebase
 
-protocol AuthenticationControllerProtocol {
-    func checkFormStatus()
-}
-
-
 class EmailLoginVC: UIViewController {
     // MARK: - Properties
     let topView = TopView("이메일로 로그인")
@@ -58,6 +53,13 @@ class EmailLoginVC: UIViewController {
         viewModel.passDC.bind { [weak self] color in
             self?.passItem.descriptionLabel.textColor = color
         }
+        
+        viewModel.buttonEnable.bind { [weak self] button in
+            self?.loginButton.isEnabled = button
+        }
+        viewModel.buttonColor.bind { [weak self] color in
+            self?.loginButton.backgroundColor = color
+        }
     
     }
         
@@ -80,6 +82,8 @@ class EmailLoginVC: UIViewController {
                     self?.dismissIndicator()
                     let ok = UIAlertAction(title: "확인", style: .default) { action in
                         self?.viewModel.passwordInitialize()
+                        self?.viewModel.password = ""
+                        self?.viewModel.buttonEnableCheck()
                         return
                     }
                     self?.presentAlert(title: "로그인 실패", message: "이메일과 패스워드를 확인해주세요.", isCancelActionIncluded: false, preferredStyle: .alert, with: ok)
@@ -149,27 +153,16 @@ class EmailLoginVC: UIViewController {
        
         passItem.tf.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
         emailItem.tf.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
-       
+        
     }
 }
 
-extension EmailLoginVC: AuthenticationControllerProtocol {
-    func checkFormStatus() {
-        if viewModel.formIsValid {
-            loginButton.isEnabled = true
-            loginButton.backgroundColor = .mainYellow
-        } else {
-            loginButton.isEnabled = false
-            loginButton.backgroundColor = #colorLiteral(red: 0.5058823529, green: 0.5058823529, blue: 0.5058823529, alpha: 1)
-        }
-    }
-}
 
 extension EmailLoginVC: UITextFieldDelegate {
+    // 키보드 영역 이외 터치시 키보드 해제
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.dismissKeyboard()
     }
-    // 키보드 영역 이외 터치시 키보드 해제
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
@@ -179,13 +172,12 @@ extension EmailLoginVC: UITextFieldDelegate {
     @objc func textFieldDidChange(textField: UITextField) {
         if textField == emailItem.tf {
             viewModel.email = textField.text
+            viewModel.descriptionEmailText()
         } else {
             viewModel.password = textField.text
+            viewModel.descriptionPassText()
         }
-        
-        checkFormStatus()
-        viewModel.descriptionEmailText()
-        viewModel.descriptionPassText()
+        viewModel.buttonEnableCheck()
     }
     
    
