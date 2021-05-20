@@ -18,21 +18,29 @@ struct JoinViewModel {
     var email: String?
     var password: String?
     var passCheck: String?
+    var phoneNum: String?
+    var authNum: String?
     
     let emailText = Observable("")
     let passText = Observable("")
     let passCheckText = Observable("")
+    let phoneNumText = Observable("")
     
-    let emailDesText = Observable("")
-    let passDesText = Observable("")
+    let emailDesText = Observable("로그인, 비밀번호 찾기 등에 사용됩니다.")
+    let passDesText = Observable("특수문자는 (! @ # $ % ^ & ? _ ~) 만 가능합니다.")
     let passCheckDesText = Observable("")
     
-    let emailDesColor: Observable<UIColor?> = Observable(nil)
-    let passDesColor: Observable<UIColor?> = Observable(nil)
-    let passCheckDesColor: Observable<UIColor?> = Observable(nil)
+    let emailDesColor: Observable<UIColor?> = Observable(#colorLiteral(red: 0.568627451, green: 0.5529411765, blue: 1, alpha: 1))
+    let passDesColor: Observable<UIColor?> = Observable(#colorLiteral(red: 0.568627451, green: 0.5529411765, blue: 1, alpha: 1))
+    let passCheckDesColor: Observable<UIColor?> = Observable(#colorLiteral(red: 0.568627451, green: 0.5529411765, blue: 1, alpha: 1))
     
     let buttonEnable = Observable(false)
+    let validButtonEnable = Observable(false)
+    let authButtonEnable = Observable(false)
+    
     let buttonColor: Observable<UIColor?> = Observable(.labelGray)
+    let validButtonColor: Observable<UIColor?> = Observable(.labelGray)
+    let authButtonColor: Observable<UIColor?> = Observable(.labelGray)
     
     var passAreMatched: Bool {
         return self.password == self.passCheck
@@ -41,6 +49,7 @@ struct JoinViewModel {
     var formIsValid: Bool {
         return true
     }
+    
     func descriptionEmailText() {
         if self.email == "" {
             emailDesText.value = "로그인, 비밀번호 찾기 등에 사용됩니다."
@@ -71,11 +80,31 @@ struct JoinViewModel {
         if self.passCheck == "" {
             passCheckDesText.value = ""
         } else if passAreMatched {
-            passDesText.value =  "비밀번호와 일치합니다."
-            passDesColor.value = .validGreen
+            passCheckDesText.value =  "비밀번호와 일치합니다."
+            passCheckDesColor.value = .validGreen
         } else {
-            passDesText.value = "입력된 비밀번호와 일치하지 않습니다."
-            passDesColor.value = .validRed
+            passCheckDesText.value = "입력된 비밀번호와 일치하지 않습니다."
+            passCheckDesColor.value = .validRed
+        }
+    }
+    
+    func phoneNumValidation() {
+        if self.phoneNum?.validatePhoneNum() == true {
+            validButtonColor.value = .mainYellow
+            validButtonEnable.value = true
+        } else {
+            validButtonColor.value = .labelGray
+            validButtonEnable.value = false
+        }
+    }
+    
+    func authNumValidation() {
+        if self.authNum?.validateAuthCode() == true {
+            authButtonColor.value = .mainYellow
+            authButtonEnable.value = true
+        } else {
+            authButtonColor.value = .labelGray
+            authButtonEnable.value = false
         }
     }
     
@@ -88,6 +117,8 @@ struct JoinViewModel {
             buttonColor.value = .labelGray
         }
     }
+    
+    
     
      func passwordInitialize() {
         passText.value = ""

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		79FAD3914DD6BD3F19E9864C /* Pods_Hoxy.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F984CD5AE290D05D2906238D /* Pods_Hoxy.framework */; };
+		E082A933265647F800A56805 /* JoinDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E082A932265647F800A56805 /* JoinDataManager.swift */; };
 		E0ED10D626492EE800661094 /* EmailLoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ED10D526492EE800661094 /* EmailLoginViewModel.swift */; };
 		E0ED10D826492F0C00661094 /* Observable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ED10D726492F0C00661094 /* Observable.swift */; };
 		E0ED10DA264B5D9E00661094 /* PostModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ED10D9264B5D9E00661094 /* PostModel.swift */; };
@@ -86,6 +87,7 @@
 /* Begin PBXFileReference section */
 		A74370B774BB4905B3B6108B /* Pods-Hoxy.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Hoxy.release.xcconfig"; path = "Target Support Files/Pods-Hoxy/Pods-Hoxy.release.xcconfig"; sourceTree = "<group>"; };
 		CCEA5CB1BB645FCD82AB47CB /* Pods-Hoxy.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Hoxy.debug.xcconfig"; path = "Target Support Files/Pods-Hoxy/Pods-Hoxy.debug.xcconfig"; sourceTree = "<group>"; };
+		E082A932265647F800A56805 /* JoinDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinDataManager.swift; sourceTree = "<group>"; };
 		E0ED10D526492EE800661094 /* EmailLoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailLoginViewModel.swift; sourceTree = "<group>"; };
 		E0ED10D726492F0C00661094 /* Observable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Observable.swift; sourceTree = "<group>"; };
 		E0ED10D9264B5D9E00661094 /* PostModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostModel.swift; sourceTree = "<group>"; };
@@ -331,6 +333,7 @@
 				EB5D8E6A25C7D3E5003D957C /* PostDataManager.swift */,
 				EB5D8E8525CB15B6003D957C /* UserDataManager.swift */,
 				EB2968FE25D98DEB00DAE55B /* ChatDataManager.swift */,
+				E082A932265647F800A56805 /* JoinDataManager.swift */,
 			);
 			path = DataManager;
 			sourceTree = "<group>";
@@ -486,6 +489,7 @@
 			files = (
 				EBD9F3F925C3C61F004E18F1 /* UIViewController.swift in Sources */,
 				EB5D8E5825C70FB7003D957C /* LoginButton.swift in Sources */,
+				E082A933265647F800A56805 /* JoinDataManager.swift in Sources */,
 				EB78A37425E75DBF00E4C538 /* ProfileBackTop.swift in Sources */,
 				EB128D6025CFA55D004C0A66 /* LocationService.swift in Sources */,
 				EB128D6325CFA6BD004C0A66 /* LocationVC.swift in Sources */,
