@@ -18,16 +18,14 @@ struct JoinDataManager {
     
     func phoneNumberAuthentication(phoneNum: String) {
         let phoneNumber = "+82 \(String(Array(phoneNum)[1...]))"
-//        var veriID = ""
         Auth.auth().languageCode = "kr"
 
         PhoneAuthProvider.provider().verifyPhoneNumber(phoneNumber, uiDelegate: nil) { (id, error) in
             if let e = error {
                 print("ID Get Error \(e.localizedDescription)")
+                self.authDelegate?.phoneNumAuth("")
                 return
             }
-        
-//            veriID = id ?? ""
             self.authDelegate?.phoneNumAuth(id ?? "")
         }
     }

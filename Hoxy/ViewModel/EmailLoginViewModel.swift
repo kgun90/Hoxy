@@ -37,10 +37,10 @@ struct EmailLoginViewModel {
             emailDesText.value = ""
         } else if self.email?.validateEmail() == true {
             emailDesText.value = "올바른 양식입니다"
-            emailDesColor.value = .green
+            emailDesColor.value = .validGreen
         } else {
             emailDesText.value = "양식에 맞게 입력해주세요"
-            emailDesColor.value = .red
+            emailDesColor.value = #colorLiteral(red: 0.568627451, green: 0.5529411765, blue: 1, alpha: 1)
         }
     }
 
@@ -49,10 +49,10 @@ struct EmailLoginViewModel {
             passDesText.value = ""
         } else if self.password?.validatePassword() == true {
             passDesText.value = "올바른 양식입니다"
-            passDesColor.value = .green
+            passDesColor.value = .validGreen
         } else {
             passDesText.value = "양식에 맞게 입력해주세요"
-            passDesColor.value = .red
+            passDesColor.value = #colorLiteral(red: 0.568627451, green: 0.5529411765, blue: 1, alpha: 1)
         }
     }
     

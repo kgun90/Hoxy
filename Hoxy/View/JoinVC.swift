@@ -73,6 +73,7 @@ class JoinVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
+        joinDataManager.authDelegate = self
        
         optionSetting()
         layout()
@@ -96,18 +97,13 @@ class JoinVC: UIViewController {
     }
     
     // MARK: - Selectors
-
-    
-    
     @objc func authAction() {
         self.dismissKeyboard()
-        authHidden()
         joinDataManager.phoneNumberAuthentication(phoneNum: phoneNumTextfield.text!)
     }
         
     @objc func authCheckAction() {
         self.showIndicator()
-//        authSubmit(self.veriID, authTextfield.text ?? "")
         joinDataManager.authSubmit(self.veriID, authTextfield.text ?? "")
     }
   
@@ -125,6 +121,61 @@ class JoinVC: UIViewController {
         present(vc, animated: true, completion: nil)
     }
     
+    func authComplete() {
+        if self.emailItem.tf.text?.validateEmail() ?? false,
+           self.passItem.tf.text?.validatePassword() ?? false,
+           self.passItem.tf.text == self.passCheckItem.tf.text,
+           self.phoneNumTextfield.text?.validatePhoneNum() ?? false,
+           self.veriID != ""{
+            progressButton.isEnabled = true
+            progressButton.backgroundColor = .mainYellow
+        }
+    }
+    
+    func authHidden() {
+        authButton.isHidden = false
+        authTextfield.isHidden = false
+    }
+
+    // MARK: - Logic
+    func optionSetting() {
+        
+        emailItem.tf.delegate = self
+        passItem.tf.delegate = self
+        passCheckItem.tf.delegate = self
+        phoneNumTextfield.delegate = self
+        authTextfield.delegate = self
+        
+        phoneNumButton.isEnabled = false
+        authButton.isEnabled = false
+        progressButton.isEnabled = false
+        
+        authButton.isHidden = true
+        authTextfield.isHidden = true
+        authCompleteLabel.isHidden = true
+        
+        emailItem.tf.keyboardType = .emailAddress
+        
+        phoneNumButton.backgroundColor = .labelGray
+        authButton.backgroundColor = .labelGray
+        
+        topView.back.addTarget(self, action: #selector(backAction), for: .touchUpInside)
+        progressButton.addTarget(self, action: #selector(moveToSetting), for: .touchUpInside)
+        phoneNumButton.addTarget(self, action: #selector(authAction), for: .touchUpInside)
+        authButton.addTarget(self, action: #selector(authCheckAction), for: .touchUpInside)
+        
+        phoneNumTextfield.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
+        authTextfield.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
+        passItem.tf.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
+        passCheckItem.tf.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
+        emailItem.tf.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
+        authTextfield.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
+    }
+    
+  
+    
+}
+extension JoinVC {
     // MARK: - Helpers
     func binding() {
         viewModel.emailText.bind { [weak self] email in
@@ -177,6 +228,16 @@ class JoinVC: UIViewController {
         }
         viewModel.authButtonColor.bind { [weak self] color in
             self?.authButton.backgroundColor = color
+        }
+        
+        viewModel.authDesText.bind { [weak self] text in
+            self?.authCompleteLabel.text = text
+        }
+        viewModel.authDesColor.bind { [weak self] color in
+            self?.authCompleteLabel.textColor = color
+        }
+        viewModel.authDesVisability.bind { [weak self] visability in
+            self?.authCompleteLabel.isHidden = visability
         }
         
         
@@ -271,78 +332,6 @@ class JoinVC: UIViewController {
             $0.leading.equalTo(authTextfield.snp.leading)
         }
     }
-    // MARK: - Logic
-    func optionSetting() {
-        
-        emailItem.tf.delegate = self
-        passItem.tf.delegate = self
-        passCheckItem.tf.delegate = self
-        phoneNumTextfield.delegate = self
-        authTextfield.delegate = self
-        
-        phoneNumButton.isEnabled = false
-        authButton.isEnabled = false
-        progressButton.isEnabled = false
-        
-        authButton.isHidden = true
-        authTextfield.isHidden = true
-        authCompleteLabel.isHidden = true
-        
-        emailItem.tf.keyboardType = .emailAddress
-        
-        phoneNumButton.backgroundColor = .labelGray
-        authButton.backgroundColor = .labelGray
-        
-        topView.back.addTarget(self, action: #selector(backAction), for: .touchUpInside)
-        progressButton.addTarget(self, action: #selector(moveToSetting), for: .touchUpInside)
-        phoneNumButton.addTarget(self, action: #selector(authAction), for: .touchUpInside)
-        authButton.addTarget(self, action: #selector(authCheckAction), for: .touchUpInside)
-        
-        phoneNumTextfield.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
-        authTextfield.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
-        passItem.tf.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
-        passCheckItem.tf.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
-        emailItem.tf.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
-        authTextfield.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
-    }
-    
-    func authComplete() {
-        if self.emailItem.tf.text?.validateEmail() ?? false,
-           self.passItem.tf.text?.validatePassword() ?? false,
-           self.passItem.tf.text == self.passCheckItem.tf.text,
-           self.phoneNumTextfield.text?.validatePhoneNum() ?? false,
-           self.veriID != ""{
-            progressButton.isEnabled = true
-            progressButton.backgroundColor = .mainYellow
-        }
-    }
-    
-    func authSubmit(_ veriID: String, _ veriCode: String) {
-        let credential = PhoneAuthProvider.provider().credential(withVerificationID: veriID, verificationCode: veriCode)
-        
-        Auth.auth().signIn(with: credential) { (authResult, error) in
-            if let e = error {
-                print(e.localizedDescription)
-                self.dismissIndicator()
-                self.authTextfield.text = ""
-                self.authCompleteLabel.text = "인증번호가 올바르지 않습니다 확인바랍니다."
-                return
-            }
-            
-            print(authResult.debugDescription)
-            self.dismissIndicator()
-            self.authCompleteLabel.isHidden = false
-            self.uid = authResult?.user.uid ?? ""
-            self.dismissKeyboard()
-           
-        }
-    }
-  
-    func authHidden() {
-        authButton.isHidden = false
-        authTextfield.isHidden = false
-    }
-    
 }
 
 extension JoinVC: UITextFieldDelegate {
@@ -367,15 +356,17 @@ extension JoinVC: UITextFieldDelegate {
     }
     
     @objc func textFieldDidChange(sender: UITextField) {
-    
         // textField 입력 실시간 감지
         switch sender {
         case emailItem.tf:
             viewModel.email = sender.text
+            viewModel.descriptionEmailTextEntering()
         case passItem.tf:
             viewModel.password = sender.text
+            viewModel.descriptionPassTextEntering()
         case passCheckItem.tf:
             viewModel.passCheck = sender.text
+            viewModel.descriptionPassCheckText()
         case phoneNumTextfield:
             viewModel.phoneNum = sender.text
             viewModel.phoneNumValidation()
@@ -385,7 +376,7 @@ extension JoinVC: UITextFieldDelegate {
         default:
             return
         }
-        authComplete()
+        viewModel.buttonEnableCheck()
     }
     
     func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
@@ -395,39 +386,35 @@ extension JoinVC: UITextFieldDelegate {
                 viewModel.descriptionEmailText()
             case passItem.tf:
                 viewModel.descriptionPassText()
-            case passCheckItem.tf:
-                viewModel.descriptionPassCheckText()
             default:
-                print("?")
+                return true
             }
-            return true
-        } else {
-            return true
         }
+        return true
     }
-    
 }
+
 extension JoinVC: AuthDataDelegate {
-    
     func phoneNumAuth(_ veriID: String) {
-        print("veriID: \(veriID)")
-        self.veriID = veriID
+        if veriID != "" {
+            self.veriID = veriID
+            authHidden()
+        } else {
+            let action = UIAlertAction(title: "확인", style: .default, handler: nil)
+            self.presentAlert(title: "휴대전화 인증 오류", message: "번호를 다시 입력 바랍니다", preferredStyle: .alert, with: action)
+        }
     }
     
     func validAuth(_ error: String, _ uid: String) {
+        print("Auth Error message : \(error)")
+        
         self.dismissIndicator()
         self.dismissKeyboard()
-        self.authCompleteLabel.isHidden = false
-        print(error)
-        if error == "" {
-            self.authCompleteLabel.text = "인증되었습니다."
-            self.authCompleteLabel.textColor = .validGreen
-        } else {
-            self.authCompleteLabel.text = error//"인증번호를 올바르게 입력 바랍니다."
-            self.authCompleteLabel.textColor = .validRed
-        }
+
+        viewModel.validAuth = (error == "" ? true : false)
+        viewModel.descriptionAuthText()
+        viewModel.buttonEnableCheck()
     }
-    
 }
 
 extension JoinVC {
