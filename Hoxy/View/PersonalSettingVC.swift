@@ -10,6 +10,7 @@ import CoreLocation
 import Firebase
 
 class PersonalSettingVC: UIViewController {
+    
     // MARK: - Properties
     let topView = TopView("정보설정")
     let submitButton = BottomButton("가입하기")
@@ -94,12 +95,13 @@ class PersonalSettingVC: UIViewController {
     var years: [String] = []
     var joinInfo = JoinModel()
     var currentLatLon: GeoPoint?
+    private var joinDataManager = JoinDataManager()
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .white
-     
+        joinDataManager.joinDelegate = self
         layout()
         configuration()
         
@@ -117,7 +119,7 @@ class PersonalSettingVC: UIViewController {
     
     @objc func textFieldDidChange() {
         if locationNameLabel.text != nil, ageTextField.text != nil {
-            print(joinInfo)
+            print("\(joinInfo.uid)")
             submitButton.backgroundColor = .mainYellow
             submitButton.isEnabled = true
         }
@@ -132,7 +134,9 @@ class PersonalSettingVC: UIViewController {
     }
     
     @objc func submitJoin() {
+        print(joinInfo)
         self.showIndicator()
+//        joinDa
         Auth.auth().currentUser?.updateEmail(to: joinInfo.email, completion: { (error) in
             if let e = error {
                 print(e.localizedDescription)
@@ -157,8 +161,7 @@ class PersonalSettingVC: UIViewController {
             "town": joinInfo.town,
             "uid": joinInfo.uid
         ])
-        dismissIndicator()
-        moveToRoot(LocationVC())
+ 
     }
     
     // MARK: - UI Layout
@@ -352,6 +355,16 @@ class PersonalSettingVC: UIViewController {
         gradeView.isHidden = false
        
     }
+}
+
+extension PersonalSettingVC: JoinDelegate {
+    func joinAction() {
+        
+        dismissIndicator()
+        moveToRoot(LocationVC())
+    }
+    
+    
 }
 
 extension PersonalSettingVC: CLLocationManagerDelegate {

@@ -73,28 +73,20 @@ class EmailLoginVC: UIViewController {
             self?.passItem.tf.text = password
         }
         
-        viewModel.emailDesText.bind { [weak self] label in
-            self?.emailItem.descriptionLabel.text = label
+        viewModel.emailDes.bind { [weak self] label in
+            self?.emailItem.descriptionLabel.text = label.text
+            self?.emailItem.descriptionLabel.textColor = label.color
         }
         
-        viewModel.passDesText.bind { [weak self] label in
-            self?.passItem.descriptionLabel.text = label
+        viewModel.passDes.bind { [weak self] label in
+            self?.passItem.descriptionLabel.text = label.text
+            self?.passItem.descriptionLabel.textColor = label.color
         }
-        
-        viewModel.emailDesColor.bind { [weak self] color in
-            self?.emailItem.descriptionLabel.textColor = color
+        viewModel.buttonSet.bind { [weak self] button in
+            self?.loginButton.isEnabled = button.visability
+            self?.loginButton.backgroundColor = button.color
         }
-        
-        viewModel.passDesColor.bind { [weak self] color in
-            self?.passItem.descriptionLabel.textColor = color
-        }
-        
-        viewModel.buttonEnable.bind { [weak self] button in
-            self?.loginButton.isEnabled = button
-        }
-        viewModel.buttonColor.bind { [weak self] color in
-            self?.loginButton.backgroundColor = color
-        }
+
     
     }
     func layout() {

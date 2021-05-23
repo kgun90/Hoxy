@@ -23,9 +23,12 @@ class JoinInputItem: UIView {
         itemLabel.textColor = .black
         
         tf.placeholder = placeholder
+//        tf.placeholder.c
         tf.font = .BasicFont(.medium, size: 14)
         tf.isSecureTextEntry = secureTextType
         tf.autocapitalizationType = .none
+        tf.backgroundColor = .white
+        tf.textColor = .black
    
         descriptionLabel.text = descriptionText
         descriptionLabel.font = .BasicFont(.medium, size: 10)

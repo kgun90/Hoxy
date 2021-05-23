@@ -5,7 +5,7 @@
 //  Created by Geon Kang on 2021/01/27.
 //
 
-import Foundation
+import UIKit
 
 struct LoginModel {
     var email: String = ""
@@ -15,4 +15,15 @@ struct LoginModel {
     var town: String = ""
     var uid: String = ""
     var age: Int = 0
+}
+
+struct DefaultSetModel {
+    var text: String = ""
+    var color: UIColor = .labelGray
+    var visability: Bool = false
+}
+
+public enum InputMode {
+    case realtime
+    case once
 }

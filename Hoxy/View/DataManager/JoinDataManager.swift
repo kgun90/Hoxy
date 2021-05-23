@@ -7,14 +7,20 @@
 
 import Foundation
 import Firebase
+import CoreLocation
 
 protocol AuthDataDelegate {
     func phoneNumAuth(_ veriID: String)
     func validAuth(_ error: String, _ uid: String)
 }
 
+protocol JoinDelegate {
+    func joinAction()
+}
+
 struct JoinDataManager {
     var authDelegate: AuthDataDelegate?
+    var joinDelegate: JoinDelegate?
     
     func phoneNumberAuthentication(phoneNum: String) {
         let phoneNumber = "+82 \(String(Array(phoneNum)[1...]))"
@@ -41,5 +47,33 @@ struct JoinDataManager {
             }
             authDelegate?.validAuth("", authResult?.user.uid ?? "")
         }
+    }
+    
+    func joinProcess(_ joinInfo: JoinModel, _ currentLatLon: GeoPoint) {
+        Auth.auth().currentUser?.updateEmail(to: joinInfo.email, completion: { (error) in
+            if let e = error {
+                print(e.localizedDescription)
+            }
+        })
+        Auth.auth().currentUser?.updatePassword(to: joinInfo.pass, completion:  { (error) in
+            if let e = error {
+                print(e.localizedDescription)
+            }
+        })
+        let emoji: String = ""
+        
+        set.fs.collection(set.Table.member).document(joinInfo.uid).setData([
+            "birth": joinInfo.age,
+            "city": joinInfo.city,
+            "email": joinInfo.email,
+            "emoji": emoji.randomEmoji(),
+            "exp": 50,
+            "location": currentLatLon,
+            "participation": 0,
+            "phone": joinInfo.phone,
+            "town": joinInfo.town,
+            "uid": joinInfo.uid
+        ])
+ 
     }
 }

@@ -17,6 +17,7 @@ class TopView: UIView {
         self.backgroundColor = backgroundColor
         let titleLabel = UILabel()
         titleLabel.text = title
+        titleLabel.textColor = .black
         titleLabel.font = .BasicFont(.medium, size: 18)
         addSubview(titleLabel)
         titleLabel.snp.makeConstraints {

@@ -115,7 +115,7 @@ class JoinVC: UIViewController {
         let vc = PersonalSettingVC()
         vc.modalPresentationStyle = .overFullScreen
            
-        let joinData = JoinModel(email: emailItem.tf.text!, pass: passItem.tf.text!, phone: phoneNumTextfield.text!, uid: uid)
+        let joinData = JoinModel(email: emailItem.tf.text!, pass: passItem.tf.text!, phone: phoneNumTextfield.text!, uid: self.uid)
         vc.joinInfo = joinData
         
         present(vc, animated: true, completion: nil)
@@ -188,56 +188,41 @@ extension JoinVC {
             self?.passCheckItem.tf.text = password
         }
         
-        viewModel.emailDesText.bind { [weak self] text in
-            self?.emailItem.descriptionLabel.text = text
+        
+        viewModel.emailDes.bind { [weak self] label in
+            self?.emailItem.descriptionLabel.text = label.text
+            self?.emailItem.descriptionLabel.textColor = label.color
         }
-        viewModel.passDesText.bind { [weak self] text in
-            self?.passItem.descriptionLabel.text = text
+
+        viewModel.passDes.bind { [weak self] label in
+            self?.passItem.descriptionLabel.text = label.text
+            self?.passItem.descriptionLabel.textColor = label.color
         }
-        viewModel.passCheckDesText.bind { [weak self] text in
-            self?.passCheckItem.descriptionLabel.text = text
+     
+        viewModel.passCheckDes.bind { [weak self] label in
+            self?.passCheckItem.descriptionLabel.text = label.text
+            self?.passCheckItem.descriptionLabel.textColor = label.color
+        }
+
+        viewModel.moveNextButton.bind { [weak self] button in
+            self?.progressButton.isEnabled = button.visability
+            self?.progressButton.backgroundColor = button.color
         }
         
-        viewModel.emailDesColor.bind { [weak self] color in
-            self?.emailItem.descriptionLabel.textColor = color
-        }
-        viewModel.passDesColor.bind { [weak self] color in
-            self?.passItem.descriptionLabel.textColor = color
-        }
-        viewModel.passCheckDesColor.bind { [weak self] color in
-            self?.passCheckItem.descriptionLabel.textColor = color
+        viewModel.phoneValidButton.bind { [weak self] button in
+            self?.phoneNumButton.isEnabled = button.visability
+            self?.phoneNumButton.backgroundColor = button.color
         }
         
-        
-        viewModel.buttonEnable.bind { [weak self] button in
-            self?.progressButton.isEnabled = button
-        }
-        viewModel.buttonColor.bind { [weak self] color in
-            self?.progressButton.backgroundColor = color
+        viewModel.authButton.bind { [weak self] button in
+            self?.authButton.isEnabled = button.visability
+            self?.authButton.backgroundColor = button.color
         }
         
-        viewModel.validButtonEnable.bind { [weak self] button in
-            self?.phoneNumButton.isEnabled = button
-        }
-        viewModel.validButtonColor.bind { [weak self] color in
-            self?.phoneNumButton.backgroundColor = color
-        }
-        
-        viewModel.authButtonEnable.bind { [weak self] button in
-            self?.authButton.isEnabled = button
-        }
-        viewModel.authButtonColor.bind { [weak self] color in
-            self?.authButton.backgroundColor = color
-        }
-        
-        viewModel.authDesText.bind { [weak self] text in
-            self?.authCompleteLabel.text = text
-        }
-        viewModel.authDesColor.bind { [weak self] color in
-            self?.authCompleteLabel.textColor = color
-        }
-        viewModel.authDesVisability.bind { [weak self] visability in
-            self?.authCompleteLabel.isHidden = visability
+        viewModel.authDes.bind { [weak self] label in
+            self?.authCompleteLabel.text = label.text
+            self?.authCompleteLabel.textColor = label.color
+            self?.authCompleteLabel.isHidden = label.visability
         }
         
         
@@ -360,10 +345,10 @@ extension JoinVC: UITextFieldDelegate {
         switch sender {
         case emailItem.tf:
             viewModel.email = sender.text
-            viewModel.descriptionEmailTextEntering()
+            viewModel.descriptionEmailText(.realtime)
         case passItem.tf:
             viewModel.password = sender.text
-            viewModel.descriptionPassTextEntering()
+            viewModel.descriptionPassText(.realtime)
         case passCheckItem.tf:
             viewModel.passCheck = sender.text
             viewModel.descriptionPassCheckText()
@@ -383,9 +368,9 @@ extension JoinVC: UITextFieldDelegate {
         if textField.text != "" {
             switch textField {
             case emailItem.tf:
-                viewModel.descriptionEmailText()
+                viewModel.descriptionEmailText(.once)
             case passItem.tf:
-                viewModel.descriptionPassText()
+                viewModel.descriptionPassText(.once)
             default:
                 return true
             }
@@ -407,10 +392,11 @@ extension JoinVC: AuthDataDelegate {
     
     func validAuth(_ error: String, _ uid: String) {
         print("Auth Error message : \(error)")
-        
+       
         self.dismissIndicator()
         self.dismissKeyboard()
-
+        
+        self.uid = uid
         viewModel.validAuth = (error == "" ? true : false)
         viewModel.descriptionAuthText()
         viewModel.buttonEnableCheck()
