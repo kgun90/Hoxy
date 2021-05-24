@@ -8,6 +8,7 @@
 import Foundation
 import UIKit.UIColor
 
+// 용도를 생각해볼것
 protocol AutenticationProtocol {
     var formIsValid: Bool { get }
 }

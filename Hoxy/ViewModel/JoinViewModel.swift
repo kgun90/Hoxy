@@ -33,8 +33,7 @@ struct JoinViewModel {
     let authDes = Observable(DefaultSetModel())
     let authButton = Observable(DefaultSetModel())
     let moveNextButton = Observable(DefaultSetModel())
-    
-    
+        
     
     var passAreMatched: Bool {
         return self.password == self.passCheck

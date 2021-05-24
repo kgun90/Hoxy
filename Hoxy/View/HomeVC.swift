@@ -10,7 +10,8 @@ import Firebase
 import CoreLocation
 import BTNavigationDropdownMenu
 
-class HomeVC: BaseViewController, PostDataDelegate {
+class HomeVC: BaseViewController {
+
 
     // MARK: - Properties
     lazy var listTableView = UITableView().then {
@@ -26,17 +27,18 @@ class HomeVC: BaseViewController, PostDataDelegate {
         $0.addTarget(self, action: #selector(moveToWrite), for: .touchUpInside)
     }
     
-    var postDataManager = PostDataManager()
-    var posts: [PostDataModel] = []
+    var posts = [PostDataModel()]
     var id: String?
-//    var location = CLLocation()
+    private var viewModel = HomeViewModel()
+
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         showIndicator()
-        postDataManager.delegate = self
-        postDataManager.requestPostData()
+        binding()
+        viewModel.requestData()
+        
         setting()
         layout()
         dropdownMenu()
@@ -45,7 +47,9 @@ class HomeVC: BaseViewController, PostDataDelegate {
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-         }
+        self.dismissIndicator()
+    }
+    
     // MARK: - Selectors
     @objc func moveToWrite() {
         let vc = WriteVC()
@@ -58,6 +62,7 @@ class HomeVC: BaseViewController, PostDataDelegate {
         listTableView.dataSource = self
         listTableView.register(UINib(nibName: "HomeTableViewCell", bundle: nil), forCellReuseIdentifier: "HomeTableViewCell")
         listTableView.tableFooterView = UIView()
+        reloadTable()
     }
     
     func dropdownMenu() {
@@ -69,28 +74,8 @@ class HomeVC: BaseViewController, PostDataDelegate {
         menuView.checkMarkImage.withTintColor(.black)
         
         menuView.didSelectItemAtIndexHandler = {[weak self] (indexPath: Int) -> () in
-            self!.locationChangeAction(indexPath)
+            self!.viewModel.locationChangeAction(self!.posts, indexPath)
         }
-    }
-    
-    func locationChangeAction(_ index: Int) {
-        showIndicator()
-        listTableView.reloadData()
-        if index == 0 {
-            posts = posts.filter ({ (post: PostDataModel) -> Bool in
-                let location = CLLocation(latitude: post.location!.latitude, longitude: post.location!.longitude)
-                return location.distance(from: LocationService.currentLocation!) < 5000
-            })
-        } else {
-            posts = posts.filter ({ (post: PostDataModel) -> Bool in
-                let location = CLLocation(latitude: post.location!.latitude, longitude: post.location!.longitude)
-                return location.distance(from: LocationService.userLocation!) < 5000
-            })
-        }
-  
-
-        listTableView.reloadData()
-        dismissIndicator()
     }
     
     // MARK: - Helpers
@@ -113,12 +98,6 @@ class HomeVC: BaseViewController, PostDataDelegate {
         }
     }
     
-    func getPostData(_ postData: [PostDataModel]) {
-        posts = postData
-        self.listTableView.reloadData()
-        self.dismissIndicator()
-    }
-    
     func initRefresh() {
         let refresh = UIRefreshControl()
         refresh.addTarget(self, action: #selector(updateUI(refresh: )), for: .valueChanged)
@@ -134,7 +113,7 @@ class HomeVC: BaseViewController, PostDataDelegate {
     
     @objc func updateUI(refresh: UIRefreshControl) {
         refresh.endRefreshing()
-        listTableView.reloadData()
+        reloadTable()
     }
     
     func readPost(_ id: String) {
@@ -143,7 +122,17 @@ class HomeVC: BaseViewController, PostDataDelegate {
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
+    func binding() {
+        viewModel.postData.bind { [weak self] data in
+            self?.posts = data
+        }
+    }
     
+    func reloadTable() {
+        DispatchQueue.main.async {
+            self.listTableView.reloadData()
+        }
+    }
 }
 extension HomeVC: UITableViewDataSource, UITableViewDelegate {
     func numberOfSections(in tableView: UITableView) -> Int {

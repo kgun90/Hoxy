@@ -22,9 +22,18 @@ extension UIViewController {
     @objc func endEditing() {
         self.view.endEditing(false)
     }
+    // MARK: 취소와 확인이 뜨는 UIAlertController
+    func presentOkOnlyAlert(title: String, message: String? = nil,
+                      handler: ((UIAlertAction) -> Void)? = nil) {
+        self.dismissIndicator()
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let actionDone = UIAlertAction(title: "확인", style: .default, handler: handler)
+        alert.addAction(actionDone)
+        self.present(alert, animated: true, completion: nil)
+    }
     
     // MARK: 취소와 확인이 뜨는 UIAlertController
-    func presentAlert(title: String, message: String? = nil,
+    func presentOkCancelAlert(title: String, message: String? = nil,
                       isCancelActionIncluded: Bool = false,
                       preferredStyle style: UIAlertController.Style = .alert,
                       handler: ((UIAlertAction) -> Void)? = nil) {

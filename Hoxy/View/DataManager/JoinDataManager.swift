@@ -15,7 +15,7 @@ protocol AuthDataDelegate {
 }
 
 protocol JoinDelegate {
-    func joinAction()
+    func joinAction(_ error: String)
 }
 
 struct JoinDataManager {
@@ -53,11 +53,13 @@ struct JoinDataManager {
         Auth.auth().currentUser?.updateEmail(to: joinInfo.email, completion: { (error) in
             if let e = error {
                 print(e.localizedDescription)
+                joinDelegate?.joinAction(e.localizedDescription)
             }
         })
         Auth.auth().currentUser?.updatePassword(to: joinInfo.pass, completion:  { (error) in
             if let e = error {
                 print(e.localizedDescription)
+                joinDelegate?.joinAction(e.localizedDescription)
             }
         })
         let emoji: String = ""
@@ -74,6 +76,6 @@ struct JoinDataManager {
             "town": joinInfo.town,
             "uid": joinInfo.uid
         ])
- 
+        joinDelegate?.joinAction("")
     }
 }

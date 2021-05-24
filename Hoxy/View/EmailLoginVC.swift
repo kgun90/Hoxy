@@ -27,7 +27,7 @@ class EmailLoginVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-//        loginCheck()
+        loginCheck()
         buttonTarget()
         binding()
         layout()
@@ -46,18 +46,23 @@ class EmailLoginVC: UIViewController {
     }
     
     @objc func loginAction() {
+        self.showIndicator()
         if let email = emailItem.tf.text, let pass = passItem.tf.text {
             Auth.auth().signIn(withEmail: email, password: pass) { [weak self] authResult, error in
                 if let e = error {
+                    self?.dismissIndicator()
                     print(e.localizedDescription)
                     let ok = UIAlertAction(title: "확인", style: .default) { action in
                         self?.viewModel.passwordInitialize()
                         self?.viewModel.password = ""
                         self?.viewModel.buttonEnableCheck()
+                        
                         return
                     }
                     self?.presentAlert(title: "로그인 실패", message: "이메일과 패스워드를 확인해주세요.", isCancelActionIncluded: false, preferredStyle: .alert, with: ok)
+                    
                 } else {
+                    self?.dismissIndicator()
                     self?.moveToRoot(LocationVC())
                 }
             }

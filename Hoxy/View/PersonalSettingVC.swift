@@ -134,39 +134,14 @@ class PersonalSettingVC: UIViewController {
     }
     
     @objc func submitJoin() {
-        print(joinInfo)
-        self.showIndicator()
-//        joinDa
-        Auth.auth().currentUser?.updateEmail(to: joinInfo.email, completion: { (error) in
-            if let e = error {
-                print(e.localizedDescription)
-            }
-        })
-        Auth.auth().currentUser?.updatePassword(to: joinInfo.pass, completion:  { (error) in
-            if let e = error {
-                print(e.localizedDescription)
-            }
-        })
-        let emoji: String = ""
-        
-        set.fs.collection(set.Table.member).document(joinInfo.uid).setData([
-            "birth": joinInfo.age,
-            "city": joinInfo.city,
-            "email": joinInfo.email,
-            "emoji": emoji.randomEmoji(),
-            "exp": 50,
-            "location": currentLatLon!,
-            "participation": 0,
-            "phone": joinInfo.phone,
-            "town": joinInfo.town,
-            "uid": joinInfo.uid
-        ])
- 
+        self.presentOkCancelAlert(title: "회원 가입", message: "가입을 진행하시겠습니까?", isCancelActionIncluded: true, preferredStyle: .alert) { action in
+            self.joinDataManager.joinProcess(self.joinInfo, self.currentLatLon!)
+            self.showIndicator()
+        }
     }
     
     // MARK: - UI Layout
-    func layout() {
-        
+    func layout() {        
         view.addSubview(topView)
         view.addSubview(logoImage)
         view.addSubview(submitButton)
@@ -358,13 +333,14 @@ class PersonalSettingVC: UIViewController {
 }
 
 extension PersonalSettingVC: JoinDelegate {
-    func joinAction() {
-        
+    func joinAction(_ error: String) {
         dismissIndicator()
-        moveToRoot(LocationVC())
+        if error != "" {
+            self.presentOkOnlyAlert(title: "가입 오류", message: "가입 도중 에러가 발생했습니다. 고객센터에 문의 바랍니다 \n \(error)")
+        } else {
+            moveToRoot(LocationVC())
+        }
     }
-    
-    
 }
 
 extension PersonalSettingVC: CLLocationManagerDelegate {
