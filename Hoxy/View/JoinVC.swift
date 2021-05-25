@@ -10,15 +10,13 @@ import Firebase
 
 class JoinVC: UIViewController {
     // MARK: - Properties
-    let topView = TopView("회원가입")
-    
     private var viewModel = JoinViewModel()
     private var joinDataManager = JoinDataManager()
     
     lazy var logoImage = UIImageView().then {
         $0.image = UIImage(named: "logo")
     }
-
+    let topView = TopView("회원가입")
     let emailItem = JoinInputItem("이메일", "id1234@hoxy.com", false, "로그인, 비밀번호 찾기 등에 사용됩니다.")
     let passItem = JoinInputItem("비밀번호", "대소문자/숫자/기호를 모두 포함한 8~16자리 입력", true, "특수문자는 (! @ # $ % ^ & ? _ ~) 만 가능합니다." )
     let passCheckItem = JoinInputItem("비밀번호 확인", "입력하신 비밀번호를 다시 한번 입력 해주세요.", true)
@@ -74,10 +72,7 @@ class JoinVC: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .white
         joinDataManager.authDelegate = self
-       
-        optionSetting()
-        layout()
-        binding() 
+        configureUI()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -136,47 +131,126 @@ class JoinVC: UIViewController {
         authButton.isHidden = false
         authTextfield.isHidden = false
     }
+}
 
-    // MARK: - Logic
-    func optionSetting() {
-        
-        emailItem.tf.delegate = self
-        passItem.tf.delegate = self
-        passCheckItem.tf.delegate = self
-        phoneNumTextfield.delegate = self
-        authTextfield.delegate = self
-        
-        phoneNumButton.isEnabled = false
-        authButton.isEnabled = false
-        progressButton.isEnabled = false
-        
-        authButton.isHidden = true
-        authTextfield.isHidden = true
-        authCompleteLabel.isHidden = true
-        
-        emailItem.tf.keyboardType = .emailAddress
-        
-        phoneNumButton.backgroundColor = .labelGray
-        authButton.backgroundColor = .labelGray
-        
-        topView.back.addTarget(self, action: #selector(backAction), for: .touchUpInside)
-        progressButton.addTarget(self, action: #selector(moveToSetting), for: .touchUpInside)
-        phoneNumButton.addTarget(self, action: #selector(authAction), for: .touchUpInside)
-        authButton.addTarget(self, action: #selector(authCheckAction), for: .touchUpInside)
-        
-        phoneNumTextfield.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
-        authTextfield.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
-        passItem.tf.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
-        passCheckItem.tf.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
-        emailItem.tf.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
-        authTextfield.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
+
+extension JoinVC: UITextFieldDelegate {
+    // textField 입력 실시간 감지
+    @objc func textFieldDidChange(sender: UITextField) {
+        switch sender {
+        case emailItem.tf:
+            viewModel.email = sender.text
+            viewModel.descriptionEmailText(.realtime)
+        case passItem.tf:
+            viewModel.password = sender.text
+            viewModel.descriptionPassText(.realtime)
+        case passCheckItem.tf:
+            viewModel.passCheck = sender.text
+            viewModel.descriptionPassCheckText()
+        case phoneNumTextfield:
+            viewModel.phoneNum = sender.text
+            viewModel.phoneNumValidation()
+        case authTextfield:
+            viewModel.authNum = sender.text
+            viewModel.authNumValidation()
+        default:
+            return
+        }
+        viewModel.buttonEnableCheck()
     }
     
-  
+    // 키보드 영역 이외 터치시 키보드 해제
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.dismissKeyboard()
+    }
     
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+    
+    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+        switch textField {
+        case authTextfield:
+            authKeyboardStatus = true
+        default:
+            authKeyboardStatus = false
+        }
+        return true
+    }
+    
+    func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
+        if textField.text != "" {
+            switch textField {
+            case emailItem.tf:
+                viewModel.descriptionEmailText(.once)
+            case passItem.tf:
+                viewModel.descriptionPassText(.once)
+            default:
+                return true
+            }
+        }
+        return true
+    }
 }
+
+extension JoinVC: AuthDataDelegate {
+    func phoneNumAuth(_ veriID: String) {
+        if veriID != "" {
+            self.veriID = veriID
+            authHidden()
+        } else {
+            let action = UIAlertAction(title: "확인", style: .default, handler: nil)
+            self.presentAlert(title: "휴대전화 인증 오류", message: "번호를 다시 입력 바랍니다", preferredStyle: .alert, with: action)
+        }
+    }
+    
+    func validAuth(_ error: String, _ uid: String) {
+        print("Auth Error message : \(error)")
+       
+        self.dismissIndicator()
+        self.dismissKeyboard()
+        
+        self.uid = uid
+        viewModel.validAuth = (error == "" ? true : false)
+        viewModel.descriptionAuthText()
+        viewModel.buttonEnableCheck()
+    }
+}
+
+// MARK: 키보드 표시에 따른 뷰 시점 이동
 extension JoinVC {
-    // MARK: - Helpers
+    // textField 중 authTextfield에 포커스 이동시 키보드 등장과 함께 화면이 위로 올라가는 동작을 하는 부분, 다른 textField로 포커스 이동시엔 해제한다.
+    func registerForKeyboardNotifications() {
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    func unregisterForKeyboardNotifications() {
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    @objc func keyboardWillShow(note: NSNotification) {
+        if authKeyboardStatus {
+            self.view.frame.origin.y = -150
+        } else {
+            self.view.frame.origin.y = 0
+        }
+    }
+    @objc func keyboardWillHide(note: NSNotification) {
+        self.view.frame.origin.y = 0
+    }
+}
+
+// MARK: Configure UI
+extension JoinVC {
+    func configureUI () {
+        binding()
+        setting()
+        layout()
+    }
+    
     func binding() {
         viewModel.emailText.bind { [weak self] email in
             self?.emailItem.tf.text = email
@@ -187,7 +261,6 @@ extension JoinVC {
         viewModel.passCheckText.bind { [weak self] password in
             self?.passCheckItem.tf.text = password
         }
-        
         
         viewModel.emailDes.bind { [weak self] label in
             self?.emailItem.descriptionLabel.text = label.text
@@ -224,8 +297,39 @@ extension JoinVC {
             self?.authCompleteLabel.textColor = label.color
             self?.authCompleteLabel.isHidden = label.visability
         }
+    }
+    
+    func setting() {
+        emailItem.tf.delegate = self
+        passItem.tf.delegate = self
+        passCheckItem.tf.delegate = self
+        phoneNumTextfield.delegate = self
+        authTextfield.delegate = self
         
+        phoneNumButton.isEnabled = false
+        authButton.isEnabled = false
+        progressButton.isEnabled = false
         
+        authButton.isHidden = true
+        authTextfield.isHidden = true
+        authCompleteLabel.isHidden = true
+        
+        emailItem.tf.keyboardType = .emailAddress
+        
+        phoneNumButton.backgroundColor = .labelGray
+        authButton.backgroundColor = .labelGray
+        
+        topView.back.addTarget(self, action: #selector(backAction), for: .touchUpInside)
+        progressButton.addTarget(self, action: #selector(moveToSetting), for: .touchUpInside)
+        phoneNumButton.addTarget(self, action: #selector(authAction), for: .touchUpInside)
+        authButton.addTarget(self, action: #selector(authCheckAction), for: .touchUpInside)
+        
+        phoneNumTextfield.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
+        authTextfield.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
+        passItem.tf.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
+        passCheckItem.tf.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
+        emailItem.tf.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
+        authTextfield.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
     }
     
     func layout() {
@@ -316,114 +420,5 @@ extension JoinVC {
             $0.top.equalTo(authTextfield.snp.bottom).offset(3)
             $0.leading.equalTo(authTextfield.snp.leading)
         }
-    }
-}
-
-extension JoinVC: UITextFieldDelegate {
-    // 키보드 영역 이외 터치시 키보드 해제
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.dismissKeyboard()
-    }
-    
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        return true
-    }
-    
-    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
-        switch textField {
-        case authTextfield:
-            authKeyboardStatus = true
-        default:
-            authKeyboardStatus = false
-        }
-        return true
-    }
-    
-    @objc func textFieldDidChange(sender: UITextField) {
-        // textField 입력 실시간 감지
-        switch sender {
-        case emailItem.tf:
-            viewModel.email = sender.text
-            viewModel.descriptionEmailText(.realtime)
-        case passItem.tf:
-            viewModel.password = sender.text
-            viewModel.descriptionPassText(.realtime)
-        case passCheckItem.tf:
-            viewModel.passCheck = sender.text
-            viewModel.descriptionPassCheckText()
-        case phoneNumTextfield:
-            viewModel.phoneNum = sender.text
-            viewModel.phoneNumValidation()
-        case authTextfield:
-            viewModel.authNum = sender.text
-            viewModel.authNumValidation()
-        default:
-            return
-        }
-        viewModel.buttonEnableCheck()
-    }
-    
-    func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
-        if textField.text != "" {
-            switch textField {
-            case emailItem.tf:
-                viewModel.descriptionEmailText(.once)
-            case passItem.tf:
-                viewModel.descriptionPassText(.once)
-            default:
-                return true
-            }
-        }
-        return true
-    }
-}
-
-extension JoinVC: AuthDataDelegate {
-    func phoneNumAuth(_ veriID: String) {
-        if veriID != "" {
-            self.veriID = veriID
-            authHidden()
-        } else {
-            let action = UIAlertAction(title: "확인", style: .default, handler: nil)
-            self.presentAlert(title: "휴대전화 인증 오류", message: "번호를 다시 입력 바랍니다", preferredStyle: .alert, with: action)
-        }
-    }
-    
-    func validAuth(_ error: String, _ uid: String) {
-        print("Auth Error message : \(error)")
-       
-        self.dismissIndicator()
-        self.dismissKeyboard()
-        
-        self.uid = uid
-        viewModel.validAuth = (error == "" ? true : false)
-        viewModel.descriptionAuthText()
-        viewModel.buttonEnableCheck()
-    }
-}
-
-extension JoinVC {
-    // textField 중 authTextfield에 포커스 이동시 키보드 등장과 함께 화면이 위로 올라가는 동작을 하는 부분, 다른 textField로 포커스 이동시엔 해제한다.
-    func registerForKeyboardNotifications() {
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
-    }
-    
-    func unregisterForKeyboardNotifications() {
-        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
-    }
-    
-    @objc func keyboardWillShow(note: NSNotification) {
-        if authKeyboardStatus {
-            self.view.frame.origin.y = -150
-        } else {
-            self.view.frame.origin.y = 0
-        }
-    }
-    
-    @objc func keyboardWillHide(note: NSNotification) {
-        self.view.frame.origin.y = 0
     }
 }

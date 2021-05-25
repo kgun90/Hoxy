@@ -10,6 +10,8 @@
 		79FAD3914DD6BD3F19E9864C /* Pods_Hoxy.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F984CD5AE290D05D2906238D /* Pods_Hoxy.framework */; };
 		E082A933265647F800A56805 /* JoinDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E082A932265647F800A56805 /* JoinDataManager.swift */; };
 		E08F5489265B372900740A04 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E08F5488265B372900740A04 /* HomeViewModel.swift */; };
+		E08F548F265C83D900740A04 /* WriteDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E08F548E265C83D900740A04 /* WriteDataManager.swift */; };
+		E08F5491265C848B00740A04 /* WriteViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E08F5490265C848B00740A04 /* WriteViewModel.swift */; };
 		E0ED10D626492EE800661094 /* EmailLoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ED10D526492EE800661094 /* EmailLoginViewModel.swift */; };
 		E0ED10D826492F0C00661094 /* Observable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ED10D726492F0C00661094 /* Observable.swift */; };
 		E0ED10DA264B5D9E00661094 /* PostModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ED10D9264B5D9E00661094 /* PostModel.swift */; };
@@ -90,6 +92,8 @@
 		CCEA5CB1BB645FCD82AB47CB /* Pods-Hoxy.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Hoxy.debug.xcconfig"; path = "Target Support Files/Pods-Hoxy/Pods-Hoxy.debug.xcconfig"; sourceTree = "<group>"; };
 		E082A932265647F800A56805 /* JoinDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinDataManager.swift; sourceTree = "<group>"; };
 		E08F5488265B372900740A04 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
+		E08F548E265C83D900740A04 /* WriteDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WriteDataManager.swift; sourceTree = "<group>"; };
+		E08F5490265C848B00740A04 /* WriteViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WriteViewModel.swift; sourceTree = "<group>"; };
 		E0ED10D526492EE800661094 /* EmailLoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailLoginViewModel.swift; sourceTree = "<group>"; };
 		E0ED10D726492F0C00661094 /* Observable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Observable.swift; sourceTree = "<group>"; };
 		E0ED10D9264B5D9E00661094 /* PostModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostModel.swift; sourceTree = "<group>"; };
@@ -309,6 +313,7 @@
 				E0ED10D526492EE800661094 /* EmailLoginViewModel.swift */,
 				E0ED10E2264CFCE600661094 /* JoinViewModel.swift */,
 				E08F5488265B372900740A04 /* HomeViewModel.swift */,
+				E08F5490265C848B00740A04 /* WriteViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -337,6 +342,7 @@
 				EB5D8E8525CB15B6003D957C /* UserDataManager.swift */,
 				EB2968FE25D98DEB00DAE55B /* ChatDataManager.swift */,
 				E082A932265647F800A56805 /* JoinDataManager.swift */,
+				E08F548E265C83D900740A04 /* WriteDataManager.swift */,
 			);
 			path = DataManager;
 			sourceTree = "<group>";
@@ -496,6 +502,7 @@
 				E082A933265647F800A56805 /* JoinDataManager.swift in Sources */,
 				EB78A37425E75DBF00E4C538 /* ProfileBackTop.swift in Sources */,
 				EB128D6025CFA55D004C0A66 /* LocationService.swift in Sources */,
+				E08F5491265C848B00740A04 /* WriteViewModel.swift in Sources */,
 				EB128D6325CFA6BD004C0A66 /* LocationVC.swift in Sources */,
 				EB5D8E5C25C7168C003D957C /* WriteVC.swift in Sources */,
 				EB5D8E7225C7D629003D957C /* PostDataModel.swift in Sources */,
@@ -545,6 +552,7 @@
 				EB5D8E6025C7172D003D957C /* WriteOptionItem.swift in Sources */,
 				E0ED10DC264B63A800661094 /* JoinModel.swift in Sources */,
 				EB38A72925BE72F800516515 /* PersonalSettingVC.swift in Sources */,
+				E08F548F265C83D900740A04 /* WriteDataManager.swift in Sources */,
 				EB2968FF25D98DEB00DAE55B /* ChatDataManager.swift in Sources */,
 				EB38A72025BDA01600516515 /* BottomButton.swift in Sources */,
 				EB5D8E6B25C7D3E5003D957C /* PostDataManager.swift in Sources */,

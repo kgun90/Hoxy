@@ -9,11 +9,8 @@ import Foundation
 import CoreLocation
 
 struct HomeViewModel: PostDataDelegate {
-
-    
     let postData = Observable([PostDataModel()])
     var postDataManager = PostDataManager()
-    
     
     mutating func requestData() {
         postDataManager.delegate = self
@@ -25,7 +22,6 @@ struct HomeViewModel: PostDataDelegate {
     }
     
     func locationChangeAction(_ postData: [PostDataModel], _ index: Int) {
-
         if index == 0 {
             self.postData.value = postData.filter ({ (post: PostDataModel) -> Bool in
                 let location = CLLocation(latitude: post.location!.latitude, longitude: post.location!.longitude)
@@ -37,7 +33,11 @@ struct HomeViewModel: PostDataDelegate {
                 return location.distance(from: LocationService.userLocation!) < 5000
             })
         }
-
-
+    }
+    
+    func addViewCount(_ id: String, _ currentViewCount: Int) {
+        set.fs.collection(set.Table.post).document(id).updateData([
+            "view": currentViewCount + 1
+        ])
     }
 }

@@ -10,30 +10,25 @@ import Firebase
 
 class EmailLoginVC: UIViewController {
     // MARK: - Properties
-    let topView = TopView("이메일로 로그인")
-    
     private var viewModel = EmailLoginViewModel()
 
     lazy var logoImage = UIImageView().then {
         $0.image = UIImage(named: "logo")
     }
-
+    
+    let topView = TopView("이메일로 로그인")
     let emailItem = JoinInputItem("이메일", "id1234@hoxy.com", false)
     let passItem = JoinInputItem("비밀번호", "영문 대소문자/숫자/기호를 모두 포함한 8~16자리 입력", true)
     let loginButton = BottomButton("로그인", .labelGray)
-    
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
         loginCheck()
-        buttonTarget()
-        binding()
-        layout()
-    
+        configureUI()
     }
-        
+    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         emailItem.tf.addUnderLine()
@@ -60,7 +55,6 @@ class EmailLoginVC: UIViewController {
                         return
                     }
                     self?.presentAlert(title: "로그인 실패", message: "이메일과 패스워드를 확인해주세요.", isCancelActionIncluded: false, preferredStyle: .alert, with: ok)
-                    
                 } else {
                     self?.dismissIndicator()
                     self?.moveToRoot(LocationVC())
@@ -68,8 +62,38 @@ class EmailLoginVC: UIViewController {
             }
         }
     }
-        
-    // MARK: - Helpers
+}
+
+extension EmailLoginVC: UITextFieldDelegate {
+    @objc func textFieldDidChange(sender: UITextField) {
+        if sender == emailItem.tf {
+            viewModel.email = sender.text
+            viewModel.descriptionEmailText()
+        } else {
+            viewModel.password = sender.text
+            viewModel.descriptionPassText()
+        }
+        viewModel.buttonEnableCheck()
+    }
+    // 키보드 영역 이외 터치시 키보드 해제
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.dismissKeyboard()
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+}
+
+// MARK: UI Configure
+extension EmailLoginVC {
+    func configureUI() {
+        binding()
+        setting()
+        layout()
+    }
+    
     func binding() {
         viewModel.emailText.bind { [weak self] email in
             self?.emailItem.tf.text = email
@@ -87,13 +111,28 @@ class EmailLoginVC: UIViewController {
             self?.passItem.descriptionLabel.text = label.text
             self?.passItem.descriptionLabel.textColor = label.color
         }
+        
         viewModel.buttonSet.bind { [weak self] button in
             self?.loginButton.isEnabled = button.visability
             self?.loginButton.backgroundColor = button.color
         }
-
-    
     }
+    
+    func setting() {
+        emailItem.tf.delegate = self
+        passItem.tf.delegate = self
+       
+        loginButton.isEnabled = false
+        emailItem.tf.keyboardType = .emailAddress
+          
+        topView.back.addTarget(self, action: #selector(backAction), for: .touchUpInside)
+        loginButton.addTarget(self, action: #selector(loginAction), for: .touchUpInside)
+       
+        passItem.tf.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
+        emailItem.tf.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
+        
+    }
+    
     func layout() {
         view.addSubview(topView)
         view.addSubview(logoImage)
@@ -137,47 +176,4 @@ class EmailLoginVC: UIViewController {
             $0.height.equalTo(Device.heightScale(85))
         }
     }
-        
-    // MARK: - Logic
-    func buttonTarget() {
-
-        emailItem.tf.delegate = self
-        passItem.tf.delegate = self
-       
-        loginButton.isEnabled = false
-        emailItem.tf.keyboardType = .emailAddress
-          
-        topView.back.addTarget(self, action: #selector(backAction), for: .touchUpInside)
-        loginButton.addTarget(self, action: #selector(loginAction), for: .touchUpInside)
-       
-        passItem.tf.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
-        emailItem.tf.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
-        
-    }
-}
-
-
-extension EmailLoginVC: UITextFieldDelegate {
-    // 키보드 영역 이외 터치시 키보드 해제
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.dismissKeyboard()
-    }
-    
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        return true
-    }
-    
-    @objc func textFieldDidChange(sender: UITextField) {
-        if sender == emailItem.tf {
-            viewModel.email = sender.text
-            viewModel.descriptionEmailText()
-        } else {
-            viewModel.password = sender.text
-            viewModel.descriptionPassText()
-        }
-        viewModel.buttonEnableCheck()
-    }
-    
-   
 }

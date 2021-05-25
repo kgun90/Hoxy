@@ -13,14 +13,14 @@ class BaseViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        configureUI()
+        configure()
         // Background Color
         self.view.backgroundColor = .mainBackground
     }
     // MARK: - Selectors
     
     // MARK: - Helpers
-    func configureUI() {
+    func configure() {
         configureNavigationBar()
     }
     

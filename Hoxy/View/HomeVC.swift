@@ -11,9 +11,10 @@ import CoreLocation
 import BTNavigationDropdownMenu
 
 class HomeVC: BaseViewController {
-
-
     // MARK: - Properties
+    private var viewModel = HomeViewModel()
+    var posts = [PostDataModel()]
+    
     lazy var listTableView = UITableView().then {
         $0.backgroundColor = .mainBackground
     }
@@ -27,24 +28,16 @@ class HomeVC: BaseViewController {
         $0.addTarget(self, action: #selector(moveToWrite), for: .touchUpInside)
     }
     
-    var posts = [PostDataModel()]
-    var id: String?
-    private var viewModel = HomeViewModel()
-
-    
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         showIndicator()
-        binding()
         viewModel.requestData()
-        
-        setting()
-        layout()
+        configureUI()
         dropdownMenu()
         initRefresh()
-       
     }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         self.dismissIndicator()
@@ -57,14 +50,6 @@ class HomeVC: BaseViewController {
     }
     
     // MARK: - Logics
-    func setting() {
-        listTableView.delegate = self
-        listTableView.dataSource = self
-        listTableView.register(UINib(nibName: "HomeTableViewCell", bundle: nil), forCellReuseIdentifier: "HomeTableViewCell")
-        listTableView.tableFooterView = UIView()
-        reloadTable()
-    }
-    
     func dropdownMenu() {
         let menuView = BTNavigationDropdownMenu(title: BTTitle.index(0), items: [LocationService.currentTown, LocationService.userTown])
         self.navigationItem.titleView = menuView
@@ -78,26 +63,6 @@ class HomeVC: BaseViewController {
         }
     }
     
-    // MARK: - Helpers
-    func layout() {
-        view.addSubview(listTableView)
-        view.addSubview(writeButton)
-        view.bringSubviewToFront(writeButton)
-        listTableView.snp.makeConstraints {
-            $0.top.equalToSuperview()
-            $0.bottom.equalToSuperview()
-            $0.width.equalToSuperview()
-            $0.height.equalToSuperview()
-            $0.center.equalToSuperview()
-        }
-        writeButton.snp.makeConstraints {
-            $0.bottom.equalToSuperview().offset(-(Device.tabBarHeight + Device.heightScale(46)))
-            $0.trailing.equalToSuperview().offset(Device.widthScale(-30))
-            $0.width.equalTo(Device.widthScale(55))
-            $0.height.equalTo(Device.heightScale(55))
-        }
-    }
-    
     func initRefresh() {
         let refresh = UIRefreshControl()
         refresh.addTarget(self, action: #selector(updateUI(refresh: )), for: .valueChanged)
@@ -108,7 +73,6 @@ class HomeVC: BaseViewController {
         } else {
             listTableView.addSubview(refresh)
         }
-        
     }
     
     @objc func updateUI(refresh: UIRefreshControl) {
@@ -122,12 +86,6 @@ class HomeVC: BaseViewController {
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
-    func binding() {
-        viewModel.postData.bind { [weak self] data in
-            self?.posts = data
-        }
-    }
-    
     func reloadTable() {
         DispatchQueue.main.async {
             self.listTableView.reloadData()
@@ -138,6 +96,7 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
     func numberOfSections(in tableView: UITableView) -> Int {
         return posts.count
     }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 1
     }
@@ -183,11 +142,50 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         readPost(posts[indexPath.section].id)
-        id = posts[indexPath.section].id
-        set.fs.collection(set.Table.post).document(posts[indexPath.section].id).updateData([
-            "view": posts[indexPath.section].view + 1
-        ])
+        viewModel.addViewCount(posts[indexPath.section].id, posts[indexPath.section].view)
+    }
+}
+
+// MARK: Configure UI
+extension HomeVC {
+    func configureUI() {
+        binding()
+        setting()
+        layout()
     }
     
+    func binding() {
+        viewModel.postData.bind { [weak self] data in
+            self?.posts = data
+        }
+    }
     
+    func setting() {
+        listTableView.delegate = self
+        listTableView.dataSource = self
+        listTableView.register(UINib(nibName: "HomeTableViewCell", bundle: nil), forCellReuseIdentifier: "HomeTableViewCell")
+        listTableView.tableFooterView = UIView()
+        reloadTable()
+    }
+    
+    func layout() {
+        view.addSubview(listTableView)
+        view.addSubview(writeButton)
+        view.bringSubviewToFront(writeButton)
+        
+        listTableView.snp.makeConstraints {
+            $0.top.equalToSuperview()
+            $0.bottom.equalToSuperview()
+            $0.width.equalToSuperview()
+            $0.height.equalToSuperview()
+            $0.center.equalToSuperview()
+        }
+        
+        writeButton.snp.makeConstraints {
+            $0.bottom.equalToSuperview().offset(-(Device.tabBarHeight + Device.heightScale(46)))
+            $0.trailing.equalToSuperview().offset(Device.widthScale(-30))
+            $0.width.equalTo(Device.widthScale(55))
+            $0.height.equalTo(Device.heightScale(55))
+        }
+    }
 }

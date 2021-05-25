@@ -12,6 +12,14 @@ import Firebase
 class PersonalSettingVC: UIViewController {
     
     // MARK: - Properties
+    private var joinDataManager = JoinDataManager()
+    
+    let locationManager = CLLocationManager()
+    var currentLocation = CLLocation()
+    var years: [String] = []
+    var joinInfo = JoinModel()
+    var currentLatLon: GeoPoint?
+    
     let topView = TopView("정보설정")
     let submitButton = BottomButton("가입하기")
     lazy var logoImage = UIImageView().then {
@@ -89,22 +97,14 @@ class PersonalSettingVC: UIViewController {
         $0.textAlignment = .center
         $0.numberOfLines = 0
     }
-    
-    let locationManager = CLLocationManager()
-    var currentLocation = CLLocation()
-    var years: [String] = []
-    var joinInfo = JoinModel()
-    var currentLatLon: GeoPoint?
-    private var joinDataManager = JoinDataManager()
+
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .white
         joinDataManager.joinDelegate = self
-        layout()
-        configuration()
-        
+        configureUI()
     }
 
     override func viewDidLayoutSubviews() {
@@ -125,7 +125,7 @@ class PersonalSettingVC: UIViewController {
         }
     }
     
-    @objc func action() {
+    @objc func dismissAction() {
         self.view.endEditing(true)
     }
     
@@ -139,136 +139,7 @@ class PersonalSettingVC: UIViewController {
             self.showIndicator()
         }
     }
-    
-    // MARK: - UI Layout
-    func layout() {        
-        view.addSubview(topView)
-        view.addSubview(logoImage)
-        view.addSubview(submitButton)
-        
-        topView.snp.makeConstraints {
-            $0.top.equalToSuperview()
-            $0.centerX.equalToSuperview()
-            $0.width.equalToSuperview()
-            $0.height.equalTo(Device.heightScale(88))
-        }
-        logoImage.snp.makeConstraints {
-            $0.centerX.equalToSuperview()
-            $0.top.equalTo(topView.snp.bottom).offset(Device.heightScale(18))
-            $0.width.equalTo(Device.widthScale(200))
-            $0.height.equalTo(Device.heightScale(57.6))
-        }
-        submitButton.snp.makeConstraints {
-            $0.centerX.equalToSuperview()
-            $0.bottom.equalToSuperview()
-            $0.width.equalToSuperview()
-            $0.height.equalTo(Device.heightScale(85))
-        }
-        locationLayout()
-        ageLayout()
-        bottomStackLayout()
-    }
-    
-    func locationLayout() {
-        view.addSubview(locationTitleLabel)
-        view.addSubview(locationNameLabel)
-        view.addSubview(locationSetButton)
-        view.addSubview(locationDescriptionLabel)
-        
-        locationTitleLabel.snp.makeConstraints {
-            $0.top.equalTo(logoImage.snp.bottom).offset(Device.heightScale(117))
-            $0.leading.equalToSuperview().offset(Device.widthScale(60))
-        }
-        locationNameLabel.snp.makeConstraints {
-            $0.top.equalTo(locationTitleLabel.snp.top)
-            $0.leading.equalTo(locationTitleLabel.snp.trailing).offset(Device.widthScale(35))
-            $0.width.equalTo(Device.widthScale(Device.widthScale(100)))
-        }
-        locationSetButton.snp.makeConstraints {
-            $0.top.equalTo(logoImage.snp.bottom).offset(Device.heightScale(111))
-            $0.leading.equalTo(locationNameLabel.snp.trailing).offset(15)
-            $0.width.equalTo(Device.widthScale(65))
-            $0.height.equalTo(Device.heightScale(27))
-        }
-        locationDescriptionLabel.snp.makeConstraints {
-            $0.top.equalTo(locationNameLabel.snp.bottom).offset(2)
-            $0.leading.equalTo(locationNameLabel.snp.leading)
-        }
-    }
-    
-    func ageLayout() {
-        view.addSubview(ageLabel)
-        view.addSubview(ageTextField)
-       
-        ageLabel.snp.makeConstraints {
-            $0.top.equalTo(locationTitleLabel.snp.bottom).offset(Device.heightScale(48))
-            $0.trailing.equalTo(locationTitleLabel.snp.trailing)
-        }
-        ageTextField.snp.makeConstraints {
-            $0.top.equalTo(locationNameLabel.snp.bottom).offset(Device.heightScale(48))
-            $0.leading.equalTo(locationNameLabel.snp.leading)
-            $0.width.equalTo(Device.widthScale(180))
-        }
-    }
-    
-    func bottomStackLayout() {
-        view.addSubview(resultStackView)
-        gradeViewCover.addSubview(gradeView)
-        resultStackView.addArrangedSubview(resultEmailLabel)
-        resultStackView.addArrangedSubview(gradeViewCover)
-        
-        resultStackView.addArrangedSubview(resultBottomLabel)
-        resultStackView.addArrangedSubview(resultDescriptionLabel)
-        
-        resultStackView.snp.makeConstraints {
-            $0.top.equalTo(ageLabel.snp.bottom).offset(Device.heightScale(70))
-            $0.centerX.equalToSuperview()
-            $0.width.equalToSuperview()
-        }
-        
-        resultEmailLabel.snp.makeConstraints {
-            $0.centerX.equalToSuperview()
-            $0.width.equalToSuperview()
-            $0.height.equalTo(Device.heightScale(45))
-        }
-        gradeViewCover.snp.makeConstraints {
-            $0.centerX.equalToSuperview()
-            $0.width.equalToSuperview()
-            $0.height.equalTo(Device.heightScale(33))
-        }
-        gradeView.snp.makeConstraints {
-            $0.center.equalToSuperview()
-            $0.width.equalTo(47)
-            $0.height.equalTo(20)
-            
-        }
-        resultBottomLabel.snp.makeConstraints {
-            $0.centerX.equalToSuperview()
-            $0.width.equalToSuperview()
-            $0.height.equalTo(Device.heightScale(45))
-        }
-        resultDescriptionLabel.snp.makeConstraints {
-            $0.centerX.equalToSuperview()
-            $0.width.equalToSuperview()
-            $0.height.equalTo(Device.heightScale(127))
-        }
-    }
-    
-    func configuration() {
-        ageTextField.delegate = self
-        topView.back.addTarget(self, action: #selector(backAction), for: .touchUpInside)
-        ageTextField.addTarget(self, action: #selector(textFieldDidChange), for: .allEvents)
-        submitButton.addTarget(self, action: #selector(submitJoin), for: .touchUpInside)
-        
-        getYears()
-        createPickerView()
-        dismissPickerView()
-        
-        resultEmailLabel.text = joinInfo.email
-        gradeView.isHidden = true
-        submitButton.isEnabled = false
-    }
-    
+   
     func getLocation() {
         locationManager.delegate = self
         locationManager.requestWhenInUseAuthorization()
@@ -316,7 +187,7 @@ class PersonalSettingVC: UIViewController {
     func dismissPickerView() {
         let toolBar = UIToolbar()
         toolBar.sizeToFit()
-        let button = UIBarButtonItem(title: "선택", style: .plain, target: self, action: #selector(self.action))
+        let button = UIBarButtonItem(title: "선택", style: .plain, target: self, action: #selector(self.dismissAction))
         toolBar.setItems([button], animated: true)
         toolBar.isUserInteractionEnabled = true
         ageTextField.inputAccessoryView = toolBar
@@ -324,11 +195,8 @@ class PersonalSettingVC: UIViewController {
     
     func disableHidden(_ age: String) {
         self.gradeView = GradeButton(mode: .personalSetting, Int(age)!)
-        
         bottomStackLayout()
-       
         gradeView.isHidden = false
-       
     }
 }
 
@@ -352,6 +220,7 @@ extension PersonalSettingVC: CLLocationManagerDelegate {
             getLocationName()
         }
     }
+    
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         print(error.localizedDescription)
     }
@@ -365,14 +234,160 @@ extension PersonalSettingVC: UITextFieldDelegate, UIPickerViewDelegate, UIPicker
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         return years.count
     }
+    
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         return years[row]
         
     }
+    
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         ageTextField.text = years[row]
         joinInfo.age = Int(years[row]) ?? 0
         disableHidden(years[row])
+    }
+}
+
+// MARK: Configure UI
+extension PersonalSettingVC {
+    func configureUI() {
+        setting()
+        layout()
+    }
+    
+    func setting() {
+        ageTextField.delegate = self
+        topView.back.addTarget(self, action: #selector(backAction), for: .touchUpInside)
+        ageTextField.addTarget(self, action: #selector(textFieldDidChange), for: .allEvents)
+        submitButton.addTarget(self, action: #selector(submitJoin), for: .touchUpInside)
+        
+        getYears()
+        createPickerView()
+        dismissPickerView()
+        
+        resultEmailLabel.text = joinInfo.email
+        gradeView.isHidden = true
+        submitButton.isEnabled = false
+    }
+
+    func layout() {
+        view.addSubview(topView)
+        view.addSubview(logoImage)
+        view.addSubview(submitButton)
+        
+        topView.snp.makeConstraints {
+            $0.top.equalToSuperview()
+            $0.centerX.equalToSuperview()
+            $0.width.equalToSuperview()
+            $0.height.equalTo(Device.heightScale(88))
+        }
+        logoImage.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.top.equalTo(topView.snp.bottom).offset(Device.heightScale(18))
+            $0.width.equalTo(Device.widthScale(200))
+            $0.height.equalTo(Device.heightScale(57.6))
+        }
+        submitButton.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.bottom.equalToSuperview()
+            $0.width.equalToSuperview()
+            $0.height.equalTo(Device.heightScale(85))
+        }
+        locationLayout()
+        ageLayout()
+        bottomStackLayout()
+    }
+    
+    func locationLayout() {
+        view.addSubview(locationTitleLabel)
+        view.addSubview(locationNameLabel)
+        view.addSubview(locationSetButton)
+        view.addSubview(locationDescriptionLabel)
+        
+        locationTitleLabel.snp.makeConstraints {
+            $0.top.equalTo(logoImage.snp.bottom).offset(Device.heightScale(117))
+            $0.leading.equalToSuperview().offset(Device.widthScale(60))
+        }
+        
+        locationNameLabel.snp.makeConstraints {
+            $0.top.equalTo(locationTitleLabel.snp.top)
+            $0.leading.equalTo(locationTitleLabel.snp.trailing).offset(Device.widthScale(35))
+            $0.width.equalTo(Device.widthScale(Device.widthScale(100)))
+        }
+        
+        locationSetButton.snp.makeConstraints {
+            $0.top.equalTo(logoImage.snp.bottom).offset(Device.heightScale(111))
+            $0.leading.equalTo(locationNameLabel.snp.trailing).offset(15)
+            $0.width.equalTo(Device.widthScale(65))
+            $0.height.equalTo(Device.heightScale(27))
+        }
+        
+        locationDescriptionLabel.snp.makeConstraints {
+            $0.top.equalTo(locationNameLabel.snp.bottom).offset(2)
+            $0.leading.equalTo(locationNameLabel.snp.leading)
+        }
+    }
+    
+    func ageLayout() {
+        view.addSubview(ageLabel)
+        view.addSubview(ageTextField)
+       
+        ageLabel.snp.makeConstraints {
+            $0.top.equalTo(locationTitleLabel.snp.bottom).offset(Device.heightScale(48))
+            $0.trailing.equalTo(locationTitleLabel.snp.trailing)
+        }
+        
+        ageTextField.snp.makeConstraints {
+            $0.top.equalTo(locationNameLabel.snp.bottom).offset(Device.heightScale(48))
+            $0.leading.equalTo(locationNameLabel.snp.leading)
+            $0.width.equalTo(Device.widthScale(180))
+        }
+    }
+    
+    func bottomStackLayout() {
+        view.addSubview(resultStackView)
+        gradeViewCover.addSubview(gradeView)
+        resultStackView.addArrangedSubview(resultEmailLabel)
+        resultStackView.addArrangedSubview(gradeViewCover)
+        
+        resultStackView.addArrangedSubview(resultBottomLabel)
+        resultStackView.addArrangedSubview(resultDescriptionLabel)
+        
+        resultStackView.snp.makeConstraints {
+            $0.top.equalTo(ageLabel.snp.bottom).offset(Device.heightScale(70))
+            $0.centerX.equalToSuperview()
+            $0.width.equalToSuperview()
+        }
+        
+        resultEmailLabel.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.width.equalToSuperview()
+            $0.height.equalTo(Device.heightScale(45))
+        }
+        
+        gradeViewCover.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.width.equalToSuperview()
+            $0.height.equalTo(Device.heightScale(33))
+        }
+        
+        gradeView.snp.makeConstraints {
+            $0.center.equalToSuperview()
+            $0.width.equalTo(47)
+            $0.height.equalTo(20)
+            
+        }
+        
+        resultBottomLabel.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.width.equalToSuperview()
+            $0.height.equalTo(Device.heightScale(45))
+        }
+        
+        resultDescriptionLabel.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.width.equalToSuperview()
+            $0.height.equalTo(Device.heightScale(127))
+        }
     }
     
 }
