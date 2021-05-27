@@ -167,7 +167,27 @@ class PersonalSettingVC: UIViewController {
             self.joinInfo.town = town
         }
     }
+ 
     
+    func disableHidden(_ age: String) {
+        self.gradeView = GradeButton(mode: .personalSetting, Int(age)!)
+        bottomStackLayout()
+        gradeView.isHidden = false
+    }
+}
+
+extension PersonalSettingVC: JoinDelegate {
+    func joinAction(_ error: String) {
+        dismissIndicator()
+        if error != "" {
+            self.presentOkOnlyAlert(title: "가입 오류", message: "가입 도중 에러가 발생했습니다. 고객센터에 문의 바랍니다 \n \(error)")
+        } else {
+            moveToRoot(LocationVC())
+        }
+    }
+}
+
+extension PersonalSettingVC {
     func getYears() {
         let date = Date()
         let currentYear = Calendar.current.component(.year, from: date)
@@ -191,23 +211,6 @@ class PersonalSettingVC: UIViewController {
         toolBar.setItems([button], animated: true)
         toolBar.isUserInteractionEnabled = true
         ageTextField.inputAccessoryView = toolBar
-    }
-    
-    func disableHidden(_ age: String) {
-        self.gradeView = GradeButton(mode: .personalSetting, Int(age)!)
-        bottomStackLayout()
-        gradeView.isHidden = false
-    }
-}
-
-extension PersonalSettingVC: JoinDelegate {
-    func joinAction(_ error: String) {
-        dismissIndicator()
-        if error != "" {
-            self.presentOkOnlyAlert(title: "가입 오류", message: "가입 도중 에러가 발생했습니다. 고객센터에 문의 바랍니다 \n \(error)")
-        } else {
-            moveToRoot(LocationVC())
-        }
     }
 }
 

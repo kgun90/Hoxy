@@ -12,6 +12,7 @@
 		E08F5489265B372900740A04 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E08F5488265B372900740A04 /* HomeViewModel.swift */; };
 		E08F548F265C83D900740A04 /* WriteDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E08F548E265C83D900740A04 /* WriteDataManager.swift */; };
 		E08F5491265C848B00740A04 /* WriteViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E08F5490265C848B00740A04 /* WriteViewModel.swift */; };
+		E08F5493265F7B9C00740A04 /* WriteModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E08F5492265F7B9C00740A04 /* WriteModel.swift */; };
 		E0ED10D626492EE800661094 /* EmailLoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ED10D526492EE800661094 /* EmailLoginViewModel.swift */; };
 		E0ED10D826492F0C00661094 /* Observable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ED10D726492F0C00661094 /* Observable.swift */; };
 		E0ED10DA264B5D9E00661094 /* PostModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ED10D9264B5D9E00661094 /* PostModel.swift */; };
@@ -94,6 +95,7 @@
 		E08F5488265B372900740A04 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		E08F548E265C83D900740A04 /* WriteDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WriteDataManager.swift; sourceTree = "<group>"; };
 		E08F5490265C848B00740A04 /* WriteViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WriteViewModel.swift; sourceTree = "<group>"; };
+		E08F5492265F7B9C00740A04 /* WriteModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WriteModel.swift; sourceTree = "<group>"; };
 		E0ED10D526492EE800661094 /* EmailLoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailLoginViewModel.swift; sourceTree = "<group>"; };
 		E0ED10D726492F0C00661094 /* Observable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Observable.swift; sourceTree = "<group>"; };
 		E0ED10D9264B5D9E00661094 /* PostModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostModel.swift; sourceTree = "<group>"; };
@@ -278,6 +280,7 @@
 				EB29691925DCC16400DAE55B /* ChattingModel.swift */,
 				EB78A37F25E8AE2C00E4C538 /* ReportModel.swift */,
 				EB78A38225EAB2AC00E4C538 /* BlockModel.swift */,
+				E08F5492265F7B9C00740A04 /* WriteModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -551,6 +554,7 @@
 				EB38A71D25BD89ED00516515 /* JoinInputItem.swift in Sources */,
 				EB5D8E6025C7172D003D957C /* WriteOptionItem.swift in Sources */,
 				E0ED10DC264B63A800661094 /* JoinModel.swift in Sources */,
+				E08F5493265F7B9C00740A04 /* WriteModel.swift in Sources */,
 				EB38A72925BE72F800516515 /* PersonalSettingVC.swift in Sources */,
 				E08F548F265C83D900740A04 /* WriteDataManager.swift in Sources */,
 				EB2968FF25D98DEB00DAE55B /* ChatDataManager.swift in Sources */,

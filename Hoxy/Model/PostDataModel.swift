@@ -7,6 +7,7 @@
 
 import Foundation
 import Firebase
+import UIKit.UIColor
 
 struct PostDataModel{
     var id: String = ""
@@ -24,4 +25,10 @@ struct PostDataModel{
     var location: GeoPoint?
     var view: Int = 0
     var chat: DocumentReference?
+}
+
+struct PostApplyButtonModel {
+    var title = ""
+    var color: UIColor = .mainBackground
+    var enable = false
 }

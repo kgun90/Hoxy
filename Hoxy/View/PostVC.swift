@@ -8,14 +8,25 @@
 import UIKit
 import Firebase
 
-class PostVC: BaseViewController, SingleDataDelegate, PostDataDelegate {
-    enum buttonsStatus {
-        case on
-        case offOver
-        case offWriter
-        case offAlready
-    }
+enum buttonsStatus {
+    case on
+    case offOver
+    case offWriter
+    case offAlready
+}
 
+class PostVC: BaseViewController, SingleDataDelegate, PostDataDelegate {
+
+    
+    private var postDataManager = PostDataManager()
+    private var viewModel = PostViewModel()
+    
+    var postID = PostDataModel().id
+    var posts: [PostDataModel] = []
+    var currentPost = PostDataModel()
+    
+    var commLevel = 0
+    var submitState: buttonsStatus = .on
     
     // MARK: - Properties
     lazy var mainScroll = UIScrollView().then {
@@ -210,12 +221,7 @@ class PostVC: BaseViewController, SingleDataDelegate, PostDataDelegate {
         $0.addTarget(self, action: #selector(submitAction), for: .touchUpInside)
     }
     
-    var postID = PostDataModel().id
-    var postDataManager = PostDataManager()
-    var posts: [PostDataModel] = []
-    var currentPost = PostDataModel()
-    var commLevel = 0
-    var submitState: buttonsStatus = .on
+   
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -225,8 +231,7 @@ class PostVC: BaseViewController, SingleDataDelegate, PostDataDelegate {
         postDataManager.delegate = self
         postDataManager.requestSingleData(postID)
       
-        setting()
-        layoutUI()
+        configureUI()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -239,12 +244,33 @@ class PostVC: BaseViewController, SingleDataDelegate, PostDataDelegate {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        topView.addBorder(toSide: .bottom, color: .mainBackground, borderWidth: 0.5)
-        hashtagView.addBorder(toSide: .bottom, color: .mainBackground, borderWidth: 0.5)
-        writerProfileView.addBorder(toSide: .bottom, color: .mainBackground, borderWidth: 0.5)
-        bottomView.addBorder(toSide: .bottom, color: .mainBackground, borderWidth: 0.5)
-        relatedMeetingView.addBorder(toSide: .bottom, color: .mainBackground, borderWidth: 0.5)
-        bottomView.addBorder(toSide: .top, color: .mainBackground, borderWidth: 0.5)
+        addBorder()
+    }
+    
+    func getSingleData(_ postData: PostDataModel) {
+ 
+        currentPost = postData
+        navigationItem.title = postData.title
+        modalTitleLabel.text = postData.title
+        commLevel = postData.communication
+        commuicationLavelEmoji.text = postData.emoji
+        meetingTimeLabel.text = getMeetingTime(postData.start, postData.duration)
+        locationLabel.text = postData.town
+        writeTimeLabel.text = postData.date.relativeTime_abbreviated
+        viewsLabel.text = String(postData.view)
+        
+        
+        contentLabel.text = postData.content
+        
+        writerProfile(postData.chat!, postData.writer!)
+        hashtagLabel.text = postData.tag[0]
+        
+        bottomMeetingTimeLabel.text = getBottomTime(postData.start)
+ 
+        postDataManager.requestPostData()
+        addNaviButton()
+        viewModel.applyButtonCheck(currentPost)
+        dismissIndicator()
     }
     
     // MARK: - Selectors
@@ -305,6 +331,77 @@ class PostVC: BaseViewController, SingleDataDelegate, PostDataDelegate {
     }
     
     // MARK: - Helpers
+    func addNaviButton() {
+        let moreButton = UIBarButtonItem().then {
+            $0.image = UIImage(systemName: "ellipsis")
+            $0.target = self
+            $0.action = #selector(barButtonAction)
+        }
+        
+        navigationItem.rightBarButtonItem = moreButton
+     
+    }
+    
+    func getPostData(_ postData: [PostDataModel]) {
+        for post in postData {
+            if postID != post.id && commLevel == post.communication {
+                posts.append(post)
+            }
+        }
+        listTableView.reloadData()
+    }
+    
+    
+    func getBottomTime(_ start: Date) -> String {
+        let bottomTimeFormat = DateFormatter().then {
+            $0.dateFormat = "MM월 dd일 hh시 mm분 예정"
+        }
+        let bottomTime = bottomTimeFormat.string(from: start)
+        
+        return bottomTime
+    }
+    
+    func writerProfile(_ chat: DocumentReference,_ writer: DocumentReference) {
+        writer.getDocument { (snapshot, error) in
+            if let e = error {
+                print(e.localizedDescription)
+            } else {
+                if let data = snapshot?.data() {
+                    let location = data["town"] as! String
+                    self.writerLocationLabel.text = location
+                    let count = data["participation"] as! Int
+                    self.writerAttendCountLabel.text = "총 모임참여 \(count)회"
+                    self.gradeButton.getGrade(.tableCell,  data["birth"] as! Int)
+                }
+              
+            }
+        }
+        chat.getDocument { (snapshot, error) in
+            if let e = error {
+                print(e.localizedDescription)
+            } else {
+                if let doc = snapshot?.data() {
+                    let member = doc["nickname"] as! [String : String]
+                    let nickname = member[writer.documentID] ?? ""
+                    self.writerNicknameLable.text = nickname
+                    self.bottomWriterInfoLabel.text = "\(nickname)의 모임"
+                }
+              
+            }
+        }
+    }
+    
+    func readOtherPost(_ id: String) {
+        let vc = PostVC()
+        vc.postID = id
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
+    
+}
+
+// MARK: Action Menu
+extension PostVC {
+//    Writer Menu
     func updateAction() {
         let vc = WriteVC()
         vc.uid = postID
@@ -321,47 +418,7 @@ class PostVC: BaseViewController, SingleDataDelegate, PostDataDelegate {
         }
         presentAlert(title: "삭제하기", message: "현재 글을 삭제하시겠습니까?", isCancelActionIncluded: true, with: ok)
     }
-    
-    func reportAction() {
-        var reportData = ReportModel(content: "", date: Date(), post: set.fs.collection(set.Table.post).document(currentPost.id), writer: currentPost.writer)
-        let alert = UIAlertController(title: "모임 신고하기", message: "해당 모임을 신고하는 사유를 입력바랍니다.", preferredStyle: .alert)
-        let ok = UIAlertAction(title: "확인", style: .default) { (action) in
-            reportData.content = (alert.textFields?[0].text)!
-            self.reportCheck(reportData)
-        }
-        let actionCancel = UIAlertAction(title: "취소", style: .cancel, handler: nil)
-        alert.addAction(ok)
-        alert.addAction(actionCancel)
-        alert.addTextField {
-            $0.placeholder = "100자 이내입력"
-        }
-        
-        self.present(alert, animated: true, completion: nil)
-        
-    }
-    
-    func reportCheck(_ reportData: ReportModel) {
-        let ok = UIAlertAction(title: "네", style: .default) { (action) in
-            self.reportPost(reportData)
-        }
-        presentAlert(title: "모임 신고", message: "신고를 진행 하시겠습니까?", isCancelActionIncluded: true, with: ok)
-
-    }
-    
-    func reportPost(_ reportData: ReportModel) {
-        set.fs.collection(set.Table.report).addDocument(data: [
-            "content": reportData.content,
-            "date": reportData.date,
-            "post": reportData.post! as DocumentReference,
-            "writer": reportData.writer! as DocumentReference
-        ])
-        
-        let alert = UIAlertController(title: "모임 신고하기", message: "신고가 완료 되었습니다.", preferredStyle: .alert)
-        let actionCancel = UIAlertAction(title: "확인", style: .cancel, handler: nil)
-        alert.addAction(actionCancel)
-        self.present(alert, animated: true, completion: nil)
-    }
-        
+//     User Menu
     func blockAction() {
         let me = set.fs.collection(set.Table.member).document(Auth.auth().currentUser!.uid)
         let user = currentPost.writer
@@ -377,8 +434,113 @@ class PostVC: BaseViewController, SingleDataDelegate, PostDataDelegate {
         
         set.fs.collection(set.Table.member).document(me.documentID).collection("ban").addDocument(data: blockData.toDic() as [String : Any])
     }
-     
-    func layoutUI() {
+    func reportAction() {
+        var reportData = ReportModel(content: "", date: Date(), post: set.fs.collection(set.Table.post).document(currentPost.id), writer: currentPost.writer)
+        let alert = UIAlertController(title: "모임 신고하기", message: "해당 모임을 신고하는 사유를 입력바랍니다.", preferredStyle: .alert)
+        let ok = UIAlertAction(title: "확인", style: .default) { (action) in
+            reportData.content = (alert.textFields?[0].text)!
+            self.reportCheck(reportData)
+        }
+        
+        let actionCancel = UIAlertAction(title: "취소", style: .cancel, handler: nil)
+        alert.addAction(ok)
+        alert.addAction(actionCancel)
+        alert.addTextField {
+            $0.placeholder = "100자 이내입력"
+        }
+        
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    func reportCheck(_ reportData: ReportModel) {
+        let ok = UIAlertAction(title: "네", style: .default) { (action) in
+            self.reportPost(reportData)
+        }
+        presentAlert(title: "모임 신고", message: "신고를 진행 하시겠습니까?", isCancelActionIncluded: true, with: ok)
+    }
+    
+    func reportPost(_ reportData: ReportModel) {
+        postDataManager.reportPost(reportData)
+        presentOkOnlyAlert(title: "모임 신고하기", message: "신고가 완료 되었습니다.", handler: nil)
+    }
+}
+
+extension PostVC: UITableViewDataSource, UITableViewDelegate {
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return posts.count
+    }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = self.listTableView.dequeueReusableCell(withIdentifier: "HomeTableViewCell", for: indexPath as IndexPath) as! HomeTableViewCell
+        cell.emojiLable.text = posts[indexPath.row].emoji
+        cell.titleLabel.text = posts[indexPath.row].title
+        cell.locationLabel.text = posts[indexPath.row].town
+        cell.writeTimeLabel.text = posts[indexPath.row].date.relativeTime_abbreviated
+        cell.viewsLabel.text = String(posts[indexPath.row].view)
+//        cell.meetingTimeLabel.text = posts[indexPath.section].start
+        
+        posts[indexPath.row].chat?.addSnapshotListener({ (snapshot, error) in
+            if let e = error {
+                print(e.localizedDescription)
+            } else {
+                if let data = snapshot?.data() {
+                    let memberCount = (data["member"] as! [String]).count
+                    cell.attenderCountLabel.text = " \(memberCount)/\(self.posts[indexPath.row].headcount)"
+                }
+            }
+        })
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return Device.heightScale(100)
+    }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        readOtherPost(posts[indexPath.row].id)
+    }
+
+
+}
+// MARK: Configure UI
+extension PostVC {
+    func addBorder() {
+        topView.addBorder(toSide: .bottom, color: .mainBackground, borderWidth: 0.5)
+        hashtagView.addBorder(toSide: .bottom, color: .mainBackground, borderWidth: 0.5)
+        writerProfileView.addBorder(toSide: .bottom, color: .mainBackground, borderWidth: 0.5)
+        bottomView.addBorder(toSide: .bottom, color: .mainBackground, borderWidth: 0.5)
+        relatedMeetingView.addBorder(toSide: .bottom, color: .mainBackground, borderWidth: 0.5)
+        bottomView.addBorder(toSide: .top, color: .mainBackground, borderWidth: 0.5)
+    }
+    
+    func configureUI() {
+        binding()
+        setting()
+        layout()
+    }
+    
+    func binding() {
+        viewModel.applyButton.bind { [weak self] button in
+            self?.bottomSubmitButton.backgroundColor = button.color
+            self?.bottomSubmitButton.setTitle(button.title, for: .normal)
+            self?.bottomSubmitButton.isEnabled = button.enable
+        }
+
+        viewModel.counterLabel.bind { [weak self] text in
+            self?.attenderCountLabel.text = text
+        }
+    }
+    
+    func setting() {
+        listTableView.delegate = self
+        listTableView.dataSource = self
+        listTableView.register(UINib(nibName: "HomeTableViewCell", bundle: nil), forCellReuseIdentifier: "HomeTableViewCell")
+        listTableView.tableFooterView = UIView()
+    }
+    
+    func layout() {
         view.addSubview(mainScroll)
         if isModal {
             modalLayout()
@@ -580,192 +742,6 @@ class PostVC: BaseViewController, SingleDataDelegate, PostDataDelegate {
         }
     }
     
-    func getSingleData(_ postData: PostDataModel) {
- 
-        currentPost = postData
-        navigationItem.title = postData.title
-        modalTitleLabel.text = postData.title
-        commLevel = postData.communication
-        commuicationLavelEmoji.text = postData.emoji
-        meetingTimeLabel.text = getMeetingTime(postData.start, postData.duration)
-        locationLabel.text = postData.town
-        writeTimeLabel.text = postData.date.relativeTime_abbreviated
-        viewsLabel.text = String(postData.view)
-        
-        
-        contentLabel.text = postData.content
-        
-        writerProfile(postData.chat!, postData.writer!)
-        hashtagLabel.text = postData.tag[0]
-        
-        bottomMeetingTimeLabel.text = getBottomTime(postData.start)
- 
-        postDataManager.requestPostData()
-        addNaviButton()
-        submitCheck()
-        dismissIndicator()
-    }
-    
-    func addNaviButton() {
-        let moreButton = UIBarButtonItem().then {
-            $0.image = UIImage(systemName: "ellipsis")
-            $0.target = self
-            $0.action = #selector(barButtonAction)
-        }
-        
-        navigationItem.rightBarButtonItem = moreButton
-     
-    }
-    
-    func getPostData(_ postData: [PostDataModel]) {
-        for post in postData {
-            if postID != post.id && commLevel == post.communication {
-                posts.append(post)
-            }
-        }
-        listTableView.reloadData()
-    }
     
     
-    func getBottomTime(_ start: Date) -> String {
-        let bottomTimeFormat = DateFormatter().then {
-            $0.dateFormat = "MM월 dd일 hh시 mm분 예정"
-        }
-        let bottomTime = bottomTimeFormat.string(from: start)
-        
-        return bottomTime
-    }
-    
-    func writerProfile(_ chat: DocumentReference,_ writer: DocumentReference) {
-        writer.getDocument { (snapshot, error) in
-            if let e = error {
-                print(e.localizedDescription)
-            } else {
-                if let data = snapshot?.data() {
-                    let location = data["town"] as! String
-                    self.writerLocationLabel.text = location
-                    let count = data["participation"] as! Int
-                    self.writerAttendCountLabel.text = "총 모임참여 \(count)회"
-                    self.gradeButton.getGrade(.tableCell,  data["birth"] as! Int)
-                }
-              
-            }
-        }
-        chat.getDocument { (snapshot, error) in
-            if let e = error {
-                print(e.localizedDescription)
-            } else {
-                if let doc = snapshot?.data() {
-                    let member = doc["nickname"] as! [String : String]
-                    let nickname = member[writer.documentID] ?? ""
-                    self.writerNicknameLable.text = nickname
-                    self.bottomWriterInfoLabel.text = "\(nickname)의 모임"
-                }
-              
-            }
-        }
-    }
-    
-    func setting() {
-        listTableView.delegate = self
-        listTableView.dataSource = self
-        listTableView.register(UINib(nibName: "HomeTableViewCell", bundle: nil), forCellReuseIdentifier: "HomeTableViewCell")
-        listTableView.tableFooterView = UIView()
-        
-    }
-    
-    func readPost(_ id: String) {
-        let vc = PostVC()
-        vc.postID = id
-        self.navigationController?.pushViewController(vc, animated: true)
-    }
-    
-    func submitCheck() {
-        if currentPost.writer?.documentID == Auth.auth().currentUser?.uid {
-            submitButtonCondition(.offWriter)
-            return
-        } else {
-            currentPost.chat?.addSnapshotListener({ (snapshot, error) in
-                if let e = error {
-                    print(e.localizedDescription)
-                } else {
-                    if let data = snapshot?.data() {
-                        let currentMember = data["member"] as! [String]
-                        self.attenderCountLabel.text = " \(currentMember.count)/\(self.currentPost.headcount)"
-                        print(currentMember)
-                        if currentMember.contains(Auth.auth().currentUser!.uid) {
-                            self.submitButtonCondition(.offAlready)
-                            return
-                        } else if currentMember.count == self.currentPost.headcount {
-                            self.submitButtonCondition(.offOver)
-                            return
-                        }
-                    }
-                }
-            })
-        }
-        submitButtonCondition(.on)
-        
-    }
-   
-    func submitButtonCondition(_ state: buttonsStatus) {
-        switch state {
-        case .on:
-            self.bottomSubmitButton.backgroundColor = .mainYellow
-            self.bottomSubmitButton.setTitle("신청하기", for: .normal)
-            self.bottomSubmitButton.isEnabled = true
-        case .offOver:
-            self.bottomSubmitButton.backgroundColor = .mainBackground
-            self.bottomSubmitButton.setTitle("인원마감", for: .normal)
-            self.bottomSubmitButton.isEnabled = false
-        case .offAlready:
-            self.bottomSubmitButton.backgroundColor = .mainBackground
-            self.bottomSubmitButton.setTitle("신청완료", for: .normal)
-            self.bottomSubmitButton.isEnabled = false
-        case .offWriter:
-            self.bottomSubmitButton.backgroundColor = .mainBackground
-            self.bottomSubmitButton.setTitle("나의 모임", for: .normal)
-            self.bottomSubmitButton.isEnabled = false
-        }
-    }
-}
-
-extension PostVC: UITableViewDataSource, UITableViewDelegate {
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return posts.count
-    }
-
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = self.listTableView.dequeueReusableCell(withIdentifier: "HomeTableViewCell", for: indexPath as IndexPath) as! HomeTableViewCell
-        cell.emojiLable.text = posts[indexPath.row].emoji
-        cell.titleLabel.text = posts[indexPath.row].title
-        cell.locationLabel.text = posts[indexPath.row].town
-        cell.writeTimeLabel.text = posts[indexPath.row].date.relativeTime_abbreviated
-        cell.viewsLabel.text = String(posts[indexPath.row].view)
-//        cell.meetingTimeLabel.text = posts[indexPath.section].start
-        
-        posts[indexPath.row].chat?.addSnapshotListener({ (snapshot, error) in
-            if let e = error {
-                print(e.localizedDescription)
-            } else {
-                if let data = snapshot?.data() {
-                    let memberCount = (data["member"] as! [String]).count
-                    cell.attenderCountLabel.text = " \(memberCount)/\(self.posts[indexPath.row].headcount)"
-                }
-            }
-        })
-        return cell
-    }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return Device.heightScale(100)
-    }
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        readPost(posts[indexPath.row].id)
-    }
-
-
 }

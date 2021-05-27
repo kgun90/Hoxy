@@ -98,5 +98,13 @@ struct PostDataManager {
         }
     }
     
+    func reportPost(_ reportData: ReportModel) {
+        set.fs.collection(set.Table.report).addDocument(data: [
+            "content": reportData.content,
+            "date": reportData.date,
+            "post": reportData.post! as DocumentReference,
+            "writer": reportData.writer! as DocumentReference
+        ])
+    }
 //    func requestFilteredData(_ communicationLevel: Int, )
 }
