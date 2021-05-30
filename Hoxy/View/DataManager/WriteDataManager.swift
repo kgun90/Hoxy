@@ -31,6 +31,7 @@ struct WriteDataManager {
         ])
         
         let chat = set.fs.collection(set.Table.chatting).addDocument(data: [
+            "date": Date(),
             "member": [Auth.auth().currentUser?.uid],
             "nickname": [ Auth.auth().currentUser?.uid : nickName],
             "post" : post

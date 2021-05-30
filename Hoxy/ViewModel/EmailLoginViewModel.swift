@@ -8,14 +8,10 @@
 import Foundation
 import UIKit.UIColor
 
-// 용도를 생각해볼것
-protocol AutenticationProtocol {
-    var formIsValid: Bool { get }
-}
 
 struct EmailLoginViewModel {
-    var email: String?
-    var password: String?
+    var email: String = ""
+    var password: String = ""
         
     let emailText = Observable("")
     let passText = Observable("")
@@ -25,13 +21,13 @@ struct EmailLoginViewModel {
     let buttonSet = Observable(DefaultSetModel())
         
     var formIsValid: Bool {
-        return self.email?.validateEmail() == true && self.password?.validatePassword() == true
+        return self.email.validateEmail() && self.password.validatePassword()
     }
 
     func descriptionEmailText() {
         if self.email == "" {
             emailDes.value.text = ""
-        } else if self.email?.validateEmail() == true {
+        } else if self.email.validateEmail() == true {
             emailDes.value.text = "올바른 양식입니다"
             emailDes.value.color = .validGreen
         } else {
@@ -40,10 +36,10 @@ struct EmailLoginViewModel {
         }
     }
 
-    func descriptionPassText() {        
+    func descriptionPassText() {
         if self.password == "" {
             passDes.value.text = ""
-        } else if self.password?.validatePassword() == true {
+        } else if self.password.validatePassword() == true {
             passDes.value.text = "올바른 양식입니다"
             passDes.value.color = .validGreen
         } else {

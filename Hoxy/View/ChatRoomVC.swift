@@ -12,11 +12,7 @@ import BonsaiController
 
 
 class ChatRoomVC: BaseViewController, ChatRoomDataDelegate, ChatRoomDelegate {
-    func dismiss() {
-        print("delegate")
-        self.navigationController?.popViewController(animated: true)
-    }
-    
+ 
 
     // MARK: - Properties
     lazy var topInstructionView = UIView().then {
@@ -152,6 +148,13 @@ class ChatRoomVC: BaseViewController, ChatRoomDataDelegate, ChatRoomDelegate {
             self.chatInputTextField.text = ""
         }
     }
+    
+    func dismiss() {
+        print("delegate")
+        self.navigationController?.popViewController(animated: true)
+    }
+    
+    
     // MARK: - Helpers
     func layout() {
         view.addSubview(topInstructionView)
@@ -228,7 +231,7 @@ extension ChatRoomVC: UITableViewDataSource, UITableViewDelegate {
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return chatData.count
+        return 10//chatData.count
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -237,7 +240,7 @@ extension ChatRoomVC: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = self.chatTableView.dequeueReusableCell(withIdentifier: "ChatMessageCell", for: indexPath as IndexPath) as! ChatMessageCell
-        cell.contentLabel.text = chatData[indexPath.section].content
+        cell.contentLabel.text = ""//chatData[indexPath.section].content
 
        chatData[indexPath.section].sender?.addSnapshotListener({ (snapshot, error) in
             if let e = error {

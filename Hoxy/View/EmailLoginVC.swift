@@ -67,10 +67,10 @@ class EmailLoginVC: UIViewController {
 extension EmailLoginVC: UITextFieldDelegate {
     @objc func textFieldDidChange(sender: UITextField) {
         if sender == emailItem.tf {
-            viewModel.email = sender.text
+            viewModel.email = sender.text ?? ""
             viewModel.descriptionEmailText()
         } else {
-            viewModel.password = sender.text
+            viewModel.password = sender.text ?? ""
             viewModel.descriptionPassText()
         }
         viewModel.buttonEnableCheck()

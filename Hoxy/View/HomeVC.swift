@@ -38,11 +38,6 @@ class HomeVC: BaseViewController {
         initRefresh()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(true)
-        self.dismissIndicator()
-    }
-    
     // MARK: - Selectors
     @objc func moveToWrite() {
         let vc = WriteVC()
@@ -66,7 +61,7 @@ class HomeVC: BaseViewController {
     func initRefresh() {
         let refresh = UIRefreshControl()
         refresh.addTarget(self, action: #selector(updateUI(refresh: )), for: .valueChanged)
-        refresh.attributedTitle = NSAttributedString(string: "당겨서 새로고침")
+//        refresh.attributedTitle = NSAttributedString(string: "당겨서 새로고침")
         
         if #available(iOS 10.0, *) {
             listTableView.refreshControl = refresh
@@ -109,27 +104,27 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
         cell.writeTimeLabel.text = posts[indexPath.section].date.relativeTime_abbreviated
         cell.viewsLabel.text = String(posts[indexPath.section].view)
         cell.meetingTimeLabel.text = getMeetingTime(posts[indexPath.section].start, posts[indexPath.section].duration)
-       
+        cell.hashTagLabel.text = "#" + posts[indexPath.section].tag.joined(separator: "#")
+
         posts[indexPath.section].writer?.addSnapshotListener({ (snapshot, error) in
             if let e = error {
                 print(e.localizedDescription)
-            } else {
-                if let data = snapshot?.data() {
-                    let birth = data["birth"] as! Int
-                    cell.gradeButton.getGrade(.tableCell, birth)
-                }
+                return
+            }
+            if let data = snapshot?.data() {
+                let birth = data["birth"] as! Int
+                cell.gradeButton.getGrade(.tableCell, birth)
             }
         })
 
         posts[indexPath.section].chat?.addSnapshotListener({ (snapshot, error) in
             if let e = error {
                 print(e.localizedDescription)
-            } else {
-                if let data = snapshot?.data() {
-//                    let memberCount = (data["nickname"] as! [String : String]).count
-                    let memberCount = (data["member"] as! [String]).count
-                    cell.attenderCountLabel.text = " \(memberCount)/\(self.posts[indexPath.section].headcount)"
-                }
+                return
+            }
+            if let data = snapshot?.data() {
+                let memberCount = (data["member"] as! [String]).count
+                cell.attenderCountLabel.text = " \(memberCount)/\(self.posts[indexPath.section].headcount)"
             }
         })
 
@@ -157,6 +152,8 @@ extension HomeVC {
     func binding() {
         viewModel.postData.bind { [weak self] data in
             self?.posts = data
+            self?.reloadTable()
+            self?.dismissIndicator()
         }
     }
     
@@ -165,7 +162,6 @@ extension HomeVC {
         listTableView.dataSource = self
         listTableView.register(UINib(nibName: "HomeTableViewCell", bundle: nil), forCellReuseIdentifier: "HomeTableViewCell")
         listTableView.tableFooterView = UIView()
-        reloadTable()
     }
     
     func layout() {

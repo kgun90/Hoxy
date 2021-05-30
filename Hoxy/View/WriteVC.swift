@@ -112,7 +112,6 @@ class WriteVC: BaseViewController {
         $0.textAlignment = .center
     }
     
-
     var menu = writeMenu.meetingTime
     var mode = writeMode.write
 
@@ -163,7 +162,6 @@ class WriteVC: BaseViewController {
         } else {
             navigationItem.title = "모임글 작성"
         }
-        
     }
    
     func nicknameSetting(_ nickname: String) {
@@ -183,11 +181,12 @@ class WriteVC: BaseViewController {
     
     @objc func submitAction() {
         showIndicator()
-        postModel.tag = ["test", "test"]
-//        hashTagSet()
+        hashTagSet()
         let ok = UIAlertAction(title: "확인", style: .default) { (action) in
             if self.mode == .write {
-                self.dataManager.createPost(self.postModel, self.nickName)
+//                self.dataManager.createPost(self.postModel, self.nickName)
+                print("tags: \(self.postModel.tag)")
+                self.navigationController?.popViewController(animated: true)
             } else {
                 self.dataManager.updatePost(self.postModel, self.uid ?? "")
             }
@@ -387,7 +386,7 @@ extension WriteVC {
         self.view.endEditing(true)
     }
 }
-
+// MARK: - PickerViewDelegate
 extension WriteVC: UIPickerViewDelegate, UIPickerViewDataSource {
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
@@ -414,6 +413,7 @@ extension WriteVC: UIPickerViewDelegate, UIPickerViewDataSource {
         case .location:
             return locs.towns[row]
         case .headCount:
+            postModel.headcount = set.headCount[row]
             return String(set.headCount[row])
         case .communicationLevel:
             return set.communicationLevel[row]
@@ -422,6 +422,7 @@ extension WriteVC: UIPickerViewDelegate, UIPickerViewDataSource {
         default:
             return ""
         }
+        
     }
     
     
@@ -434,7 +435,7 @@ extension WriteVC: UIPickerViewDelegate, UIPickerViewDataSource {
         case .headCount:
             headCountView.textField.text = String(set.headCount[row])
             postModel.headcount = set.headCount[row]
-            
+            print("postModel.headcount: \(postModel.headcount)")
         case .communicationLevel:
             communicationLevelView.textField.text = set.communicationLevel[row]
             let emojiRand = Int.random(in: 0...2)
@@ -457,7 +458,7 @@ extension WriteVC: UIPickerViewDelegate, UIPickerViewDataSource {
     }
     
 }
-
+// MARK: - TextViewDelegate
 extension WriteVC: UITextViewDelegate {
     func textViewDidChange(_ textView: UITextView) {
         textFieldDidChange()
@@ -503,7 +504,7 @@ extension WriteVC: SingleDataDelegate {
         })
     }
 }
-// MARK: Configure UI
+// MARK: - Configure UI
 extension WriteVC {
     func configureUI() {
         binding()

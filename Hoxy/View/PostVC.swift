@@ -263,7 +263,7 @@ class PostVC: BaseViewController, SingleDataDelegate, PostDataDelegate {
         contentLabel.text = postData.content
         
         writerProfile(postData.chat!, postData.writer!)
-        hashtagLabel.text = postData.tag[0]
+        hashtagLabel.text = "#"  + postData.tag.joined(separator: "#")
         
         bottomMeetingTimeLabel.text = getBottomTime(postData.start)
  
@@ -480,7 +480,8 @@ extension PostVC: UITableViewDataSource, UITableViewDelegate {
         cell.locationLabel.text = posts[indexPath.row].town
         cell.writeTimeLabel.text = posts[indexPath.row].date.relativeTime_abbreviated
         cell.viewsLabel.text = String(posts[indexPath.row].view)
-//        cell.meetingTimeLabel.text = posts[indexPath.section].start
+        cell.meetingTimeLabel.text = getMeetingTime(posts[indexPath.section].start, posts[indexPath.section].duration)
+        cell.hashTagLabel.text = "#" + posts[indexPath.row].tag.joined(separator: "#")
         
         posts[indexPath.row].chat?.addSnapshotListener({ (snapshot, error) in
             if let e = error {

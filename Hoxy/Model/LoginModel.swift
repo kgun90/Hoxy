@@ -27,3 +27,11 @@ public enum InputMode {
     case realtime
     case once
 }
+
+struct EmailModel {
+    var email: String = ""
+    var pass: String = ""
+    var valid: Bool {
+        return email.validateEmail() && pass.validatePassword()
+    }
+}
