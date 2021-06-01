@@ -510,6 +510,7 @@ extension WriteVC {
         binding()
         setting()
         layout()
+        tagViewAction()
     }
     
     func binding() {
@@ -518,7 +519,10 @@ extension WriteVC {
             self?.submitButton.backgroundColor = button.color
         }
     }
-    
+    @objc func tagViewAction() {
+        let vc = TagVC()
+        self.present(vc, animated: true, completion: nil)
+    }
     func setting() {
         if mode == .update {
             submitButton.isEnabled = true
@@ -533,9 +537,9 @@ extension WriteVC {
         headCountView.textField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
         communicationLevelView.textField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
         meetingDurationView.textField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
-        hashTagTextField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
-        
-        submitButton.addTarget(self, action: #selector(submitAction), for: .touchUpInside)
+//        hashTagTextField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
+        hashTagTextField.addTarget(self, action: #selector(tagViewAction), for: .touchUpInside)
+        submitButton.addTarget(self, action: #selector(submitAction), for: .editingChanged)
     }
     
     func layout() {

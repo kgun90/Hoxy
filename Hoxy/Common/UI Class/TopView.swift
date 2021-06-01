@@ -11,7 +11,8 @@ class TopView: UIView {
     let back = UIButton()
     
     init(_ title: String,
-         _ backgroundColor: UIColor = #colorLiteral(red: 0.9787401557, green: 0.8706828952, blue: 0.06605642289, alpha: 1)
+         _ backgroundColor: UIColor = #colorLiteral(red: 0.9787401557, green: 0.8706828952, blue: 0.06605642289, alpha: 1),
+         _ imageTitle: String = "arrow.backward"
          ) {
         super.init(frame: .zero)
         self.backgroundColor = backgroundColor
@@ -27,7 +28,7 @@ class TopView: UIView {
         
         // MARK: - back button setting
      
-        back.setImage(UIImage(systemName: "arrow.backward"), for: .normal)
+        back.setImage(UIImage(systemName: imageTitle), for: .normal)
         back.tintColor = .black
 
         addSubview(back)
