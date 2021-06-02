@@ -16,6 +16,7 @@ struct set {
         static let chatting = "chatting"
         static let post = "post"
         static let report = "report"
+        static let tag = "tag"
     }
     
     static let communicationEmoji = [["😷", "🤫", "🤐"], ["😀", "😃", "😄"], ["😆", "🤩", "🥳"]]

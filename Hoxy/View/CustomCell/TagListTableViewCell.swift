@@ -13,7 +13,11 @@ class TagListTableViewCell: UITableViewCell {
         $0.textColor = .black
         $0.text = "Title"
     }
-
+    lazy var countLabel = UILabel().then {
+        $0.font = .BasicFont(.semiBold, size: 16)
+        $0.textColor = .black
+        $0.text = "Title"
+    }
     override func awakeFromNib() {
         super.awakeFromNib()
         layout()
@@ -26,10 +30,15 @@ class TagListTableViewCell: UITableViewCell {
     }
     func layout() {
         contentView.addSubview(tagLabel)
+        contentView.addSubview(countLabel)
         
         tagLabel.snp.makeConstraints {
             $0.centerY.equalToSuperview()
             $0.leading.equalToSuperview().offset(Device.widthScale(21))
+        }
+        countLabel.snp.makeConstraints {
+            $0.centerY.equalToSuperview()
+            $0.trailing.equalToSuperview().offset(Device.widthScale(-15))
         }
     }
 }

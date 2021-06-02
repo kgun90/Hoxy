@@ -7,35 +7,49 @@
 
 import UIKit
 
-class TagVC: UIViewController {
+class TagVC: UIViewController, RequestTagProtocol{
+
     // MARK: - Properties
     let topView = TopView("태그추가", .mainYellow, "multiply")
     lazy var tagListTableView = UITableView()
+    var tagList = [TagModel()]
+    var dataManager = TagDataManager()
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
+        dataManager.delegate = self
+        dataManager.requestTagList()
+        
     }
     // MARK: - Selectors
     @objc func dismissAction() {
         self.dismiss(animated: true, completion: nil)
     }
     // MARK: - Helpers
-   
+    func getTagList(_ tagDataList: [TagModel]) {
+        print("getTagList: \(tagDataList)")
+        tagList = tagDataList
+        reloadTable()
+    }
+    func reloadTable() {
+        DispatchQueue.main.async {
+            self.tagListTableView.reloadData()
+        }
+    }
 }
 
 extension TagVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 10
+        return tagList.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = self.tagListTableView.dequeueReusableCell(withIdentifier: "TagListTableViewCell") as! TagListTableViewCell
-        cell.tagLabel.text = "풍덕천동"
+        cell.tagLabel.text = tagList[indexPath.row].name
+        cell.countLabel.text = String(tagList[indexPath.row].count)
         return cell
     }
-    
-    
 }
 
 extension TagVC {

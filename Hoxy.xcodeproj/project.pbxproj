@@ -56,6 +56,7 @@
 		EB3EE78D2666626C007507D6 /* TagVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB3EE78C2666626C007507D6 /* TagVC.swift */; };
 		EB3EE79226667B61007507D6 /* TagListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB3EE79026667B61007507D6 /* TagListTableViewCell.swift */; };
 		EB3EE79326667B61007507D6 /* TagListTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = EB3EE79126667B61007507D6 /* TagListTableViewCell.xib */; };
+		EB3EE7952667D9C8007507D6 /* TagDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB3EE7942667D9C8007507D6 /* TagDataManager.swift */; };
 		EB43F79425D1BA3700AFED54 /* PostViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB43F79325D1BA3700AFED54 /* PostViewModel.swift */; };
 		EB5D8E5825C70FB7003D957C /* LoginButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5D8E5725C70FB7003D957C /* LoginButton.swift */; };
 		EB5D8E5C25C7168C003D957C /* WriteVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5D8E5B25C7168C003D957C /* WriteVC.swift */; };
@@ -144,6 +145,7 @@
 		EB3EE78C2666626C007507D6 /* TagVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagVC.swift; sourceTree = "<group>"; };
 		EB3EE79026667B61007507D6 /* TagListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagListTableViewCell.swift; sourceTree = "<group>"; };
 		EB3EE79126667B61007507D6 /* TagListTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TagListTableViewCell.xib; sourceTree = "<group>"; };
+		EB3EE7942667D9C8007507D6 /* TagDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagDataManager.swift; sourceTree = "<group>"; };
 		EB43F79325D1BA3700AFED54 /* PostViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostViewModel.swift; sourceTree = "<group>"; };
 		EB5D8E5725C70FB7003D957C /* LoginButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginButton.swift; sourceTree = "<group>"; };
 		EB5D8E5B25C7168C003D957C /* WriteVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WriteVC.swift; sourceTree = "<group>"; };
@@ -355,6 +357,7 @@
 				EB2968FE25D98DEB00DAE55B /* ChatDataManager.swift */,
 				E082A932265647F800A56805 /* JoinDataManager.swift */,
 				E08F548E265C83D900740A04 /* WriteDataManager.swift */,
+				EB3EE7942667D9C8007507D6 /* TagDataManager.swift */,
 			);
 			path = DataManager;
 			sourceTree = "<group>";
@@ -533,6 +536,7 @@
 				EB78A36925E55D0200E4C538 /* ChatMenuItem.swift in Sources */,
 				EB11F0D125C54E9B00EC9F6F /* IndicatorView.swift in Sources */,
 				EB05FFD325E3943C00A587BE /* ChatMemberTableViewCell.swift in Sources */,
+				EB3EE7952667D9C8007507D6 /* TagDataManager.swift in Sources */,
 				EB5D8E7525C7E1BF003D957C /* Date.swift in Sources */,
 				EB11F0CD25C5367100EC9F6F /* UIView.swift in Sources */,
 				EB87AB7F25BC11EF00DF3BBB /* UnKnownVC.swift in Sources */,

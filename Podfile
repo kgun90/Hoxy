@@ -11,7 +11,7 @@ target 'Hoxy' do
   pod 'SnapKit'
   pod 'Then'
   pod 'BTNavigationDropdownMenu'
-  pod 'PARTagPicker'
+  pod 'TagListView', '~> 1.0'
   # Pods for Hoxy
 
 end

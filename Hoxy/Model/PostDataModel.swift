@@ -32,3 +32,8 @@ struct PostApplyButtonModel {
     var color: UIColor = .mainBackground
     var enable = false
 }
+
+struct TagModel{
+    var name = ""
+    var count = 0
+}
