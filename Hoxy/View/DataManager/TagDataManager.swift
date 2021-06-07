@@ -22,11 +22,14 @@ struct TagDataManager {
                     return
                 }
                 if let snapshotocuments = querySanpshot?.documents {
-                    var tagDataList = [TagModel()]
+                    var tagDataList = [TagModel]()
+                   
                     for doc in snapshotocuments {
                         let data = doc.data()
-                        let tagData = TagModel(name: data["name"] as! String, count: data["count"] as! Int)                        
+                        let tagData = TagModel(name: data["name"] as? String, count: data["count"] as? Int)
+                    
                         tagDataList.append(tagData)
+                       
                     }
                     delegate?.getTagList(tagDataList)
                 }

@@ -22,8 +22,9 @@ extension UIColor {
     class var mainYellow: UIColor { #colorLiteral(red: 0.9607843137, green: 0.8745098039, blue: 0.3019607843, alpha: 1) }
     class var meetingTimeOrange: UIColor { #colorLiteral(red: 0.9607843137, green: 0.5803921569, blue: 0.3019607843, alpha: 1) }
     class var labelGray: UIColor { #colorLiteral(red: 0.537254902, green: 0.5725490196, blue: 0.6039215686, alpha: 1) }
+    class var backgroundGray: UIColor { .init(hex: 0xF7F7F7, alpha: 1) }
     class var hashtagBlue: UIColor { #colorLiteral(red: 0.05098039216, green: 0.5490196078, blue: 1, alpha: 1) }
     class var validGreen: UIColor { #colorLiteral(red: 0.4666666687, green: 0.7647058964, blue: 0.2666666806, alpha: 1) }
     class var validRed: UIColor { #colorLiteral(red: 0.8078431487, green: 0.02745098062, blue: 0.3333333433, alpha: 1) }
-   
+
 }

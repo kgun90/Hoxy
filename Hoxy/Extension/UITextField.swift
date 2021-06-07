@@ -8,10 +8,10 @@
 import UIKit
 
 extension UITextField {
-    func addUnderLine() {
+    func addUnderLine(color: UInt = 0x000000) {
         let border = CALayer()
         border.frame = CGRect(x: 0, y: self.frame.height-1, width: self.frame.width, height: 1)
-        border.backgroundColor = UIColor.black.cgColor
+        border.backgroundColor = UIColor.init(hex: color, alpha: 1).cgColor
         borderStyle = .none
         layer.addSublayer(border)
     }

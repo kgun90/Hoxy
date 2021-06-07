@@ -34,6 +34,6 @@ struct PostApplyButtonModel {
 }
 
 struct TagModel{
-    var name = ""
-    var count = 0
+    var name: String?
+    var count: Int?
 }

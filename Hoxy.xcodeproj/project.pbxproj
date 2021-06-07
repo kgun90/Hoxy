@@ -57,6 +57,7 @@
 		EB3EE79226667B61007507D6 /* TagListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB3EE79026667B61007507D6 /* TagListTableViewCell.swift */; };
 		EB3EE79326667B61007507D6 /* TagListTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = EB3EE79126667B61007507D6 /* TagListTableViewCell.xib */; };
 		EB3EE7952667D9C8007507D6 /* TagDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB3EE7942667D9C8007507D6 /* TagDataManager.swift */; };
+		EB3EE797266E77F1007507D6 /* TagVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = EB3EE796266E77F1007507D6 /* TagVC.xib */; };
 		EB43F79425D1BA3700AFED54 /* PostViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB43F79325D1BA3700AFED54 /* PostViewModel.swift */; };
 		EB5D8E5825C70FB7003D957C /* LoginButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5D8E5725C70FB7003D957C /* LoginButton.swift */; };
 		EB5D8E5C25C7168C003D957C /* WriteVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5D8E5B25C7168C003D957C /* WriteVC.swift */; };
@@ -146,6 +147,7 @@
 		EB3EE79026667B61007507D6 /* TagListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagListTableViewCell.swift; sourceTree = "<group>"; };
 		EB3EE79126667B61007507D6 /* TagListTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TagListTableViewCell.xib; sourceTree = "<group>"; };
 		EB3EE7942667D9C8007507D6 /* TagDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagDataManager.swift; sourceTree = "<group>"; };
+		EB3EE796266E77F1007507D6 /* TagVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TagVC.xib; sourceTree = "<group>"; };
 		EB43F79325D1BA3700AFED54 /* PostViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostViewModel.swift; sourceTree = "<group>"; };
 		EB5D8E5725C70FB7003D957C /* LoginButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginButton.swift; sourceTree = "<group>"; };
 		EB5D8E5B25C7168C003D957C /* WriteVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WriteVC.swift; sourceTree = "<group>"; };
@@ -307,6 +309,7 @@
 				EBDA506825BC03BB00C6A122 /* HomeVC.swift */,
 				EB5D8E5B25C7168C003D957C /* WriteVC.swift */,
 				EB3EE78C2666626C007507D6 /* TagVC.swift */,
+				EB3EE796266E77F1007507D6 /* TagVC.xib */,
 				EB5D8E7D25CA645A003D957C /* PostVC.swift */,
 				EB87AB7D25BC11EF00DF3BBB /* UnKnownVC.swift */,
 				EBDA506D25BC03CA00C6A122 /* ChatListVC.swift */,
@@ -460,6 +463,7 @@
 				EB2968FC25D9790400DAE55B /* ChatListTableViewCell.xib in Resources */,
 				EB3EE79326667B61007507D6 /* TagListTableViewCell.xib in Resources */,
 				EB05FFD425E3943C00A587BE /* ChatMemberTableViewCell.xib in Resources */,
+				EB3EE797266E77F1007507D6 /* TagVC.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
