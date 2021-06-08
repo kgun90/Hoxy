@@ -11,7 +11,6 @@ import TagListView
 class TagVC: UIViewController, RequestTagProtocol{
 
     @IBOutlet weak var tagListView: TagListView!
-    
     // MARK: - Properties
     let topView = TopView("태그추가", .mainYellow, "multiply")
     lazy var tagListTableView = UITableView()
@@ -36,11 +35,11 @@ class TagVC: UIViewController, RequestTagProtocol{
         tagTextField.snp.makeConstraints {
             $0.centerY.equalToSuperview()
             $0.leading.equalToSuperview().offset(Device.widthScale(47))
-            $0.trailing.equalToSuperview().offset(Device.widthScale(-50))
+            $0.trailing.equalToSuperview().offset(Device.widthScale(-80))
         }
         tagAddButton.snp.makeConstraints {
             $0.leading.equalTo(tagTextField.snp.trailing).offset(5)
-            $0.width.equalTo(Device.widthScale(25))
+            $0.width.equalTo(Device.widthScale(50))
             $0.height.equalTo(tagTextField.snp.height)
             $0.bottom.equalTo(tagTextField.snp.bottom)
         }
@@ -63,6 +62,7 @@ class TagVC: UIViewController, RequestTagProtocol{
     
     var tagList = [TagModel]()
     var dataManager = TagDataManager()
+    var tagData: [String] = []
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -94,7 +94,12 @@ class TagVC: UIViewController, RequestTagProtocol{
     }
     
     @objc func addTagAction() {
-        
+        if tagData.count < 5 {
+            tagListView.addTag(tagTextField.text!)
+            tagData.append(tagTextField.text!)
+        }
+        tagTextField.text = ""
+        print("tagData: \(tagData)")
     }
 }
 
@@ -109,6 +114,15 @@ extension TagVC: UITableViewDelegate, UITableViewDataSource {
         cell.countLabel.text = String(tagList[indexPath.row].count ?? 0)
         return cell
     }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if tagData.count < 5 {
+            tagListView.addTag(tagList[indexPath.row].name!)
+            tagList.remove(at: indexPath.row)
+        }
+       
+        reloadTable()
+    }
 }
 
 extension TagVC {
@@ -122,7 +136,7 @@ extension TagVC {
         tagListTableView.dataSource = self
         tagListTableView.delegate = self
         tagListTableView.register(UINib(nibName: "TagListTableViewCell", bundle: nil), forCellReuseIdentifier: "TagListTableViewCell")
-        tagListView.backgroundColor = .white
+        tagListView.backgroundColor = .mainBackground
     }
     
     func layout() {
