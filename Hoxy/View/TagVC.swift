@@ -8,12 +8,16 @@
 import UIKit
 import TagListView
 
-class TagVC: UIViewController, RequestTagProtocol{
+class TagVC: UIViewController, RequestTagProtocol, TagListViewDelegate{
 
     @IBOutlet weak var tagListView: TagListView!
     // MARK: - Properties
     let topView = TopView("태그추가", .mainYellow, "multiply")
     lazy var tagListTableView = UITableView()
+    lazy var tagListBackground = UIView().then {
+        $0.backgroundColor = .init(hex: 0xDDDDDD)
+        $0.addSubview(tagListView)
+    }
     lazy var tfView = UIView().then {
         $0.backgroundColor = .backgroundGray
         
@@ -62,14 +66,14 @@ class TagVC: UIViewController, RequestTagProtocol{
     
     var tagList = [TagModel]()
     var dataManager = TagDataManager()
-    var tagData: [String] = []
+    var tagData = [TagModel]()
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
         dataManager.delegate = self
         dataManager.requestTagList()
-        
+        tagListView.delegate = self
     }
     
     override func viewDidLayoutSubviews() {
@@ -96,10 +100,17 @@ class TagVC: UIViewController, RequestTagProtocol{
     @objc func addTagAction() {
         if tagData.count < 5 {
             tagListView.addTag(tagTextField.text!)
-            tagData.append(tagTextField.text!)
+            tagData.append(TagModel(name: tagTextField.text!, count: 0))
         }
         tagTextField.text = ""
         print("tagData: \(tagData)")
+    }
+    
+    func tagRemoveButtonPressed(_ title: String, tagView: TagView, sender: TagListView) {
+        sender.removeTagView(tagView)
+        tagList.append(tagData.filter{ $0.name == title }.first!)
+        tagData = tagData.filter{ $0.name != title }
+        reloadTable()
     }
 }
 
@@ -118,6 +129,7 @@ extension TagVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if tagData.count < 5 {
             tagListView.addTag(tagList[indexPath.row].name!)
+            tagData.append(TagModel(name: tagList[indexPath.row].name, count: tagList[indexPath.row].count))
             tagList.remove(at: indexPath.row)
         }
        
@@ -141,6 +153,7 @@ extension TagVC {
     
     func layout() {
         view.addSubview(topView)
+        view.addSubview(tagListBackground)
         view.addSubview(tfView)
         view.addSubview(tagListTableView)
         topView.snp.makeConstraints {
@@ -149,11 +162,17 @@ extension TagVC {
             $0.width.equalToSuperview()
             $0.height.equalTo(Device.heightScale(88))
         }
-        tagListView.snp.makeConstraints {
+        tagListBackground.snp.makeConstraints {
             $0.top.equalTo(topView.snp.bottom)
             $0.width.equalToSuperview()
             $0.centerX.equalToSuperview()
             $0.height.equalTo(Device.heightScale(90))
+        }
+        tagListView.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(10)
+            $0.bottom.equalToSuperview().offset(-10)
+            $0.leading.equalToSuperview().offset(10)
+            $0.trailing.equalToSuperview().offset(-10)
         }
         tfView.snp.makeConstraints {
             $0.top.equalTo(tagListView.snp.bottom)

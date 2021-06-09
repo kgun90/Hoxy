@@ -23,7 +23,7 @@
                 <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VRW-kp-QA8" customClass="TagListView" customModule="TagListView">
                     <rect key="frame" x="51" y="268" width="318" height="454"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    <color key="backgroundColor" red="0.86666667460000002" green="0.86666667460000002" blue="0.86666667460000002" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                     <userDefinedRuntimeAttributes>
                         <userDefinedRuntimeAttribute type="color" keyPath="tagBackgroundColor">
                             <color key="value" red="0.2470588235" green="0.52941176469999995" blue="0.89411764709999997" alpha="1" colorSpace="calibratedRGB"/>
