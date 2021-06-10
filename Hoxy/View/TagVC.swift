@@ -8,11 +8,22 @@
 import UIKit
 import TagListView
 
-class TagVC: UIViewController, RequestTagProtocol, TagListViewDelegate{
+protocol TagDelegate {
+    func getTagList(_ tagList: [TagModel])
+}
 
+class TagVC: UIViewController, RequestTagProtocol, TagListViewDelegate{
+    var delegate: TagDelegate?
+    
     @IBOutlet weak var tagListView: TagListView!
     // MARK: - Properties
     let topView = TopView("태그추가", .mainYellow, "multiply")
+    lazy var tagPostButton = UIButton().then {
+        $0.setTitle("완료", for: .normal)
+        $0.titleLabel?.font = .BasicFont(.medium, size: 15)
+        $0.titleLabel?.textColor = .hashtagBlue
+        $0.addTarget(self, action: #selector(tagPostAction), for: .touchUpInside)
+    }
     lazy var tagListTableView = UITableView()
     lazy var tagListBackground = UIView().then {
         $0.backgroundColor = .init(hex: 0xDDDDDD)
@@ -67,6 +78,7 @@ class TagVC: UIViewController, RequestTagProtocol, TagListViewDelegate{
     var tagList = [TagModel]()
     var dataManager = TagDataManager()
     var tagData = [TagModel]()
+    var originalTagList = [TagModel]()
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -85,9 +97,15 @@ class TagVC: UIViewController, RequestTagProtocol, TagListViewDelegate{
     @objc func dismissAction() {
         self.dismiss(animated: true, completion: nil)
     }
+    @objc func tagPostAction() {
+        self.dismiss(animated: true) {
+            self.delegate?.getTagList(self.tagData)
+        }
+    }
     // MARK: - Helpers
     func getTagList(_ tagDataList: [TagModel]) {
         tagList = tagDataList
+        originalTagList = tagDataList
         reloadTable()
     }
     
@@ -98,7 +116,7 @@ class TagVC: UIViewController, RequestTagProtocol, TagListViewDelegate{
     }
     
     @objc func addTagAction() {
-        if tagData.count < 5 {
+        if tagData.count < 5 && tagTextField.text != ""{
             tagListView.addTag(tagTextField.text!)
             tagData.append(TagModel(name: tagTextField.text!, count: 0))
         }
@@ -108,8 +126,15 @@ class TagVC: UIViewController, RequestTagProtocol, TagListViewDelegate{
     
     func tagRemoveButtonPressed(_ title: String, tagView: TagView, sender: TagListView) {
         sender.removeTagView(tagView)
-        tagList.append(tagData.filter{ $0.name == title }.first!)
         tagData = tagData.filter{ $0.name != title }
+        
+        originalTagList.forEach {
+            if title == $0.name {
+                tagList.append($0)
+            }
+        }
+               
+        tagList.sort { $0.count! > $1.count! }
         reloadTable()
     }
 }
@@ -127,10 +152,13 @@ extension TagVC: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
         if tagData.count < 5 {
             tagListView.addTag(tagList[indexPath.row].name!)
             tagData.append(TagModel(name: tagList[indexPath.row].name, count: tagList[indexPath.row].count))
-            tagList.remove(at: indexPath.row)
+            tagList = tagList.filter({
+                $0.name != tagList[indexPath.row].name
+            })
         }
        
         reloadTable()
@@ -156,12 +184,20 @@ extension TagVC {
         view.addSubview(tagListBackground)
         view.addSubview(tfView)
         view.addSubview(tagListTableView)
+        topView.addSubview(tagPostButton)
+        
         topView.snp.makeConstraints {
             $0.top.equalToSuperview()
             $0.centerX.equalToSuperview()
             $0.width.equalToSuperview()
             $0.height.equalTo(Device.heightScale(88))
         }
+        
+        tagPostButton.snp.makeConstraints {
+            $0.trailing.equalToSuperview().offset(Device.widthScale(-30))
+            $0.top.equalToSuperview().offset(Device.heightScale(60))
+        }
+        
         tagListBackground.snp.makeConstraints {
             $0.top.equalTo(topView.snp.bottom)
             $0.width.equalToSuperview()
