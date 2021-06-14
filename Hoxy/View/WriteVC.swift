@@ -30,6 +30,8 @@ class WriteVC: BaseViewController {
     var userDataManager = UserDataManager()
     var postDataManager = PostDataManager()
     
+    var getTag = TagVC()
+    
     let meetingLocationView = WriteOptionItem(placeholder: "모임지역")
     let headCountView = WriteOptionItem(placeholder: "모임인원")
     let communicationLevelView = WriteOptionItem(placeholder: "소통레벨")
@@ -136,7 +138,7 @@ class WriteVC: BaseViewController {
             postDataManager.requestSingleData(id)
             mode = .update
         }
-   
+        getTag.delegate = self
         configureUI()
         configureTextField()
 
@@ -197,6 +199,11 @@ class WriteVC: BaseViewController {
     }
 }
 
+extension WriteVC: TagDelegate {
+    func getTagList(_ tagList: [TagModel]) {
+        print("tagList \(tagList)")
+    }
+}
 // MARK: Update Mode 일때 필요한 메서드
 extension WriteVC {
     func updateSetting(_ data: PostDataModel) {
@@ -520,8 +527,7 @@ extension WriteVC {
         }
     }
     @objc func tagViewAction() {
-        let vc = TagVC()
-        self.present(vc, animated: true, completion: nil)
+        self.present(getTag, animated: true, completion: nil)
     }
     func setting() {
         if mode == .update {

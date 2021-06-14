@@ -27,6 +27,8 @@
 		EB11F0D625C55EB200EC9F6F /* EmailLoginVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB11F0D525C55EB200EC9F6F /* EmailLoginVC.swift */; };
 		EB128D6025CFA55D004C0A66 /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB128D5F25CFA55D004C0A66 /* LocationService.swift */; };
 		EB128D6325CFA6BD004C0A66 /* LocationVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB128D6225CFA6BD004C0A66 /* LocationVC.swift */; };
+		EB1C983A2674C79400042EC2 /* TagItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1C98392674C79400042EC2 /* TagItem.swift */; };
+		EB1C983C267658D100042EC2 /* UIScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1C983B267658D100042EC2 /* UIScrollView.swift */; };
 		EB25DC8825B9C1E5006F4008 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB25DC8725B9C1E5006F4008 /* AppDelegate.swift */; };
 		EB25DC8A25B9C1E5006F4008 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB25DC8925B9C1E5006F4008 /* SceneDelegate.swift */; };
 		EB25DC8C25B9C1E5006F4008 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB25DC8B25B9C1E5006F4008 /* ViewController.swift */; };
@@ -57,7 +59,6 @@
 		EB3EE79226667B61007507D6 /* TagListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB3EE79026667B61007507D6 /* TagListTableViewCell.swift */; };
 		EB3EE79326667B61007507D6 /* TagListTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = EB3EE79126667B61007507D6 /* TagListTableViewCell.xib */; };
 		EB3EE7952667D9C8007507D6 /* TagDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB3EE7942667D9C8007507D6 /* TagDataManager.swift */; };
-		EB3EE797266E77F1007507D6 /* TagVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = EB3EE796266E77F1007507D6 /* TagVC.xib */; };
 		EB43F79425D1BA3700AFED54 /* PostViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB43F79325D1BA3700AFED54 /* PostViewModel.swift */; };
 		EB5D8E5825C70FB7003D957C /* LoginButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5D8E5725C70FB7003D957C /* LoginButton.swift */; };
 		EB5D8E5C25C7168C003D957C /* WriteVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5D8E5B25C7168C003D957C /* WriteVC.swift */; };
@@ -115,6 +116,8 @@
 		EB11F0D525C55EB200EC9F6F /* EmailLoginVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailLoginVC.swift; sourceTree = "<group>"; };
 		EB128D5F25CFA55D004C0A66 /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
 		EB128D6225CFA6BD004C0A66 /* LocationVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationVC.swift; sourceTree = "<group>"; };
+		EB1C98392674C79400042EC2 /* TagItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagItem.swift; sourceTree = "<group>"; };
+		EB1C983B267658D100042EC2 /* UIScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIScrollView.swift; sourceTree = "<group>"; };
 		EB25DC8425B9C1E5006F4008 /* Hoxy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Hoxy.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB25DC8725B9C1E5006F4008 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		EB25DC8925B9C1E5006F4008 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -147,7 +150,6 @@
 		EB3EE79026667B61007507D6 /* TagListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagListTableViewCell.swift; sourceTree = "<group>"; };
 		EB3EE79126667B61007507D6 /* TagListTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TagListTableViewCell.xib; sourceTree = "<group>"; };
 		EB3EE7942667D9C8007507D6 /* TagDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagDataManager.swift; sourceTree = "<group>"; };
-		EB3EE796266E77F1007507D6 /* TagVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TagVC.xib; sourceTree = "<group>"; };
 		EB43F79325D1BA3700AFED54 /* PostViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostViewModel.swift; sourceTree = "<group>"; };
 		EB5D8E5725C70FB7003D957C /* LoginButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginButton.swift; sourceTree = "<group>"; };
 		EB5D8E5B25C7168C003D957C /* WriteVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WriteVC.swift; sourceTree = "<group>"; };
@@ -235,6 +237,7 @@
 				EB78A36825E55D0200E4C538 /* ChatMenuItem.swift */,
 				EB78A37325E75DBF00E4C538 /* ProfileBackTop.swift */,
 				EB78A37C25E88C8700E4C538 /* ProfileBackBottom.swift */,
+				EB1C98392674C79400042EC2 /* TagItem.swift */,
 			);
 			path = "UI Class";
 			sourceTree = "<group>";
@@ -309,7 +312,6 @@
 				EBDA506825BC03BB00C6A122 /* HomeVC.swift */,
 				EB5D8E5B25C7168C003D957C /* WriteVC.swift */,
 				EB3EE78C2666626C007507D6 /* TagVC.swift */,
-				EB3EE796266E77F1007507D6 /* TagVC.xib */,
 				EB5D8E7D25CA645A003D957C /* PostVC.swift */,
 				EB87AB7D25BC11EF00DF3BBB /* UnKnownVC.swift */,
 				EBDA506D25BC03CA00C6A122 /* ChatListVC.swift */,
@@ -378,6 +380,7 @@
 				EB5D8E7425C7E1BF003D957C /* Date.swift */,
 				EB5D8E7725C7E999003D957C /* NSMutableAttrubutedString.swift */,
 				EB78A37025E755EC00E4C538 /* UITableView.swift */,
+				EB1C983B267658D100042EC2 /* UIScrollView.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -463,7 +466,6 @@
 				EB2968FC25D9790400DAE55B /* ChatListTableViewCell.xib in Resources */,
 				EB3EE79326667B61007507D6 /* TagListTableViewCell.xib in Resources */,
 				EB05FFD425E3943C00A587BE /* ChatMemberTableViewCell.xib in Resources */,
-				EB3EE797266E77F1007507D6 /* TagVC.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -528,6 +530,7 @@
 				EB5D8E7225C7D629003D957C /* PostDataModel.swift in Sources */,
 				EB5D8E7825C7E999003D957C /* NSMutableAttrubutedString.swift in Sources */,
 				EB78A37125E755EC00E4C538 /* UITableView.swift in Sources */,
+				EB1C983A2674C79400042EC2 /* TagItem.swift in Sources */,
 				EB29690225D991D400DAE55B /* ChatListModel.swift in Sources */,
 				E0ED10E3264CFCE600661094 /* JoinViewModel.swift in Sources */,
 				EB78A36525E40CE500E4C538 /* ChatMemberView.swift in Sources */,
@@ -566,6 +569,7 @@
 				EBDA504E25BB37C300C6A122 /* TabBarController.swift in Sources */,
 				EB38A72325BE62C200516515 /* UITextField.swift in Sources */,
 				EB78A37925E7E9EF00E4C538 /* MyMessageTableViewCell.swift in Sources */,
+				EB1C983C267658D100042EC2 /* UIScrollView.swift in Sources */,
 				E0ED10D626492EE800661094 /* EmailLoginViewModel.swift in Sources */,
 				EB38A71425BD707100516515 /* JoinVC.swift in Sources */,
 				EB5D8E7E25CA645A003D957C /* PostVC.swift in Sources */,

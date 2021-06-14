@@ -6,29 +6,39 @@
 //
 
 import UIKit
-import TagListView
 
 protocol TagDelegate {
     func getTagList(_ tagList: [TagModel])
 }
 
-class TagVC: UIViewController, RequestTagProtocol, TagListViewDelegate{
+class TagVC: UIViewController, RequestTagProtocol{
     var delegate: TagDelegate?
     
-    @IBOutlet weak var tagListView: TagListView!
     // MARK: - Properties
     let topView = TopView("태그추가", .mainYellow, "multiply")
     lazy var tagPostButton = UIButton().then {
-        $0.setTitle("완료", for: .normal)
+        $0.setTitle("등록", for: .normal)
         $0.titleLabel?.font = .BasicFont(.medium, size: 15)
         $0.titleLabel?.textColor = .hashtagBlue
         $0.addTarget(self, action: #selector(tagPostAction), for: .touchUpInside)
     }
+    
     lazy var tagListTableView = UITableView()
-    lazy var tagListBackground = UIView().then {
+    
+    lazy var tagScrollView = UIScrollView().then {
         $0.backgroundColor = .init(hex: 0xDDDDDD)
-        $0.addSubview(tagListView)
+        $0.showsHorizontalScrollIndicator = false
     }
+    
+    lazy var contentView = UIStackView().then {
+        $0.backgroundColor = .init(hex: 0xDDDDDD)
+        $0.axis = .horizontal
+        $0.distribution = .fill
+        $0.alignment = .fill
+        $0.translatesAutoresizingMaskIntoConstraints = false
+        $0.spacing = 10
+    }
+    
     lazy var tfView = UIView().then {
         $0.backgroundColor = .backgroundGray
         
@@ -46,46 +56,30 @@ class TagVC: UIViewController, RequestTagProtocol, TagListViewDelegate{
         }
         
         $0.addSubview(tagTextField)
-        $0.addSubview(tagAddButton)
+ 
         tagTextField.snp.makeConstraints {
             $0.centerY.equalToSuperview()
             $0.leading.equalToSuperview().offset(Device.widthScale(47))
-            $0.trailing.equalToSuperview().offset(Device.widthScale(-80))
+            $0.trailing.equalToSuperview().offset(Device.widthScale(-30))
         }
-        tagAddButton.snp.makeConstraints {
-            $0.leading.equalTo(tagTextField.snp.trailing).offset(5)
-            $0.width.equalTo(Device.widthScale(50))
-            $0.height.equalTo(tagTextField.snp.height)
-            $0.bottom.equalTo(tagTextField.snp.bottom)
-        }
+       
     }
 
     lazy var tagTextField = UITextField().then {
         $0.font = .BasicFont(.medium, size: 12)
         $0.textColor = .hashtagBlue
+        $0.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
     }
-    lazy var tagAddButton = UIButton().then {
-        $0.setTitle("추가", for: .normal)
-        $0.titleLabel?.font = .BasicFont(.medium, size: 15)
-        $0.titleLabel?.textColor = .white
-        $0.backgroundColor = .hashtagBlue
-        $0.layer.cornerRadius = 8
-        $0.translatesAutoresizingMaskIntoConstraints = false
-        $0.addTarget(self, action: #selector(addTagAction), for: .touchUpInside)
-    }
-
-    
+        
     var tagList = [TagModel]()
     var dataManager = TagDataManager()
     var tagData = [TagModel]()
-    var originalTagList = [TagModel]()
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
         dataManager.delegate = self
         dataManager.requestTagList()
-        tagListView.delegate = self
     }
     
     override func viewDidLayoutSubviews() {
@@ -100,12 +94,12 @@ class TagVC: UIViewController, RequestTagProtocol, TagListViewDelegate{
     @objc func tagPostAction() {
         self.dismiss(animated: true) {
             self.delegate?.getTagList(self.tagData)
+            
         }
     }
     // MARK: - Helpers
     func getTagList(_ tagDataList: [TagModel]) {
         tagList = tagDataList
-        originalTagList = tagDataList
         reloadTable()
     }
     
@@ -115,27 +109,34 @@ class TagVC: UIViewController, RequestTagProtocol, TagListViewDelegate{
         }
     }
     
-    @objc func addTagAction() {
-        if tagData.count < 5 && tagTextField.text != ""{
-            tagListView.addTag(tagTextField.text!)
-            tagData.append(TagModel(name: tagTextField.text!, count: 0))
+    func addTagAction(_ model: TagModel) {
+        if tagData.count < 5{
+            tagData.append(model)
+            let tag = TagItem(model.name!, button: true)
+            contentView.addArrangedSubview(tag)
+            tag.tagButton.addTarget(self, action: #selector(tagRemoveButtonPressed(_:)), for: .touchUpInside)
+            tag.tagButton.tag = contentView.subviews.endIndex
+            tag.layer.cornerRadius = 15
         }
+        
         tagTextField.text = ""
         print("tagData: \(tagData)")
     }
     
-    func tagRemoveButtonPressed(_ title: String, tagView: TagView, sender: TagListView) {
-        sender.removeTagView(tagView)
-        tagData = tagData.filter{ $0.name != title }
-        
-        originalTagList.forEach {
-            if title == $0.name {
-                tagList.append($0)
+    @objc func tagRemoveButtonPressed(_ sender: UIButton){
+//        contentView.remov
+        print("tag: \(sender.tag)")
+    }
+    
+    @objc func textFieldDidChange() {
+        if let text = tagTextField.text {
+            let registText = text + " 등록하기"
+            tagList.insert(TagModel(name: registText, count: 0), at: 0)
+            tagList = tagList.filter {
+                ($0.name?.contains(text))!
             }
+            reloadTable()
         }
-               
-        tagList.sort { $0.count! > $1.count! }
-        reloadTable()
     }
 }
 
@@ -154,8 +155,7 @@ extension TagVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         if tagData.count < 5 {
-            tagListView.addTag(tagList[indexPath.row].name!)
-            tagData.append(TagModel(name: tagList[indexPath.row].name, count: tagList[indexPath.row].count))
+            addTagAction(TagModel(name: tagList[indexPath.row].name, count: tagList[indexPath.row].count))
             tagList = tagList.filter({
                 $0.name != tagList[indexPath.row].name
             })
@@ -176,16 +176,14 @@ extension TagVC {
         tagListTableView.dataSource = self
         tagListTableView.delegate = self
         tagListTableView.register(UINib(nibName: "TagListTableViewCell", bundle: nil), forCellReuseIdentifier: "TagListTableViewCell")
-        tagListView.backgroundColor = .mainBackground
     }
     
     func layout() {
         view.addSubview(topView)
-        view.addSubview(tagListBackground)
         view.addSubview(tfView)
         view.addSubview(tagListTableView)
         topView.addSubview(tagPostButton)
-        
+        tagListLayout()
         topView.snp.makeConstraints {
             $0.top.equalToSuperview()
             $0.centerX.equalToSuperview()
@@ -198,29 +196,38 @@ extension TagVC {
             $0.top.equalToSuperview().offset(Device.heightScale(60))
         }
         
-        tagListBackground.snp.makeConstraints {
-            $0.top.equalTo(topView.snp.bottom)
-            $0.width.equalToSuperview()
-            $0.centerX.equalToSuperview()
-            $0.height.equalTo(Device.heightScale(90))
-        }
-        tagListView.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(10)
-            $0.bottom.equalToSuperview().offset(-10)
-            $0.leading.equalToSuperview().offset(10)
-            $0.trailing.equalToSuperview().offset(-10)
-        }
         tfView.snp.makeConstraints {
-            $0.top.equalTo(tagListView.snp.bottom)
+            $0.top.equalTo(tagScrollView.snp.bottom)
             $0.centerX.equalToSuperview()
             $0.width.equalToSuperview()
             $0.height.equalTo(Device.heightScale(50))
         }
+        
         tagListTableView.snp.makeConstraints {
             $0.centerX.equalToSuperview()
             $0.top.equalTo(tfView.snp.bottom)
             $0.width.equalToSuperview()
             $0.bottom.equalToSuperview()
         }
+    }
+    
+    func tagListLayout() {
+        view.addSubview(tagScrollView)
+        tagScrollView.addSubview(contentView)
+        
+        tagScrollView.snp.makeConstraints {
+            $0.top.equalTo(topView.snp.bottom)
+            $0.leading.equalToSuperview()
+            $0.trailing.equalToSuperview()
+            $0.height.equalTo(Device.heightScale(50))
+        }
+        
+        contentView.snp.makeConstraints {
+            $0.height.equalTo(Device.heightScale(30))
+            $0.leading.equalToSuperview().offset(Device.widthScale(10))
+            $0.trailing.equalToSuperview().offset(Device.widthScale(-10))
+            $0.centerY.equalToSuperview()
+        }
+        
     }
 }

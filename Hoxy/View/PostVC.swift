@@ -20,7 +20,6 @@ class PostVC: BaseViewController, SingleDataDelegate, PostDataDelegate {
     
     private var postDataManager = PostDataManager()
     private var viewModel = PostViewModel()
-    private var getTag = TagVC()
     
     var postID = PostDataModel().id
     var posts: [PostDataModel] = []
@@ -231,7 +230,7 @@ class PostVC: BaseViewController, SingleDataDelegate, PostDataDelegate {
         postDataManager.singleDelegate = self
         postDataManager.delegate = self
         postDataManager.requestSingleData(postID)
-        getTag.delegate = self
+       
         configureUI()
     }
     
@@ -398,11 +397,6 @@ class PostVC: BaseViewController, SingleDataDelegate, PostDataDelegate {
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
-}
-extension PostVC: TagDelegate {
-    func getTagList(_ tagList: [TagModel]) {
-        print("tagList \(tagList)")
-    }
 }
 
 // MARK: Action Menu
