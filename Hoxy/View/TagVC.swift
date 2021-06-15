@@ -72,6 +72,7 @@ class TagVC: UIViewController, RequestTagProtocol{
     }
         
     var tagList = [TagModel]()
+    var oriTagList = [TagModel]()
     var dataManager = TagDataManager()
     var tagData = [TagModel]()
     // MARK: - Lifecycle
@@ -100,6 +101,7 @@ class TagVC: UIViewController, RequestTagProtocol{
     // MARK: - Helpers
     func getTagList(_ tagDataList: [TagModel]) {
         tagList = tagDataList
+        oriTagList = tagDataList
         reloadTable()
     }
     
@@ -114,29 +116,45 @@ class TagVC: UIViewController, RequestTagProtocol{
             tagData.append(model)
             let tag = TagItem(model.name!, button: true)
             contentView.addArrangedSubview(tag)
+            tag.tagButton.title = model.name
+            tag.tagButton.count = model.count
             tag.tagButton.addTarget(self, action: #selector(tagRemoveButtonPressed(_:)), for: .touchUpInside)
-            tag.tagButton.tag = contentView.subviews.endIndex
             tag.layer.cornerRadius = 15
+            tagScrollView.scroll(to: .right)
         }
         
         tagTextField.text = ""
         print("tagData: \(tagData)")
     }
     
-    @objc func tagRemoveButtonPressed(_ sender: UIButton){
-//        contentView.remov
-        print("tag: \(sender.tag)")
+    @objc func tagRemoveButtonPressed(_ sender: RemoveButton){
+        guard let tagView = sender.superview?.superview else { return }
+        tagData = tagData.filter({ $0.name != sender.title })
+        oriTagList.forEach {
+            if $0.name == sender.title {
+                tagList.append(TagModel(name: sender.title, count: sender.count))
+            }
+        }
+        
+        tagList = tagList.sorted(by: {
+            $0.count! > $1.count!
+        })
+        tagView.removeFromSuperview()
+        reloadTable()
     }
     
     @objc func textFieldDidChange() {
         if let text = tagTextField.text {
             let registText = text + " 등록하기"
             tagList.insert(TagModel(name: registText, count: 0), at: 0)
-            tagList = tagList.filter {
+            tagList = oriTagList.filter {
                 ($0.name?.contains(text))!
             }
-            reloadTable()
+           
+        } else if tagTextField.text == "" {
+            tagList.remove(at: 0)
         }
+        reloadTable()
     }
 }
 
@@ -172,7 +190,6 @@ extension TagVC {
     }
     func setting() {
         topView.back.addTarget(self, action: #selector(dismissAction), for: .touchUpInside)
-        
         tagListTableView.dataSource = self
         tagListTableView.delegate = self
         tagListTableView.register(UINib(nibName: "TagListTableViewCell", bundle: nil), forCellReuseIdentifier: "TagListTableViewCell")
@@ -231,3 +248,4 @@ extension TagVC {
         
     }
 }
+

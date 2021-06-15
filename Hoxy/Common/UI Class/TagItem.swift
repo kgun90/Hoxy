@@ -15,7 +15,7 @@ class TagItem: UIView {
         $0.spacing = 10
     }
     let tagTitle = UILabel()
-    let tagButton = UIButton()
+    let tagButton = RemoveButton()
     
     init(_ title: String, _ titleColor: UIColor = .white, _ backgroundColor: UIColor = .hashtagBlue,  button: Bool = false) {
         super.init(frame: .zero)
@@ -56,4 +56,9 @@ class TagItem: UIView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+}
+
+class RemoveButton: UIButton {
+    var title: String?
+    var count: Int?
 }
