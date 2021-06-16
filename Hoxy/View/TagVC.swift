@@ -11,16 +11,31 @@ protocol TagDelegate {
     func getTagList(_ tagList: [TagModel])
 }
 
+enum KeyTyping {
+    case on, off
+    
+    mutating func toggle() {
+        switch self {
+        case .on:
+            self = .off
+        case .off:
+            self = .on
+        }
+    }
+}
+
 class TagVC: UIViewController, RequestTagProtocol{
     var delegate: TagDelegate?
+    
+    var state: Bool = false
     
     // MARK: - Properties
     let topView = TopView("태그추가", .mainYellow, "multiply")
     lazy var tagPostButton = UIButton().then {
         $0.setTitle("등록", for: .normal)
         $0.titleLabel?.font = .BasicFont(.medium, size: 15)
-        $0.titleLabel?.textColor = .hashtagBlue
         $0.addTarget(self, action: #selector(tagPostAction), for: .touchUpInside)
+        $0.tintColor = .hashtagBlue
     }
     
     lazy var tagListTableView = UITableView()
@@ -75,6 +90,8 @@ class TagVC: UIViewController, RequestTagProtocol{
     var oriTagList = [TagModel]()
     var dataManager = TagDataManager()
     var tagData = [TagModel]()
+    
+    var keyState: KeyTyping = .off
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -106,6 +123,7 @@ class TagVC: UIViewController, RequestTagProtocol{
     }
     
     func reloadTable() {
+        tagList = tagList.sorted(by: { $0.count! > $1.count!})
         DispatchQueue.main.async {
             self.tagListTableView.reloadData()
         }
@@ -113,13 +131,16 @@ class TagVC: UIViewController, RequestTagProtocol{
     
     func addTagAction(_ model: TagModel) {
         if tagData.count < 5{
+            tagList = tagList.filter({ $0.name != model.name })
             tagData.append(model)
+            
             let tag = TagItem(model.name!, button: true)
-            contentView.addArrangedSubview(tag)
             tag.tagButton.title = model.name
             tag.tagButton.count = model.count
             tag.tagButton.addTarget(self, action: #selector(tagRemoveButtonPressed(_:)), for: .touchUpInside)
-            tag.layer.cornerRadius = 15
+            
+            contentView.addArrangedSubview(tag)
+            
             tagScrollView.scroll(to: .right)
         }
         
@@ -135,30 +156,28 @@ class TagVC: UIViewController, RequestTagProtocol{
                 tagList.append(TagModel(name: sender.title, count: sender.count))
             }
         }
-        
-        tagList = tagList.sorted(by: {
-            $0.count! > $1.count!
-        })
+      
         tagView.removeFromSuperview()
         reloadTable()
     }
     
-    @objc func textFieldDidChange() {
-        if let text = tagTextField.text {
-            let registText = text + " 등록하기"
-            tagList.insert(TagModel(name: registText, count: 0), at: 0)
-            tagList = oriTagList.filter {
-                ($0.name?.contains(text))!
-            }
-           
-        } else if tagTextField.text == "" {
-            tagList.remove(at: 0)
+    @objc func textFieldDidChange() {        
+        if tagTextField.text == "" {
+            tagList = oriTagList
+        } else {
+            
+            tagList.insert(TagModel(name: tagTextField.text, count: 0), at: 0)
+            tagList = oriTagList.filter({
+                $0.name == tagTextField.text
+            })
         }
+        tagList.removeFirst()
         reloadTable()
     }
 }
 
 extension TagVC: UITableViewDelegate, UITableViewDataSource {
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return tagList.count
     }
@@ -171,15 +190,8 @@ extension TagVC: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
-        if tagData.count < 5 {
-            addTagAction(TagModel(name: tagList[indexPath.row].name, count: tagList[indexPath.row].count))
-            tagList = tagList.filter({
-                $0.name != tagList[indexPath.row].name
-            })
-        }
-       
-        reloadTable()
+        let model = TagModel(name: tagList[indexPath.row].name, count: tagList[indexPath.row].count)
+        addTagAction(model)
     }
 }
 
@@ -207,10 +219,10 @@ extension TagVC {
             $0.width.equalToSuperview()
             $0.height.equalTo(Device.heightScale(88))
         }
-        
+
         tagPostButton.snp.makeConstraints {
             $0.trailing.equalToSuperview().offset(Device.widthScale(-30))
-            $0.top.equalToSuperview().offset(Device.heightScale(60))
+            $0.centerY.equalTo(topView.back.snp.centerY)
         }
         
         tfView.snp.makeConstraints {

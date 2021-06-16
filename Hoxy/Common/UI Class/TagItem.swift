@@ -20,12 +20,11 @@ class TagItem: UIView {
     init(_ title: String, _ titleColor: UIColor = .white, _ backgroundColor: UIColor = .hashtagBlue,  button: Bool = false) {
         super.init(frame: .zero)
         
-     
+        layer.cornerRadius = 15
         self.backgroundColor = backgroundColor
         
         tagTitle.text = title
         tagTitle.textColor = titleColor
-        
         addSubview(tagStackView)
         tagStackView.addArrangedSubview(tagTitle)
         
