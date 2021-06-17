@@ -75,19 +75,39 @@ class WriteVC: BaseViewController {
             $0.width.equalTo(Device.widthScale(24))
             $0.height.equalTo(Device.heightScale(24))
         }
-        
-        $0.addSubview(hashTagTextField)
-        
-        hashTagTextField.snp.makeConstraints {
-            $0.centerY.equalToSuperview()
-            $0.leading.equalToSuperview().offset(Device.widthScale(47))
-            $0.trailing.equalToSuperview().offset(Device.widthScale(-10))
-        }
+
     }
 
-    lazy var hashTagTextField = UITextField().then {
-        $0.font = .BasicFont(.medium, size: 12)
-        $0.textColor = .hashtagBlue
+    lazy var tagView = UIView().then {
+        $0.backgroundColor = UIColor(hex: 0xDDDDDD)
+        $0.addSubview(tagScrollView)
+        tagScrollView.snp.makeConstraints { sv in
+            sv.top.equalToSuperview()
+            sv.bottom.equalToSuperview()
+            sv.leading.equalToSuperview()
+            sv.trailing.equalToSuperview()
+        }
+    }
+    
+    lazy var tagScrollView = UIScrollView().then {
+        $0.backgroundColor = UIColor(hex: 0xDDDDDD)
+        $0.showsHorizontalScrollIndicator = false
+        
+        $0.addSubview(tagStackView)
+        
+        tagStackView.snp.makeConstraints { sv in
+            sv.height.equalTo(Device.heightScale(30))
+            sv.leading.equalToSuperview().offset(Device.widthScale(10))
+            sv.trailing.equalToSuperview().offset(Device.widthScale(-10))
+            sv.centerY.equalToSuperview()
+        }
+    }
+    
+    lazy var tagStackView = UIStackView().then {
+        $0.axis = .horizontal
+        $0.alignment = .fill
+        $0.distribution = .fill
+        $0.spacing = Device.widthScale(10)
     }
     
     lazy var nicknameView = UIView().then {
@@ -172,11 +192,6 @@ class WriteVC: BaseViewController {
     }
         
     func hashTagSet() {
-        if !hashTagTextField.text!.isEmpty {
-            let original = hashTagTextField.text!
-            let removeHash = original.replacingOccurrences(of: "#", with: "", options: NSString.CompareOptions.literal, range: nil).components(separatedBy: " ")
-            hashTag = removeHash
-        }
         hashTag.insert(communicationLevelView.textField.text ?? "", at: 0)
         postModel.tag = hashTag
     }
@@ -200,7 +215,13 @@ class WriteVC: BaseViewController {
 }
 
 extension WriteVC: TagDelegate {
-    func getTagList(_ tagList: [TagModel]) {
+    func getTagList(_ tagList: [String]) {
+        tagList.forEach {
+            postModel.tag.append($0)
+            let tag = TagItem($0)
+            tag.tagButton.title = $0
+            tagStackView.addArrangedSubview(tag)
+        }
         print("tagList \(tagList)")
     }
 }
@@ -449,10 +470,6 @@ extension WriteVC: UIPickerViewDelegate, UIPickerViewDataSource {
             postModel.emoji = set.communicationEmoji[row][emojiRand]
             print(postModel.emoji)
             postModel.communication = row
-//            if postModel.tag[0] != set.communicationLevel[row] {
-//                postModel.tag.insert(set.communicationLevel[row], at: 0)
-//                postModel.tag.append(set.communicationLevel[row])
-//            }
           
         case .meetingDuration:
             meetingDurationView.textField.text = set.meetingDuration[row]
@@ -517,7 +534,7 @@ extension WriteVC {
         binding()
         setting()
         layout()
-        tagViewAction()
+       
     }
     
     func binding() {
@@ -544,7 +561,7 @@ extension WriteVC {
         communicationLevelView.textField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
         meetingDurationView.textField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
 //        hashTagTextField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
-        hashTagTextField.addTarget(self, action: #selector(tagViewAction), for: .touchUpInside)
+//        hashTagTextField.addTarget(self, action: #selector(tagViewAction), for: .touchUpInside)
         submitButton.addTarget(self, action: #selector(submitAction), for: .editingChanged)
     }
     
@@ -565,6 +582,7 @@ extension WriteVC {
             $0.width.equalToSuperview()
             $0.height.equalTo(Device.heightScale(50))
         }
+        
         titleTextField.snp.makeConstraints {
             $0.leading.equalToSuperview().offset(Device.widthScale(20))
             $0.centerY.equalToSuperview()
@@ -576,46 +594,54 @@ extension WriteVC {
             $0.width.equalTo(view.frame.size.width / 2)
             $0.height.equalTo(Device.widthScale(50))
         }
+        
         headCountView.snp.makeConstraints {
             $0.top.equalTo(titleTextFieldView.snp.bottom)
             $0.trailing.equalToSuperview()
             $0.width.equalTo(view.frame.size.width / 2)
             $0.height.equalTo(Device.widthScale(50))
         }
+        
         communicationLevelView.snp.makeConstraints {
             $0.top.equalTo(meetingLocationView.snp.bottom)
             $0.centerX.equalToSuperview()
             $0.width.equalToSuperview()
             $0.height.equalTo(Device.heightScale(50))
         }
+        
         startTimeView.snp.makeConstraints {
             $0.top.equalTo(communicationLevelView.snp.bottom)
             $0.leading.equalToSuperview()
             $0.width.equalTo(view.frame.size.width / 2)
             $0.height.equalTo(Device.heightScale(50))
         }
+        
         meetingDurationView.snp.makeConstraints {
             $0.top.equalTo(communicationLevelView.snp.bottom)
             $0.trailing.equalToSuperview()
             $0.width.equalTo(view.frame.size.width / 2)
             $0.height.equalTo(Device.heightScale(50))
         }
+        
         contentTextView.snp.makeConstraints {
             $0.top.equalTo(meetingDurationView.snp.bottom)
             $0.centerX.equalToSuperview()
             $0.width.equalToSuperview()
             $0.height.equalTo(Device.heightScale(280))
         }
+        
         contentCountLabel.snp.makeConstraints {
             $0.bottom.equalTo(contentTextView.snp.bottom)
             $0.trailing.equalTo(contentTextView.snp.trailing).offset(Device.widthScale(-20))
         }
+        
         submitButton.snp.makeConstraints {
             $0.centerX.equalToSuperview()
             $0.bottom.equalToSuperview()
             $0.width.equalToSuperview()
             $0.height.equalTo(Device.heightScale(108))
         }
+        
         layoutHashtag()
         layoutNicknameView()
         layoutWriteDescription()
@@ -623,8 +649,12 @@ extension WriteVC {
     }
     
     func layoutHashtag(){
-        view.addSubview(hashTagView)
-        hashTagView.snp.makeConstraints {
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(tagViewAction))
+        
+        tagView.addGestureRecognizer(gesture)
+        view.addSubview(tagView)
+        
+        tagView.snp.makeConstraints {
             $0.top.equalTo(contentTextView.snp.bottom)
             $0.centerX.equalToSuperview()
             $0.width.equalToSuperview()
@@ -632,12 +662,13 @@ extension WriteVC {
         }
     }
     
+    
     func layoutNicknameView() {
         nicknameView.addSubview(nicknameLabel)
         view.addSubview(nicknameView)
         
         nicknameView.snp.makeConstraints {
-            $0.top.equalTo(hashTagView.snp.bottom)
+            $0.top.equalTo(tagView.snp.bottom)
             $0.centerX.equalToSuperview()
             $0.width.equalToSuperview()
             $0.height.equalTo(Device.heightScale(45))
@@ -673,7 +704,7 @@ extension WriteVC {
         startTimeView.addBorder(toSide: .right, color: .mainBackground, borderWidth: 0.5)
         meetingDurationView.addBorder(toSide: .bottom, color: .mainBackground, borderWidth: 0.5)
         contentTextView.addBorder(toSide: .bottom, color: .mainBackground, borderWidth: 0.5)
-        hashTagView.addBorder(toSide: .bottom, color: .mainBackground, borderWidth: 0.5)
+        tagView.addBorder(toSide: .bottom, color: .mainBackground, borderWidth: 0.5)
         nicknameView.addBorder(toSide: .bottom, color: .mainBackground, borderWidth: 0.5)
     }
     

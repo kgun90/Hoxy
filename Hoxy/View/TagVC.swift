@@ -8,7 +8,7 @@
 import UIKit
 
 protocol TagDelegate {
-    func getTagList(_ tagList: [TagModel])
+    func getTagList(_ tagList: [String])
 }
 
 enum KeyTyping {
@@ -51,7 +51,7 @@ class TagVC: UIViewController, RequestTagProtocol{
         $0.distribution = .fill
         $0.alignment = .fill
         $0.translatesAutoresizingMaskIntoConstraints = false
-        $0.spacing = 10
+        $0.spacing = Device.widthScale(10)
     }
     
     lazy var tfView = UIView().then {
@@ -89,7 +89,7 @@ class TagVC: UIViewController, RequestTagProtocol{
     var tagList = [TagModel]()
     var oriTagList = [TagModel]()
     var dataManager = TagDataManager()
-    var tagData = [TagModel]()
+    var tagData = [String]()
     
     var keyState: KeyTyping = .off
     // MARK: - Lifecycle
@@ -123,20 +123,18 @@ class TagVC: UIViewController, RequestTagProtocol{
     }
     
     func reloadTable() {
-        tagList = tagList.sorted(by: { $0.count! > $1.count!})
         DispatchQueue.main.async {
             self.tagListTableView.reloadData()
         }
     }
     
-    func addTagAction(_ model: TagModel) {
+    func addTagAction(_ title: String) {
         if tagData.count < 5{
-            tagList = tagList.filter({ $0.name != model.name })
-            tagData.append(model)
+            tagData.append(title)
             
-            let tag = TagItem(model.name!, button: true)
-            tag.tagButton.title = model.name
-            tag.tagButton.count = model.count
+            let tag = TagItem(title, button: true)
+            tag.tagButton.title = title
+         
             tag.tagButton.addTarget(self, action: #selector(tagRemoveButtonPressed(_:)), for: .touchUpInside)
             
             contentView.addArrangedSubview(tag)
@@ -144,35 +142,41 @@ class TagVC: UIViewController, RequestTagProtocol{
             tagScrollView.scroll(to: .right)
         }
         
-        tagTextField.text = ""
-        print("tagData: \(tagData)")
+        reloadTagList()
+        reloadTable()
     }
     
     @objc func tagRemoveButtonPressed(_ sender: RemoveButton){
         guard let tagView = sender.superview?.superview else { return }
-        tagData = tagData.filter({ $0.name != sender.title })
-        oriTagList.forEach {
-            if $0.name == sender.title {
-                tagList.append(TagModel(name: sender.title, count: sender.count))
-            }
-        }
-      
         tagView.removeFromSuperview()
+        
+        tagData = tagData.filter({ $0 != sender.title })
+        
+        reloadTagList()
         reloadTable()
     }
     
-    @objc func textFieldDidChange() {        
-        if tagTextField.text == "" {
-            tagList = oriTagList
-        } else {
-            
-            tagList.insert(TagModel(name: tagTextField.text, count: 0), at: 0)
+    @objc func textFieldDidChange() {
+        if tagTextField.text != "" {
             tagList = oriTagList.filter({
-                $0.name == tagTextField.text
+                ($0.name?.contains(tagTextField.text!))!
             })
+            tagList.insert(TagModel(name: tagTextField.text! + " 등록하기", count: 0), at: 0)
+        } else {
+            reloadTagList()
         }
-        tagList.removeFirst()
+
         reloadTable()
+    }
+    
+    func reloadTagList() {
+        tagList = oriTagList.filter({
+            !tagData.contains($0.name!)
+        })
+        
+        tagList = tagList.sorted(by: { $0.count! > $1.count!})
+        reloadTable()
+       
     }
 }
 
@@ -190,8 +194,12 @@ extension TagVC: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let model = TagModel(name: tagList[indexPath.row].name, count: tagList[indexPath.row].count)
-        addTagAction(model)
+        let title = tagList[indexPath.row].name?.filter({
+            !" 등록하기".contains($0)
+        })
+
+        addTagAction(title ?? "")
+        tagTextField.text = ""
     }
 }
 
