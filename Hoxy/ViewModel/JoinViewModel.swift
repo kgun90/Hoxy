@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit.UIColor
+import CoreLocation
 
 protocol PasswordCheckProtocol {
     var passAreMatched: Bool { get }
@@ -24,7 +25,8 @@ struct JoinViewModel {
     let passText = Observable("")
     let passCheckText = Observable("")
     let phoneNumText = Observable("")
-    
+    let userTown = Observable("")
+    let userCity = Observable("")
     
     let emailDes = Observable(DefaultSetModel())
     let passDes = Observable(DefaultSetModel())
@@ -34,7 +36,8 @@ struct JoinViewModel {
     let authButton = Observable(DefaultSetModel())
     let moveNextButton = Observable(DefaultSetModel())
         
-    
+    let memberModel = Observable(MemberModel(dictionary: [:]))
+        
     var passAreMatched: Bool {
         return self.password == self.passCheck
     }
@@ -46,6 +49,7 @@ struct JoinViewModel {
            self.authNum?.validateAuthCode() ?? false,
            passAreMatched,
            validAuth ?? false {
+            
             return true
         }
         return false
@@ -136,5 +140,23 @@ struct JoinViewModel {
         passText.value = ""
         passDes.value.text = ""
         
+    }
+    
+    func getUserLocation(_ location: CLLocation) {
+        let geocode = CLGeocoder()
+        geocode.reverseGeocodeLocation(location) { (placemark, error) in
+            guard
+                let mark = placemark,
+                let city = mark.first?.locality,
+                let town = mark.first?.thoroughfare
+            else {
+                return
+            }
+            self.userTown.value = town
+            self.userCity.value = city
+            
+            LocationService.saveCurrentLocation(town: town, location: location)
+            LocationService.saveUserLocation(town: town, location: location)
+        }
     }
 }

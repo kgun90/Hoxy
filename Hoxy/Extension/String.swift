@@ -94,6 +94,15 @@ extension String {
         return attributedString
     }
     
+    func attributedText(withString string: String, boldString: String, font: UIFont, boldFont: UIFont) -> NSAttributedString {
+        let attributedString = NSMutableAttributedString(string: string,
+                                                     attributes: [NSAttributedString.Key.font: font])
+        let boldFontAttribute: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: boldFont]
+        let range = (string as NSString).range(of: boldString)
+        attributedString.addAttributes(boldFontAttribute, range: range)
+        return attributedString
+    }
+    
     func attributedText(withString string: String, coloredString: String, font: UIFont) -> NSAttributedString {
         let attributedString = NSMutableAttributedString(string: string,
                                                      attributes: [NSAttributedString.Key.font: font])
@@ -104,7 +113,36 @@ extension String {
     }
     
     func nicknameGenerate() -> String{
-        return "\(set.title[Int.random(in: 0 ..< set.title.count)]) \(set.nickname[Int.random(in: 0 ..< set.nickname.count)])"
+        return "\(Constants.title[Int.random(in: 0 ..< Constants.title.count)]) \(Constants.nickname[Int.random(in: 0 ..< Constants.nickname.count)])"
+    }
+    
+    func getMeetingTime(_ start: Date, _ duration: Int) -> String{
+        let startTimeFormat = DateFormatter().then {
+            $0.dateFormat = "MM.dd hh시 mm분"
+        }
+        let startTime = startTimeFormat.string(from: start)
+        
+        let endTimeFormat = DateFormatter().then {
+            $0.dateFormat = "hh시 mm분"
+        }
+        let end = start.addingTimeInterval(TimeInterval(duration * 60))
+        let endTime = endTimeFormat.string(from: end)
+        let timedifference = Calendar.current.dateComponents([.hour, .minute], from: start, to: end)
+        
+        if let hour = timedifference.hour, let minute = timedifference.minute {
+            return  "\(startTime)~\(endTime) \(hour)시간 \(minute)분"
+        } else {
+            return ""
+        }
+    }
+    
+    func getMeetingTime(_ date: Date) -> String{
+        let startTimeFormat = DateFormatter().then {
+            $0.dateFormat = "MM/dd hh시mm분 예정"
+        }
+        let startTime = startTimeFormat.string(from: date)
+        
+        return startTime
     }
 }
  

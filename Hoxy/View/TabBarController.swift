@@ -10,7 +10,7 @@ import Then
 
 class TabBarController: UITabBarController, UITabBarControllerDelegate {
     let home = HomeVC()
-    let unknown = UnKnownVC()
+    let unknown = AlertVC()
     let chat = ChatListVC()
     let myPage = MyPageVC()
     

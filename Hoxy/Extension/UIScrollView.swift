@@ -18,7 +18,6 @@ public enum ScrollDirection {
 public extension UIScrollView {
 
     func scroll(to direction: ScrollDirection) {
-
         DispatchQueue.main.async {
             switch direction {
             case .top:

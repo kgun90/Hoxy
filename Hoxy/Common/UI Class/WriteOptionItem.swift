@@ -20,7 +20,7 @@ class WriteOptionItem: UIView {
     
     func labelSetting(_ placeHolder: String) {
         
-        textField.attributedPlaceholder = NSAttributedString(string: "\(placeHolder) >", attributes: [NSAttributedString.Key.foregroundColor: UIColor.black])
+        textField.attributedPlaceholder = NSAttributedString(string: "\(placeHolder) >", attributes: [NSAttributedString.Key.foregroundColor: UIColor.init(hex: 0x9EA0AB), NSAttributedString.Key.font : UIFont.BasicFont(.light, size: 16)])
  
         
         addSubview(textField)

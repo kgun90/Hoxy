@@ -68,11 +68,13 @@ class HomeTableViewCell: UITableViewCell {
         $0.textColor = UIColor(hex: 0x6c6c6c)
     }
 
+    var postData: PostDataModel? {
+        didSet { configure() }
+    }
     // MARK: - Lifecycle
     override func awakeFromNib() {
         super.awakeFromNib()
         configureUI()
-        
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -157,5 +159,25 @@ class HomeTableViewCell: UITableViewCell {
         }
     }
     
-  
+    func configure() {
+        guard let data = postData else { return }
+        
+        emojiLable.text = data.emoji
+        titleLabel.text = data.title
+        locationLabel.text = data.town
+        writeTimeLabel.text = data.date.relativeTime_abbreviated
+        viewsLabel.text = String(data.view)
+        meetingTimeLabel.text = "".getMeetingTime(data.start, data.duration)
+        hashTagLabel.text = "#" + data.tag.joined(separator: "#")
+        
+        ChatDataManager.getChattingData(byReference: data.chat!) { chat in
+            let memberCount = chat.member.count
+            self.attenderCountLabel.text = " \(memberCount)/\(data.headcount)"
+        }
+        guard let writer = data.writer else { return }
+        
+        UserDataManager.getUserData(byReference: writer) { data in
+            self.gradeButton.getGrade(.tableCell, data.birth)
+        }
+    }
 }

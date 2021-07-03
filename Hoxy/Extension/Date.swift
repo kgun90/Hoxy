@@ -33,5 +33,13 @@ extension Date {
 
         return dateComponents.date ?? self
     }
+
+    var hhmm: String {
+        let format = DateFormatter().then {
+            $0.dateFormat = "MM/dd HH:mm"
+        }
+        let result = format.string(from: self)
+        return result
+    }
 }
 

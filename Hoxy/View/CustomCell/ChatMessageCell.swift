@@ -6,24 +6,34 @@
 //
 
 import UIKit
-
+protocol ChateMessageCellDelegate: AnyObject {
+    func showChatUserProfile(senderInfo: SenderInfoModel)
+}
 class ChatMessageCell: UITableViewCell {
-   
+    weak var delegate: ChateMessageCellDelegate?
+    
     @IBOutlet weak var nicknameLabel: UILabel!
     @IBOutlet weak var emojiButton: UIButton!
-    @IBOutlet weak var contentLabel: UILabel!
+    @IBOutlet weak var chatLabel: UILabel!
     @IBOutlet weak var contentFrameView: UIView!
+    @IBOutlet weak var dateLabel: UILabel!
     
     @IBOutlet weak var messageCellStackView: UIStackView!
     var senderID = ""
     var senderNickname = ""
+    var chatID = ""
+    
+    var chatData : ChatModel? {
+        didSet { configure() }
+    }
+    
+    var senderInfo: SenderInfoModel?
 
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
         contentFrameView.layer.cornerRadius = 8
-        contentView.backgroundColor = .mainBackground
-  
+        self.backgroundColor = .clear
     }
     
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -34,10 +44,12 @@ class ChatMessageCell: UITableViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        contentLabel.text = nil
+        chatLabel.text = nil
+        nicknameLabel.text = nil
+        dateLabel.text = nil
+        
         nicknameLabel.isHidden = false
         emojiButton.isHidden = false
-        contentFrameView.backgroundColor = nil
       
         updateLayout()
     }
@@ -45,5 +57,28 @@ class ChatMessageCell: UITableViewCell {
     func updateLayout(){
         self.setNeedsLayout()
         self.layoutIfNeeded()
+    }
+    
+    @objc func handleEmojiButton(_ sender: UIButton) {
+        delegate?.showChatUserProfile(senderInfo: self.senderInfo!)
+    }
+    
+    func configure() {
+        guard let data = chatData else { return }
+        
+        UserDataManager.getUserData(byReference: data.sender) { member in
+            let id = data.sender.documentID
+
+            ChatDataManager.getSenderInfoData(chatID: self.chatID, senderID: id) { data in
+                self.senderInfo = data
+                self.nicknameLabel.text = data.nickname
+            }
+            
+            self.emojiButton.setTitle(member.emoji, for: .normal)
+            self.emojiButton.addTarget(self, action: #selector(self.handleEmojiButton(_:)), for: .touchUpInside)
+        }
+      
+        chatLabel.text = data.content
+        dateLabel.text = data.date.hhmm
     }
 }

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="KGk-i7-Jjw" customClass="BlockUserCell" customModule="Hoxy" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="40"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="375" height="40"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="nickname" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5zw-bw-cOl">
+                        <rect key="frame" x="42" y="10" width="66" height="20"/>
+                        <fontDescription key="fontDescription" name="AppleSDGothicNeo-SemiBold" family="Apple SD Gothic Neo" pointSize="16"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="town" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xNu-Ir-NO5">
+                        <rect key="frame" x="113" y="13" width="26" height="15"/>
+                        <fontDescription key="fontDescription" name="AppleSDGothicNeo-Regular" family="Apple SD Gothic Neo" pointSize="12"/>
+                        <color key="textColor" red="0.43921568630000002" green="0.43921568630000002" blue="0.43921568630000002" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="😀" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TeR-Hs-hXT">
+                        <rect key="frame" x="13" y="10" width="21" height="20"/>
+                        <fontDescription key="fontDescription" name="AppleSDGothicNeo-SemiBold" family="Apple SD Gothic Neo" pointSize="16"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="date" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XKY-Tp-BaY">
+                        <rect key="frame" x="317.5" y="12.5" width="22.5" height="15"/>
+                        <fontDescription key="fontDescription" name="AppleSDGothicNeo-Regular" family="Apple SD Gothic Neo" pointSize="12"/>
+                        <color key="textColor" red="0.43921568630000002" green="0.43921568630000002" blue="0.43921568630000002" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                <constraints>
+                    <constraint firstItem="XKY-Tp-BaY" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="1NP-hj-J11"/>
+                    <constraint firstItem="5zw-bw-cOl" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="9wi-Xh-82g"/>
+                    <constraint firstItem="5zw-bw-cOl" firstAttribute="leading" secondItem="TeR-Hs-hXT" secondAttribute="trailing" constant="8" symbolic="YES" id="KvP-bF-S5I"/>
+                    <constraint firstAttribute="trailing" secondItem="XKY-Tp-BaY" secondAttribute="trailing" constant="35" id="b2S-rw-eb1"/>
+                    <constraint firstItem="xNu-Ir-NO5" firstAttribute="leading" secondItem="5zw-bw-cOl" secondAttribute="trailing" constant="5" id="dTC-TY-lgP"/>
+                    <constraint firstItem="xNu-Ir-NO5" firstAttribute="bottom" secondItem="5zw-bw-cOl" secondAttribute="bottom" constant="2" id="hWc-uG-NZV"/>
+                    <constraint firstItem="TeR-Hs-hXT" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="oAt-NG-0EH"/>
+                    <constraint firstItem="TeR-Hs-hXT" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="13" id="pbt-dB-UQb"/>
+                </constraints>
+            </tableViewCellContentView>
+            <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
+            <connections>
+                <outlet property="dateLabel" destination="XKY-Tp-BaY" id="RYA-gd-qDj"/>
+                <outlet property="emojiLabel" destination="TeR-Hs-hXT" id="cDE-0T-0st"/>
+                <outlet property="nicknameLabel" destination="5zw-bw-cOl" id="bRW-3G-Tpy"/>
+                <outlet property="townLabel" destination="xNu-Ir-NO5" id="d4M-TO-AUF"/>
+            </connections>
+            <point key="canvasLocation" x="-77.536231884057983" y="57.589285714285708"/>
+        </tableViewCell>
+    </objects>
+</document>

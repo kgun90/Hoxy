@@ -8,9 +8,19 @@
 import Foundation
 import Firebase
 
-struct ChatListModel {
-    var post: DocumentReference?
-    var member: [String] = []
-    var nickname: Dictionary<String, Any> = [:]
-    var chatID: String = ""
-}
+//struct ChatListModel {
+//    var post: DocumentReference?
+//    let member: [String]
+//    let nickname: Dictionary<String, Any>
+//    let chatID: String
+//    
+//    let chat: ChatModel
+//    let id: String
+//    
+//    init(dictionary: [String: Any]) {
+//        post = dictionary["post"] as? DocumentReference
+//        member = dictionary["member"] as? [String] ?? []
+//        nickname = dictionary["nickname"] as? [String: Any] ?? [:]
+//        chatID = dictionary["chatID"] as?
+//    }
+//}

@@ -9,12 +9,12 @@ import Foundation
 import Firebase
 
 struct BlockModel {
-    var user: DocumentReference?
-    var date: Date = Date()
-    var chatting: DocumentReference?
-    var pair: DocumentReference?
-    var active: Bool?
-    
+    let user: DocumentReference?
+    let date: Date
+    let chatting: DocumentReference?
+    let pair: DocumentReference?
+    let active: Bool?
+
     func toDic() -> Dictionary<String, Any?> {
         return [
             "user": user,
@@ -22,6 +22,15 @@ struct BlockModel {
             "chatting": chatting,
             "pair": pair,
             "active": active
-    ]
+        ]
     }
+    
+    init(dictionary: [String: Any?]) {
+        user = dictionary["user"] as? DocumentReference
+        date = (dictionary["date"] as? Timestamp ?? Timestamp()).dateValue()
+        chatting = dictionary["chatting"] as? DocumentReference
+        pair = dictionary["pair"] as? DocumentReference 
+        active = dictionary["active"] as? Bool ?? false
+    }
+   
 }

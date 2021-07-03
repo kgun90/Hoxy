@@ -8,9 +8,21 @@
 import UIKit
 import Firebase
 
-struct set {
+struct Constants {
+    
     static let fs = Firestore.firestore()
 
+    static let MEMBER_COLLECTION = Firestore.firestore().collection(Table.member)
+    static let CHAT_COLLECTION = Firestore.firestore().collection(Table.chatting)
+    static let POST_COLLECTION = Firestore.firestore().collection(Table.post)
+    static let REPORT_COLLECTION = Firestore.firestore().collection(Table.report)
+    static let TAG_COLLECTION = Firestore.firestore().collection(Table.tag)
+    
+    static let currentLocation = "current_location"
+    static let currentTown = "current_town"
+    static let userLocation = "user_location"
+    static let userTown = "user_Town"
+    
     struct Table {
         static let member = "member"
         static let chatting = "chatting"
@@ -24,8 +36,8 @@ struct set {
     static let communicationLevel = ["조용히 만나요", "대화는 해요", "재밌게 놀아요"]
     static let headCount = [2, 3, 4]
     static let meetingDuration = ["30분", "1시간", "1시간 30분", "2시간", "2시간 30분", "3시간", "3시간 30분", "4시간"]
-
-    static let communicationDic = ["조용히 만나요": 1, "대화는 해요": 2, "재밌게 놀아요": 3]
+    static let meetingDurationDic = [30 : "30분", 60 : "1시간", 90 : "1시간 30분", 120 : "2시간", 150 : "2시간 30분", 180: "3시간", 210: "3시간 30분", 240: "4시간"]
+    static let communicationDic = [1: "조용히 만나요", 2: "대화는 해요", 3: "재밌게 놀아요"]
     
     static let title = [
         "하얀",

@@ -11,32 +11,45 @@ import Firebase
 struct PostViewModel {
     let applyButton = Observable(PostApplyButtonModel())
     let counterLabel = Observable("")
+    let title = Observable("")
     
-    func applyButtonCheck(_ currentPost: PostDataModel) {
-        if currentPost.writer?.documentID == Auth.auth().currentUser?.uid {
-            submitButtonCondition(.offWriter)
-            return
-        } else {
-            currentPost.chat?.addSnapshotListener({ (snapshot, error) in
-                if let e = error {
-                    print(e.localizedDescription)
-                    return
-                } else {
-                    if let data = snapshot?.data() {
-                        let currentMember = data["member"] as! [String]
-                        counterLabel.value = " \(currentMember.count)/\(currentPost.headcount)"
-                        print(currentMember)
-                        if currentMember.contains(Auth.auth().currentUser!.uid) {
-                            self.submitButtonCondition(.offAlready)
-                            return
-                        } else if currentMember.count == currentPost.headcount {
-                            self.submitButtonCondition(.offOver)
-                            return
-                        }
-                    }
-                }
-            })
+    let post = Observable(PostDataModel(uid: "", dictionary: [:]))
+    let relatedPost = Observable([PostDataModel]())
+
+    func getPostData(postID: String) {
+        PostDataManager.getPostData(byID: postID) { data in
+            self.post.value = data
         }
+    }
+    
+    func getRelatedPostData() {
+        PostDataManager.getPostListData { posts in
+            relatedPost.value = posts.filter({ data in
+                self.post.value.id != data.id && self.post.value.communication == data.communication
+            })
+        }        
+    }
+    
+    func applyButtonCheck(_ currentPost: PostDataModel?) {
+        guard let currentPost = currentPost else { return }
+        
+        ChatDataManager.getChattingData(byReference: currentPost.chat) { data in
+            counterLabel.value = " \(data.member.count)/\(currentPost.headcount)"
+            
+            if currentPost.writer == Auth.auth().currentUser {
+                submitButtonCondition(.offWriter)
+                return
+            } else {
+                if data.member.contains(Auth.auth().currentUser!.uid) {
+                    self.submitButtonCondition(.offAlready)
+                    return
+                } else if data.member.count == currentPost.headcount {
+                    self.submitButtonCondition(.offOver)
+                    return
+                }
+            }
+        }
+        
         submitButtonCondition(.on)
     }
     
@@ -56,5 +69,5 @@ struct PostViewModel {
             
         }
     }
-//    var
+
 }

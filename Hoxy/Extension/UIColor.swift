@@ -26,5 +26,6 @@ extension UIColor {
     class var hashtagBlue: UIColor { #colorLiteral(red: 0.05098039216, green: 0.5490196078, blue: 1, alpha: 1) }
     class var validGreen: UIColor { #colorLiteral(red: 0.4666666687, green: 0.7647058964, blue: 0.2666666806, alpha: 1) }
     class var validRed: UIColor { #colorLiteral(red: 0.8078431487, green: 0.02745098062, blue: 0.3333333433, alpha: 1) }
+    class var disabledGray: UIColor { #colorLiteral(red: 0.5058823529, green: 0.5058823529, blue: 0.5058823529, alpha: 1) }
 
 }

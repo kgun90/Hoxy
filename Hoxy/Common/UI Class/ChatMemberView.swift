@@ -45,14 +45,14 @@ class ChatMemberView: UIView {
         $0.distribution = .fillProportionally
     }
     
-    var sender: String = ""
+    var senderID: String = ""
     
-    init(_ emoji: String, _ nickname: String, writerType: MemberType, memberType: MemberType, sender: String) {
+    init(emoji: String, nickname: String, writerType: MemberType, memberType: MemberType, sender: String) {
         super.init(frame: .zero)
         getMemberData(emoji, nickname, writerType, memberType)
         backgroundColor = .white
        
-        self.sender = sender
+        self.senderID = sender
         
         meView.addSubview(meLabel)
         

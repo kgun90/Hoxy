@@ -21,6 +21,4 @@ extension UIFont {
         return UIFont(name: "AppleSDGothicNeo-\(type.rawValue)", size: size)!
     }
     
-    
-    
 }

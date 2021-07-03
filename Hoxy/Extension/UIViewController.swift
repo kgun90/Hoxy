@@ -155,7 +155,7 @@ extension UIViewController {
     func moveToRoot(_ vc: UIViewController) {
         if let window = UIApplication.shared.windows.first {
             window.rootViewController = vc
-            UIView.transition(with: window, duration: 0.2, options: .transitionCrossDissolve, animations: nil)
+            UIView.transition(with: window, duration: 0.1, options: .transitionCrossDissolve, animations: nil)
         } else {
             vc.modalPresentationStyle = .overFullScreen
             self.present(vc, animated: true, completion: nil)
@@ -165,7 +165,7 @@ extension UIViewController {
     //MARK:    로그인 상태 여부를 판단하여 자동로그인을 한다.
     func loginCheck() {
         if Auth.auth().currentUser?.uid != nil {
-            self.moveToRoot(LocationVC())
+            self.moveToRoot(TabBarController())
         }
     }
 }

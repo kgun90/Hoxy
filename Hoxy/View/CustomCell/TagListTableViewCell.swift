@@ -16,10 +16,11 @@ class TagListTableViewCell: UITableViewCell {
     lazy var countLabel = UILabel().then {
         $0.font = .BasicFont(.semiBold, size: 16)
         $0.textColor = .black
-        $0.text = "Title"
+        $0.text = "count"
     }
     override func awakeFromNib() {
         super.awakeFromNib()
+        countLabel.isHidden = true
         layout()
     }
 

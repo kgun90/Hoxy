@@ -7,6 +7,8 @@
 
 import Foundation
 import UIKit.UIColor
+import CoreLocation
+import Firebase
 
 
 struct EmailLoginViewModel {
@@ -19,6 +21,8 @@ struct EmailLoginViewModel {
     let emailDes = Observable(DefaultSetModel())
     let passDes = Observable(DefaultSetModel())
     let buttonSet = Observable(DefaultSetModel())
+    
+    var manager = LocationManager()
         
     var formIsValid: Bool {
         return self.email.validateEmail() && self.password.validatePassword()
@@ -63,4 +67,5 @@ struct EmailLoginViewModel {
         passDes.value.text = ""
         
     }
+  
 }
