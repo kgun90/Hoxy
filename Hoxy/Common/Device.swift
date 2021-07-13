@@ -53,7 +53,7 @@ struct Device {
     }
     
     static func heightScale(_ size: CGFloat) -> CGFloat {
-        return UIScreen.main.bounds.height * (size / 812)
+        return self.isNotch ? UIScreen.main.bounds.height * (size / 812) : UIScreen.main.bounds.height * (size / 667)
         
     }
     

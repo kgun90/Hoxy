@@ -17,6 +17,7 @@ struct Constants {
     static let POST_COLLECTION = Firestore.firestore().collection(Table.post)
     static let REPORT_COLLECTION = Firestore.firestore().collection(Table.report)
     static let TAG_COLLECTION = Firestore.firestore().collection(Table.tag)
+    static let ALERT_COLLECTION = Firestore.firestore().collection(Table.alert)
     
     static let currentLocation = "current_location"
     static let currentTown = "current_town"
@@ -29,6 +30,7 @@ struct Constants {
         static let post = "post"
         static let report = "report"
         static let tag = "tag"
+        static let alert = "alert"
     }
     
     static let communicationEmoji = [["😷", "🤫", "🤐"], ["😀", "😃", "😄"], ["😆", "🤩", "🥳"]]

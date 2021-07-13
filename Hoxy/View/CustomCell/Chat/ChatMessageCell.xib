@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="201" id="KGk-i7-Jjw" customClass="ChatMessageCell" customModule="Hoxy" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="416" height="201"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="416" height="201"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="EZo-6b-GrM">
+                        <rect key="frame" x="47" y="25" width="67" height="34"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Content" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7bL-if-jwP">
+                                <rect key="frame" x="8" y="8" width="51" height="18"/>
+                                <fontDescription key="fontDescription" name="AppleSDGothicNeo-Regular" family="Apple SD Gothic Neo" pointSize="15"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="7bL-if-jwP" secondAttribute="trailing" constant="8" id="349-td-RM6"/>
+                            <constraint firstAttribute="bottom" secondItem="7bL-if-jwP" secondAttribute="bottom" constant="8" id="OTF-2Z-ocE"/>
+                            <constraint firstItem="7bL-if-jwP" firstAttribute="leading" secondItem="EZo-6b-GrM" secondAttribute="leading" constant="8" id="Zna-Bc-v80"/>
+                            <constraint firstItem="7bL-if-jwP" firstAttribute="top" secondItem="EZo-6b-GrM" secondAttribute="top" constant="8" id="hbf-CN-Su2"/>
+                        </constraints>
+                    </view>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" text="Nickname" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="axE-tw-8v9">
+                        <rect key="frame" x="49" y="3" width="62" height="19"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="19" id="UUf-cl-wMz"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" name="AppleSDGothicNeo-Regular" family="Apple SD Gothic Neo" pointSize="15"/>
+                        <color key="textColor" red="0.18431372549019609" green="0.18431372549019609" blue="0.18431372549019609" alpha="0.84705882352941175" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fu4-aK-bOI">
+                        <rect key="frame" x="5" y="8" width="34" height="48"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="34" id="FXt-0W-Swa"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="30"/>
+                        <state key="normal" title="🥳"/>
+                    </button>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="02/25 12:24" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1fP-ba-FGg">
+                        <rect key="frame" x="124" y="45.5" width="60" height="13.5"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="60" id="uXI-mE-ZkR"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" name="AppleSDGothicNeo-Regular" family="Apple SD Gothic Neo" pointSize="11"/>
+                        <color key="textColor" red="0.43921568630000002" green="0.43921568630000002" blue="0.43921568630000002" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                <constraints>
+                    <constraint firstItem="fu4-aK-bOI" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="8" id="0Dh-wJ-RTJ"/>
+                    <constraint firstItem="axE-tw-8v9" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="3" id="0kb-Qn-hjz"/>
+                    <constraint firstItem="EZo-6b-GrM" firstAttribute="top" secondItem="axE-tw-8v9" secondAttribute="bottom" constant="3" id="ASU-2d-gq4"/>
+                    <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="EZo-6b-GrM" secondAttribute="bottom" priority="750" constant="3" id="GGT-Ej-bZn"/>
+                    <constraint firstItem="axE-tw-8v9" firstAttribute="leading" secondItem="fu4-aK-bOI" secondAttribute="trailing" constant="10" id="SA5-Qp-dea"/>
+                    <constraint firstItem="EZo-6b-GrM" firstAttribute="leading" secondItem="fu4-aK-bOI" secondAttribute="trailing" constant="8" symbolic="YES" id="fFL-Oo-Z2Z"/>
+                    <constraint firstItem="fu4-aK-bOI" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="5" id="fiU-p3-02t"/>
+                    <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="1fP-ba-FGg" secondAttribute="trailing" priority="750" constant="30" id="gTa-OO-x23"/>
+                    <constraint firstItem="1fP-ba-FGg" firstAttribute="leading" secondItem="EZo-6b-GrM" secondAttribute="trailing" constant="10" id="hC5-U6-tHd"/>
+                    <constraint firstItem="1fP-ba-FGg" firstAttribute="bottom" secondItem="EZo-6b-GrM" secondAttribute="bottom" id="zuJ-hB-RnZ"/>
+                </constraints>
+            </tableViewCellContentView>
+            <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
+            <color key="backgroundColor" red="0.2823529541" green="0.62352943419999995" blue="0.97254908080000002" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+            <connections>
+                <outlet property="chatLabel" destination="7bL-if-jwP" id="WNC-tE-YcS"/>
+                <outlet property="contentFrameView" destination="EZo-6b-GrM" id="kYe-Fc-y8d"/>
+                <outlet property="dateLabel" destination="1fP-ba-FGg" id="WnV-SZ-dbY"/>
+                <outlet property="emojiButton" destination="fu4-aK-bOI" id="yH2-XU-Lzn"/>
+                <outlet property="nicknameLabel" destination="axE-tw-8v9" id="zY0-5B-qiX"/>
+            </connections>
+            <point key="canvasLocation" x="-300" y="-10.379464285714285"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>

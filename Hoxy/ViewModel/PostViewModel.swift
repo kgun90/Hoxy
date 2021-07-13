@@ -22,25 +22,32 @@ struct PostViewModel {
         }
     }
     
-    func getRelatedPostData() {
+    func getRelatedPostData() {      
         PostDataManager.getPostListData { posts in
-            relatedPost.value = posts.filter({ data in
-                self.post.value.id != data.id && self.post.value.communication == data.communication
-            })
+            var dataList = [PostDataModel]()
+            dataList = posts.filter{ data in
+                data.id != self.post.value.id && data.communication == self.post.value.communication
+            }
+            relatedPost.value = dataList
         }        
     }
     
     func applyButtonCheck(_ currentPost: PostDataModel?) {
         guard let currentPost = currentPost else { return }
+        guard let currentUser = Auth.auth().currentUser else { return }
         
         ChatDataManager.getChattingData(byReference: currentPost.chat) { data in
             counterLabel.value = " \(data.member.count)/\(currentPost.headcount)"
             
-            if currentPost.writer == Auth.auth().currentUser {
+            if currentPost.writer?.documentID == currentUser.uid {
                 submitButtonCondition(.offWriter)
                 return
             } else {
-                if data.member.contains(Auth.auth().currentUser!.uid) {
+                if currentPost.start < Date() {
+                    self.submitButtonCondition(.offExpired)
+                    return
+                }
+                 else if data.member.contains(currentUser.uid) {
                     self.submitButtonCondition(.offAlready)
                     return
                 } else if data.member.count == currentPost.headcount {
@@ -60,13 +67,18 @@ struct PostViewModel {
         switch state {
         case .on:
             applyButton.value.title = "신청하기"
+            
         case .offOver:
             applyButton.value.title = "인원마감"
+            
         case .offAlready:
             applyButton.value.title = "신청완료"
+            
         case .offWriter:
             applyButton.value.title = "나의모임"
             
+        case .offExpired:
+            applyButton.value.title = "신청기간종료"
         }
     }
 

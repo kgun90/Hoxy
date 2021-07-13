@@ -41,5 +41,17 @@ extension Date {
         let result = format.string(from: self)
         return result
     }
+    
+    var isExpired: Bool {
+        let now = Date()
+        let end = self.addingTimeInterval(TimeInterval(12 * 60 * 60))
+
+        return  now > end ? true : false
+    }
+    
+
+    func getEndtime(start: Date, duration: Int) -> Date{
+        return start.addingTimeInterval(TimeInterval(duration * 60))
+    }
 }
 

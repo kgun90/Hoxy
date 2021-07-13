@@ -13,6 +13,10 @@ enum MemberType {
     case attender
 }
 
+protocol ChatMemberDelegate {
+    func chatMemberAction(id : String)
+}
+
 class ChatMemberView: UIView {
     let emojiButton = UIButton().then {
         $0.titleLabel?.font = .BasicFont(.regular, size: 16)
@@ -46,6 +50,7 @@ class ChatMemberView: UIView {
     }
     
     var senderID: String = ""
+    var delegate: ChatMemberDelegate?
     
     init(emoji: String, nickname: String, writerType: MemberType, memberType: MemberType, sender: String) {
         super.init(frame: .zero)
@@ -53,6 +58,10 @@ class ChatMemberView: UIView {
         backgroundColor = .white
        
         self.senderID = sender
+        
+        let memberProfileGesture = UITapGestureRecognizer(target: self, action: #selector(self.move))
+        memberProfileGesture.numberOfTouchesRequired = 1
+        self.addGestureRecognizer(memberProfileGesture)
         
         meView.addSubview(meLabel)
         
@@ -96,7 +105,6 @@ class ChatMemberView: UIView {
     
     func getMemberData(_ emoji: String, _ nickname: String, _ writerType: MemberType, _ memberType: MemberType) {
         emojiButton.setTitle(emoji, for: .normal)
-//        emojiButton.text = emoji
         nicknameLabel.text = nickname
         if writerType == .writer {
             writerIcon.isHidden = false
@@ -109,8 +117,10 @@ class ChatMemberView: UIView {
         } else {
             meView.isHidden = true
         }
-       
-        
+    }
+    
+    @objc func move() {
+        self.delegate?.chatMemberAction(id: self.senderID)
     }
     
     required init?(coder: NSCoder) {

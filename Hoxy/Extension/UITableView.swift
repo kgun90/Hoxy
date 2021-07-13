@@ -11,11 +11,9 @@ import UIKit
 extension UITableView {
 
     func scrollToBottom(){
-        DispatchQueue.main.async { [self] in            
-            let indexPath = IndexPath(
-                row: self.numberOfRows(inSection:  self.numberOfSections-1) - 1,
-                section: self.numberOfSections - 1)
-           
+        DispatchQueue.main.async { [self] in
+            let indexPath = IndexPath( row: self.numberOfRows(inSection:  self.numberOfSections - 1) - 1, section: self.numberOfSections - 1)
+            Log.any(indexPath)
             if hasRowAtIndexPath(indexPath: indexPath) {
                 self.scrollToRow(at: indexPath, at: .bottom, animated: false)
             }
@@ -28,6 +26,11 @@ extension UITableView {
             if hasRowAtIndexPath(indexPath: indexPath) {
                 self.scrollToRow(at: indexPath, at: .top, animated: false)
            }
+        }
+    }
+    func scrollToNear() {
+        DispatchQueue.main.async {
+            self.scrollToNearestSelectedRow(at: .bottom, animated: false)
         }
     }
 

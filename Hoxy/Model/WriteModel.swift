@@ -23,9 +23,10 @@ struct WriteContentsModel {
     var headCount = 0
     var communication = 0
     var emoji = ""
-    var start = Date()
+    var start: Date?
     var duration = 0
     var tag: [String] = []
+    var view = 0
 }
 
 struct WriteMenuModel {

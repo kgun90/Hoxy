@@ -8,28 +8,51 @@
 import UIKit
 import Firebase
 
-//protocol SingleDataDelegate {
-//    func getSingleData(_ postData: PostDataModel)
-//}
-
 struct PostDataManager {
     
 //    MARK: - 작성된 글 목록을 불러옴 -> HomeVC
     static func getPostListData(completion: @escaping ([PostDataModel]) -> Void) {
-        Constants.POST_COLLECTION.order(by: "date", descending: true)
-            .addSnapshotListener { (snapshot, error ) in
+        var blockList: [String] = []
+        guard let id = Auth.auth().currentUser?.uid else { return }
+        Constants.MEMBER_COLLECTION.document(id).collection("ban").addSnapshotListener { snapshot, error in
+            if let e = error {
+                print(e.localizedDescription)
+                return
+            }
+            guard let documents = snapshot?.documents else { return }
+           
+            documents.forEach {
+                let data = BlockModel(id: $0.documentID, dictionary: $0.data())
+                guard let id = data.user?.documentID else { return }
+                blockList.append(id)
+            }
+        }
+        
+        Constants.POST_COLLECTION.order(by: "start", descending: true).addSnapshotListener { snapshot, error in
                 var postList: [PostDataModel] = []
                 if let e = error {
                     print(e.localizedDescription)
                     return
                 }
                 guard let documents = snapshot?.documents else { return }
-                
+               
                 documents.forEach { document in
                     let data = document.data()
-                    postList.append(PostDataModel(uid: document.documentID, dictionary: data))
+                    let post = PostDataModel(uid: document.documentID, dictionary: data)
+                    guard let id = post.writer?.documentID else { return }
+                   
+                    if blockList.isEmpty {
+                        postList.append(post)
+                    } else {
+                        blockList.forEach {
+                            if $0 != id {
+                                postList.append(post)
+                            }
+                        }
+                    }
+                   
                     completion(postList)
-                } 
+                }
             }        
     }
     //    MARK: - Reference 로 글정보 받음
@@ -72,27 +95,58 @@ struct PostDataManager {
     
 //    MARK: - 모임 신청
     static func joinAction(post: PostDataModel, nickname: String) {
+        guard let current = Auth.auth().currentUser else { return }
         post.chat?.getDocument(completion: { snapshot, error in
             if let e = error {
                 print(e.localizedDescription)
                 return
             }
             guard let data = snapshot?.data() else { return }
-            guard let uid = Auth.auth().currentUser?.uid else { return }
+           
             
             var member = data["member"] as? [String] ?? []
-            member.append(uid)
+            member.append(current.uid)
             post.chat?.updateData([
                 "member": member,
-                "nickname.\(uid)": nickname
+                "nickname.\(current.uid)": nickname
             ])
-            
         })
+        
+        UserDataManager.getUserData(byID: current.uid) { data in
+            let participation = data.participation
+            Constants.MEMBER_COLLECTION.document(current.uid).updateData([
+                "participation": participation + 1
+            ])
+        }
+      
+        UserDataManager.getUserData(byID: current.uid) { data in
+            Constants.ALERT_COLLECTION.addDocument(data:[
+                "title": "\(nickname)님이 모임에 참가했습니다",
+                "content": "'\(post.title)' 모임에 새로운 참가 신청이 왔어요 \n환영 인사를 해주세요~",
+                "date": Date(),
+                "emoji": data.emoji,
+                "type": "apply",
+                "target": post.chat?.documentID,
+                "uid": post.writer?.documentID
+            ])
+        }
+        
     }
     
 //    MARK: - 모임글 삭제
     static func deletaAction(post: PostDataModel) {
+        guard let writer = post.writer else { return }
+        
+        UserDataManager.getUserData(byReference: writer) { user in
+            let participation = user.participation
+            if participation > 0
+                && post.start.getEndtime(start: post.start, duration: post.duration) < Date()  {
+                writer.updateData(["participation" : participation - 1])
+            }
+        }
+        
         post.chat?.delete()
+        
         Constants.POST_COLLECTION.document(post.id).delete()
     }
 }

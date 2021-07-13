@@ -26,9 +26,7 @@ class EmailLoginVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        loginCheck()
         configureUI()
-        
     }
     
     override func viewDidLayoutSubviews() {
@@ -43,7 +41,6 @@ class EmailLoginVC: UIViewController {
     }
     
     @objc func loginAction() {
-        loginCheck()
         self.showIndicator()
         if let email = emailItem.tf.text, let pass = passItem.tf.text {
             Auth.auth().signIn(withEmail: email, password: pass) { [weak self] authResult, error in
@@ -59,10 +56,18 @@ class EmailLoginVC: UIViewController {
                     }
                     self?.presentAlert(title: "로그인 실패", message: "이메일과 패스워드를 확인해주세요.", isCancelActionIncluded: false, preferredStyle: .alert, with: ok)
                 } else {
+                    self?.subscribeMessage()
                     self?.dismissIndicator()
-                    self?.moveToRoot(TabBarController())//LocationVC())
+                    self?.moveToRoot(TabBarController())
                 }
             }
+        }
+    }
+//    MARK: - Helpers
+    func subscribeMessage() {
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        Messaging.messaging().subscribe(toTopic: uid) { error in
+          print("DEBUG: Subscribe Complete")
         }
     }
 }

@@ -14,6 +14,7 @@ struct BlockModel {
     let chatting: DocumentReference?
     let pair: DocumentReference?
     let active: Bool?
+    let id: String
 
     func toDic() -> Dictionary<String, Any?> {
         return [
@@ -25,7 +26,8 @@ struct BlockModel {
         ]
     }
     
-    init(dictionary: [String: Any?]) {
+    init(id: String, dictionary: [String: Any?]) {
+       self.id = id
         user = dictionary["user"] as? DocumentReference
         date = (dictionary["date"] as? Timestamp ?? Timestamp()).dateValue()
         chatting = dictionary["chatting"] as? DocumentReference

@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Firebase
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
@@ -20,7 +21,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         // Window 설정
         self.window = UIWindow(windowScene: scene)
-        window?.rootViewController = MainLoginVC()
+        window?.rootViewController = Auth.auth().currentUser?.uid != nil ? TabBarController() : MainLoginVC()
         window?.makeKeyAndVisible()
     }
 

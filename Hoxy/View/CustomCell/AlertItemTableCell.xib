@@ -29,8 +29,8 @@
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="message" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="54f-XT-0Vo">
-                        <rect key="frame" x="64" y="30" width="44" height="15"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="message" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="54f-XT-0Vo">
+                        <rect key="frame" x="64" y="30" width="43.5" height="14.5"/>
                         <fontDescription key="fontDescription" name="AppleSDGothicNeo-Regular" family="Apple SD Gothic Neo" pointSize="12"/>
                         <color key="textColor" red="0.4392156862745098" green="0.4392156862745098" blue="0.4392156862745098" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
@@ -45,8 +45,10 @@
                 <constraints>
                     <constraint firstItem="9Zb-Mq-SsE" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="8" id="039-Nv-F7z"/>
                     <constraint firstItem="54f-XT-0Vo" firstAttribute="top" secondItem="9Zb-Mq-SsE" secondAttribute="bottom" constant="1" id="5pw-DD-TW7"/>
+                    <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="54f-XT-0Vo" secondAttribute="trailing" priority="750" constant="20" id="6sX-vV-5ol"/>
                     <constraint firstItem="54f-XT-0Vo" firstAttribute="leading" secondItem="9Zb-Mq-SsE" secondAttribute="leading" id="7Rh-wD-mcr"/>
                     <constraint firstItem="Oqr-54-cYE" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="14" id="NbP-id-b1E"/>
+                    <constraint firstItem="r8R-zf-lGY" firstAttribute="top" relation="greaterThanOrEqual" secondItem="54f-XT-0Vo" secondAttribute="bottom" priority="750" id="QrT-Np-Xo0"/>
                     <constraint firstItem="9Zb-Mq-SsE" firstAttribute="leading" secondItem="Oqr-54-cYE" secondAttribute="trailing" constant="14" id="UjG-Be-xeu"/>
                     <constraint firstAttribute="bottom" secondItem="r8R-zf-lGY" secondAttribute="bottom" constant="4" id="XlX-VR-FiC"/>
                     <constraint firstItem="Oqr-54-cYE" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="qtt-CG-1bm"/>

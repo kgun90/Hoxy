@@ -13,6 +13,7 @@ enum buttonsStatus {
     case offOver
     case offWriter
     case offAlready
+    case offExpired
 }
 
 class PostVC: BaseViewController {
@@ -75,6 +76,7 @@ class PostVC: BaseViewController {
         $0.addSubview(meetingTimeLabel)
         $0.addSubview(locationLabel)
         $0.addSubview(writeTimeLabel)
+        $0.addSubview(viewIconImage)
         $0.addSubview(viewsLabel)
         $0.addSubview(gradeButton)
         $0.addSubview(attenderCountView)
@@ -105,6 +107,11 @@ class PostVC: BaseViewController {
         $0.text = "작성시간"
         $0.font = .BasicFont(.medium, size: 12)
         $0.textColor = .labelGray
+    }
+    
+    lazy var viewIconImage = UIImageView().then {
+        $0.image = UIImage(systemName: "eye")
+        $0.tintColor = .labelGray
     }
      lazy var viewsLabel = UILabel().then {
         $0.text = "191"
@@ -185,14 +192,15 @@ class PostVC: BaseViewController {
     }
     
     lazy var relatedMeetingTitle = UILabel().then {
-        $0.font = .BasicFont(.medium, size: 13)
+        $0.font = .BasicFont(.medium, size: 15)
         $0.textColor = .black
         $0.text = "연관모임"
     }
     
     lazy var relatedMeetingTag = UILabel().then {
-        $0.font = .BasicFont(.light, size: 13)
+        $0.font = .BasicFont(.light, size: 14)
         $0.textColor = UIColor(hex: 0x5a5a5a)
+        $0.text = "#재밌게 놀아요"
     }
     
     lazy var relatedMeetingTableView = UITableView().then {
@@ -223,6 +231,12 @@ class PostVC: BaseViewController {
         $0.addTarget(self, action: #selector(submitAction), for: .touchUpInside)
     }
     
+    private let guideLabel = UILabel().then {
+        $0.font = .BasicFont(.regular, size: 14)
+        $0.textColor = .labelGray
+        $0.text = "연관모임이 없습니다"
+    }
+
     private var postDataManager = PostDataManager()
     private var viewModel = PostViewModel()
     
@@ -351,6 +365,7 @@ class PostVC: BaseViewController {
         DispatchQueue.main.async {
             self.relatedMeetingTableView.reloadData()
         }
+        setting()
     }
     
 }
@@ -359,10 +374,17 @@ class PostVC: BaseViewController {
 extension PostVC {
 //    Writer Menu
     func updateAction() {
-        let vc = WriteVC()
-        vc.postID = postID
-        showIndicator()
-        self.navigationController?.pushViewController(vc, animated: true)
+        PostDataManager.getPostData(byID: postID) { post in
+            if post.start.isExpired {
+                self.presentOkOnlyAlert(title: "모임 시간이 지난 글은 수정할 수 없습니다.")
+                return
+            }
+            
+            let vc = WriteVC()
+            vc.postID = self.postID
+            self.showIndicator()
+            self.navigationController?.pushViewController(vc, animated: true)
+        }
     }
     
     func deleteAction() {
@@ -379,7 +401,12 @@ extension PostVC {
         guard let toID = currentPost?.writer?.documentID else { return }
         guard let chatID = currentPost?.chat?.documentID else { return }
         
-        ChatDataManager.bloackUser(fromID: fromID, toID: toID, chatID: chatID)
+        let action = UIAlertAction(title: "확인", style: .default) { action in
+            ChatDataManager.bloackUser(fromID: fromID, toID: toID, chatID: chatID)
+            self.navigationController?.popViewController(animated: true)
+        }
+        
+        presentAlert(title: "사용자 차단", message: "해당 사용자의 글이 표시되지 않습니다.", isCancelActionIncluded: true, with: action)
     }
     
     func reportAction() {
@@ -419,7 +446,7 @@ extension PostVC {
 
 extension PostVC: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return relatedMeetingPost.count
+        return relatedMeetingPost.count > 3 ? 3 : relatedMeetingPost.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -470,7 +497,7 @@ extension PostVC {
             self?.contentLabel.text = data.content
             self?.hashtagLabel.text = "#" + data.tag.joined(separator: "#")
             self?.bottomMeetingTimeLabel.text = self?.getBottomTime(data.start)
-            
+            self?.relatedMeetingTag.text = Constants.communicationLevel[data.communication]
             self?.currentPost = data
             self?.configureData()
         }
@@ -486,14 +513,16 @@ extension PostVC {
         relatedMeetingTableView.dataSource = self
         relatedMeetingTableView.register(UINib(nibName: "HomeTableViewCell", bundle: nil), forCellReuseIdentifier: "HomeTableViewCell")
         relatedMeetingTableView.tableFooterView = UIView()
+        
+        guideLabel.isHidden = relatedMeetingPost.count > 0 ? true : false
     }
     
     func layout() {
         view.addSubview(mainScroll)
+        
         mainScroll.snp.makeConstraints {
             isModal ? $0.top.equalToSuperview().offset(Device.topHeight): $0.top.equalToSuperview()
             $0.leading.bottom.trailing.equalToSuperview()
-    
         }
         
         mainScroll.addSubview(contentStackView)
@@ -550,9 +579,16 @@ extension PostVC {
             $0.top.equalTo(locationLabel.snp.top)
             $0.leading.equalTo(locationLabel.snp.trailing).offset(Device.widthScale(3))
         }
+        
+        viewIconImage.snp.makeConstraints {
+            $0.centerY.equalTo(writeTimeLabel.snp.centerY)
+            $0.width.height.equalTo(Device.widthScale(13))
+            $0.leading.equalTo(writeTimeLabel.snp.trailing).offset(5)
+        }
+        
         viewsLabel.snp.makeConstraints {
-            $0.top.equalTo(writeTimeLabel.snp.top)
-            $0.leading.equalTo(writeTimeLabel.snp.trailing).offset(4)
+            $0.centerY.equalTo(writeTimeLabel.snp.centerY)
+            $0.leading.equalTo(viewIconImage.snp.trailing).offset(5)
         }
         gradeButton.snp.makeConstraints {
             $0.top.equalTo(locationLabel.snp.top)
@@ -607,52 +643,53 @@ extension PostVC {
         
         writerProfileView.addSubview(writerNicknameLable)
         writerProfileView.addSubview(writerLocationLabel)
-        writerProfileView.addSubview(writerLevelTitleLabel)
         writerProfileView.addSubview(writerAttendCountLabel)
         contentStackView.addArrangedSubview(writerProfileView)
         
         writerProfileView.snp.makeConstraints {
             $0.width.equalToSuperview()
-            $0.height.equalTo(Device.heightScale(60))
+            $0.height.equalTo(Device.heightScale(50))
         }
         writerNicknameLable.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(Device.heightScale(10))
+            $0.centerY.equalToSuperview()
             $0.leading.equalToSuperview().offset(Device.widthScale(23))
         }
         writerLocationLabel.snp.makeConstraints {
             $0.bottom.equalTo(writerNicknameLable.snp.bottom)
             $0.leading.equalTo(writerNicknameLable.snp.trailing).offset(Device.widthScale(3))
         }
-        writerLevelTitleLabel.snp.makeConstraints {
-            $0.top.equalTo(writerNicknameLable.snp.bottom).offset(Device.heightScale(5))
-            $0.leading.equalTo(writerNicknameLable.snp.leading)
-        }
         writerAttendCountLabel.snp.makeConstraints {
             $0.centerY.equalToSuperview()
-            $0.trailing.equalToSuperview().offset(Device.widthScale(-21))
+            $0.trailing.equalToSuperview().offset(Device.widthScale(-20))
         }
         
         relatedMeetingView.addSubview(relatedMeetingTitle)
+        relatedMeetingView.addSubview(relatedMeetingTag)
         contentStackView.addArrangedSubview(relatedMeetingView)
         
         relatedMeetingView.snp.makeConstraints {
             $0.centerX.equalToSuperview()
             $0.width.equalToSuperview()
-            $0.height.equalTo(Device.heightScale(50))
+            $0.height.equalTo(Device.heightScale(40))
         }
         relatedMeetingTitle.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(Device.heightScale(7))
+            $0.centerY.equalToSuperview()
             $0.leading.equalToSuperview().offset(Device.widthScale(20))
+        }
+        relatedMeetingTag.snp.makeConstraints {
+            $0.centerY.equalToSuperview()
+            $0.leading.equalTo(relatedMeetingTitle.snp.trailing).offset(Device.widthScale(10))
         }
         
         contentStackView.addArrangedSubview(relatedMeetingTableView)
+        relatedMeetingTableView.addSubview(guideLabel)
         relatedMeetingTableView.snp.makeConstraints {
-   
             $0.width.equalToSuperview()
             $0.bottom.equalToSuperview()
-            $0.height.equalTo(Device.heightScale(300))
-
-            
+            $0.height.equalTo(Device.heightScale(370))
+        }
+        guideLabel.snp.makeConstraints {
+            $0.center.equalToSuperview()
         }
     }
     
@@ -666,7 +703,7 @@ extension PostVC {
             $0.bottom.equalToSuperview()
             $0.centerX.equalToSuperview()
             $0.width.equalToSuperview()
-            $0.height.equalTo(Device.heightScale(108))
+            $0.height.equalTo(Device.isNotch ? Device.heightScale(108) : Device.heightScale(70))
         }
         
         bottomSubmitButton.snp.makeConstraints {

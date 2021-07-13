@@ -9,6 +9,7 @@ import UIKit
 import SnapKit
 import Then
 import CoreLocation
+import Firebase
 
 class MainLoginVC: UIViewController {
     // MARK: - Properties
@@ -40,17 +41,16 @@ class MainLoginVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        loginCheck()
-        buttonTarget()
         configureUI()
     }
     
-    // MARK: - Selectors
-    func buttonTarget() {
-        googleLoginButton.addTarget(self, action: #selector(googleLoginAction), for: .touchUpInside)
-        appleLoginButton.addTarget(self, action: #selector(appleLoginAction), for: .touchUpInside)
-        emailLoginButton.addTarget(self, action: #selector(emailLoginAction), for: .touchUpInside)
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+       
     }
+
+    // MARK: - Selectors
+  
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -73,8 +73,7 @@ class MainLoginVC: UIViewController {
     
     @objc func joinAction() {
         let vc = JoinVC()
-        vc.modalPresentationStyle = .overFullScreen
-        
+        vc.modalPresentationStyle = .overFullScreen        
         present(vc, animated: true, completion: nil)
         
     }
@@ -82,6 +81,17 @@ class MainLoginVC: UIViewController {
     // MARK: - Helpers
     
     func configureUI() {
+        layout()
+        buttonTarget()
+    }
+    
+    func buttonTarget() {
+        googleLoginButton.addTarget(self, action: #selector(googleLoginAction), for: .touchUpInside)
+        appleLoginButton.addTarget(self, action: #selector(appleLoginAction), for: .touchUpInside)
+        emailLoginButton.addTarget(self, action: #selector(emailLoginAction), for: .touchUpInside)
+    }
+    
+    func layout() {
         view.addSubview(logoImage)
         view.addSubview(googleLoginButton)
         view.addSubview(appleLoginButton)
@@ -124,5 +134,5 @@ class MainLoginVC: UIViewController {
             $0.height.equalTo(19)
             $0.top.equalTo(emailLoginButton.snp.bottom).offset(Device.heightScale(36))
         }
-    }  
+    }
 }

@@ -9,11 +9,13 @@ import UIKit
 import Firebase
 
 protocol ChatRoomMenuDelegate {
-    func dismiss()
+    func dismiss(postID: String)
 }
 
-class ChatRoomMenuVC: UIViewController {
+class ChatRoomMenuVC: UIViewController, ChatMemberDelegate {
+
     var delegate: ChatRoomMenuDelegate?
+
     // MARK: - Properties
     lazy var topView = UIView().then {
         $0.backgroundColor = .white
@@ -22,6 +24,7 @@ class ChatRoomMenuVC: UIViewController {
         $0.addSubview(titleLabel)
         $0.addSubview(meetingTimeLabel)
         $0.addSubview(gradeBugtton)
+        $0.addSubview(tagLabel)
         
         emojiLabel.snp.makeConstraints {
             $0.centerY.equalToSuperview()
@@ -44,7 +47,10 @@ class ChatRoomMenuVC: UIViewController {
             $0.width.equalTo(Device.widthScale(28))
             $0.height.equalTo(Device.heightScale(14))
         }
-        
+        tagLabel.snp.makeConstraints {
+            $0.top.equalTo(meetingTimeLabel.snp.bottom).offset(Device.heightScale(3))
+            $0.leading.equalTo(titleLabel.snp.leading)
+        }
     }
     
     lazy var emojiLabel = UILabel().then {
@@ -62,6 +68,11 @@ class ChatRoomMenuVC: UIViewController {
         $0.font = .BasicFont(.medium, size: 11)
         $0.textColor = .meetingTimeOrange
         $0.text = "Test meeting time"
+    }
+    lazy var tagLabel = UILabel().then {
+        $0.font = .BasicFont(.medium, size: 11)
+        $0.textColor = .hashtagBlue
+        $0.text = "hashtag"
     }
     
     lazy var memberHeaderView = UIView().then {
@@ -105,6 +116,7 @@ class ChatRoomMenuVC: UIViewController {
         $0.spacing = 0
     }
     
+    
     let gradeBugtton = GradeButton(mode: .tableCell)
     var memberItem: [ChatMemberView] = []
     
@@ -114,13 +126,12 @@ class ChatRoomMenuVC: UIViewController {
     var memberData: [String] = []
     var postData: PostDataModel?
     
-  
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        configure()
+        configureTopView()
         configureUI()
     }
     
@@ -135,37 +146,44 @@ class ChatRoomMenuVC: UIViewController {
     
     // MARK: - Selectors
     @objc func moveToPost() {
-        let vc = PostVC()
-        vc.postID = postID
-        vc.modalPresentationStyle = .overFullScreen
-        present(vc, animated: true, completion: nil)
+        self.dismiss(animated: true) {
+            self.delegate?.dismiss(postID: self.postID)
+        }
     }
     
     @objc func leaveRoomAction() {
+        guard let currentUser = Auth.auth().currentUser else { return }
+        guard let chat = self.postData?.chat else { return }
+        
         let ok = UIAlertAction(title: "나가기", style: .default) { (action) in
             
-            guard let currentUser = Auth.auth().currentUser?.uid else {return}
-            ChatDataManager.leaveRoom(chatData: (self.postData?.chat)!, userID: currentUser)
-            
+            if self.postData?.writer?.documentID == currentUser.uid {
+                ChatDataManager.removeMeeting(chatData: chat)
+            } else {
+                ChatDataManager.leaveRoom(chatData: chat, userID: currentUser.uid)
+            }
             self.dismiss(animated: true) {
-                self.delegate?.dismiss()
+                self.delegate?.dismiss(postID: "")
             }
         }
-        presentAlert(title: "모임 떠나기", message: "채팅방을 나가시면 모임을 떠나게 됩니다. 계속 하시겠습니까?", isCancelActionIncluded: true, with: ok)
+        if self.postData?.writer?.documentID == currentUser.uid {
+            presentAlert(title: "모임 종료하기", message: "모임을 종료하게 되면 모임글이 삭제됩니다. \n 계속 하시겠습니까?", isCancelActionIncluded: true, with: ok)
+        } else {
+            presentAlert(title: "모임 떠나기", message: "채팅방을 나가시면 모임을 떠나게 됩니다. 계속 하시겠습니까?", isCancelActionIncluded: true, with: ok)
+           
+        }
+     
     }
     
-    @objc func moveToProfile(sender: UIGestureRecognizer) {
-        let sender = sender.view as? ChatMemberView
-        guard let id = sender?.senderID else { return }
+
+    func chatMemberAction(id: String) {
         ChatDataManager.getSenderInfoData(chatID: chatID, senderID: id) { data in
-              
             let vc = ChatRoomProfileVC()
             vc.modalPresentationStyle = .overFullScreen
             vc.senderInfo = data
             vc.chatID = self.chatID
             self.present(vc, animated: true, completion: nil)
         }
-        
     }
     
     // MARK: - Helpers
@@ -200,66 +218,79 @@ class ChatRoomMenuVC: UIViewController {
         }
     }
     
-    func configure() {
-        
+    func configure(writer: DocumentReference, chat: DocumentReference) {
         configureMenu()
+
+        self.memberListStackView.subviews.forEach {
+            $0.removeFromSuperview()
+        }
+        
+        ChatDataManager.getChattingData(byReference: chat) { data in
+            guard let currentUser = Auth.auth().currentUser?.uid else { return }
+
+            let nickname = data.nickname
+            let members = data.member
+           
+     
+            for member in members {
+                UserDataManager.getUserData(byID: member) { data in
+                    let emoji = data.emoji
+                    let memberItem = ChatMemberView(emoji: emoji,
+                                                    nickname: nickname[member] as? String ?? "",
+                                                    writerType: member == writer.documentID ? .writer : .attender,
+                                                    memberType: member == currentUser ? .me : .attender,
+                                                    sender: member)
+                    memberItem.delegate = self
+                    
+                    if member == writer.documentID  {
+                        self.memberListStackView.insertArrangedSubview(memberItem, at: 0)
+                    } else if member == currentUser && self.memberListStackView.arrangedSubviews.count > 0{
+                        self.memberListStackView.insertArrangedSubview(memberItem, at: 1)
+                    } else {
+                        self.memberListStackView.insertArrangedSubview(memberItem, at: self.memberListStackView.arrangedSubviews.count)
+                    }
+                }
+            }
+    
+        }
+       
+    }
+    
+    func configureTopView() {
         PostDataManager.getPostData(byID: self.postID) { post in
             guard let writer = post.writer else { return }
+            guard let chat = post.chat else { return }
             
             self.postData = post
             self.emojiLabel.text = post.emoji
             self.titleLabel.text = post.title
             self.meetingTimeLabel.text = self.getMeetingTime(post.date, post.duration)
-            
+            self.tagLabel.text = "#" + post.tag.joined(separator: "#")
+        
+            ChatDataManager.getChattingData(byReference: chat) { chat in
+                let memberCount = chat.member.count
+                self.memberHeaderCount.text = " \(memberCount)/\(post.headcount)"
+            }
+
             UserDataManager.getUserData(byReference: writer) { data in
                 self.gradeBugtton.getGrade(.tableCell, data.birth)
             }
-            guard let chat = post.chat else { return }
-            ChatDataManager.getChattingData(byReference: chat) { data in
-                var memberID = [writer.documentID]
-                let nickname = data.nickname
-                guard let currentUser = Auth.auth().currentUser?.uid else { return }
-                
-                if memberID[0] != currentUser {
-                    memberID.append(currentUser)
-                }
-                
-                let member = data.member
-                member.filter { !memberID.contains($0) }.forEach { memberID.append($0) }
-                
-                self.memberListStackView.subviews.forEach {
-                    $0.removeFromSuperview()
-                }
-                
-                for member in memberID {
-                    UserDataManager.getUserData(byID: member) { data in
-                        let emoji = data.emoji
-                        let memberItem = ChatMemberView(emoji: emoji,
-                                                        nickname: nickname[member] as? String ?? "",
-                                                        writerType: member == writer.documentID ? .writer : .attender,
-                                                        memberType: member == currentUser ? .me : .attender,
-                                                        sender: member)
-                         
-                        self.memberListStackView.insertArrangedSubview(memberItem, at: member == writer.documentID ? 0 : member == currentUser ? 1 : self.memberListStackView.subviews.count)
-                        let memberProfileGesture = UITapGestureRecognizer(target: self, action: #selector(self.moveToProfile(sender:)))
-                        memberProfileGesture.numberOfTouchesRequired = 1
-                        self.memberListStackView.arrangedSubviews.forEach {
-                            $0.addGestureRecognizer(memberProfileGesture)
-                        }
-                    }
-                }
-            }
+            
+            self.configure(writer: writer, chat: chat)
         }
     }
-
 }
 
 extension ChatRoomMenuVC {
     func configureUI() {
         binding()
+        setting()
         layout()
     }
     func binding() {
+        
+    }
+    func setting() {
         
     }
     
@@ -268,6 +299,7 @@ extension ChatRoomMenuVC {
         view.addSubview(memberHeaderView)
         view.addSubview(memberListStackView)
         view.addSubview(menuItemStackView)
+        
         topView.snp.makeConstraints {
             $0.top.equalToSuperview()
             $0.leading.equalToSuperview()
@@ -287,10 +319,9 @@ extension ChatRoomMenuVC {
         }
         
         menuItemStackView.snp.makeConstraints {
-            $0.top.equalTo(topView.snp.bottom).offset(Device.heightScale(433))
+            $0.top.equalTo(topView.snp.bottom).offset(Device.heightScale(380))
             $0.leading.equalToSuperview()
             $0.width.equalTo(Device.widthScale(287))
-            
         }
     }
 }

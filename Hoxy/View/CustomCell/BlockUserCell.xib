@@ -23,8 +23,8 @@
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="town" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xNu-Ir-NO5">
-                        <rect key="frame" x="113" y="13" width="26" height="15"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="town" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xNu-Ir-NO5">
+                        <rect key="frame" x="113" y="12.5" width="26" height="15"/>
                         <fontDescription key="fontDescription" name="AppleSDGothicNeo-Regular" family="Apple SD Gothic Neo" pointSize="12"/>
                         <color key="textColor" red="0.43921568630000002" green="0.43921568630000002" blue="0.43921568630000002" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
@@ -49,9 +49,9 @@
                     <constraint firstItem="5zw-bw-cOl" firstAttribute="leading" secondItem="TeR-Hs-hXT" secondAttribute="trailing" constant="8" symbolic="YES" id="KvP-bF-S5I"/>
                     <constraint firstAttribute="trailing" secondItem="XKY-Tp-BaY" secondAttribute="trailing" constant="35" id="b2S-rw-eb1"/>
                     <constraint firstItem="xNu-Ir-NO5" firstAttribute="leading" secondItem="5zw-bw-cOl" secondAttribute="trailing" constant="5" id="dTC-TY-lgP"/>
-                    <constraint firstItem="xNu-Ir-NO5" firstAttribute="bottom" secondItem="5zw-bw-cOl" secondAttribute="bottom" constant="2" id="hWc-uG-NZV"/>
                     <constraint firstItem="TeR-Hs-hXT" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="oAt-NG-0EH"/>
                     <constraint firstItem="TeR-Hs-hXT" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="13" id="pbt-dB-UQb"/>
+                    <constraint firstItem="xNu-Ir-NO5" firstAttribute="centerY" secondItem="5zw-bw-cOl" secondAttribute="centerY" id="xni-hW-1k8"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>

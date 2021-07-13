@@ -12,30 +12,33 @@ import CoreLocation
 class MyPageVC: BaseViewController {
 
     // MARK: - Properties
-    lazy var topView = UIView().then {
-        $0.backgroundColor = .white
+    lazy var topView = UIView().then { top in
+        top.backgroundColor = .white
 
-        $0.addSubview(user)
-        $0.addSubview(progressView)
-        $0.addSubview(emoji)
-        $0.addSubview(emojiChangeButton)
-        $0.addSubview(grade)
-        $0.addSubview(levelLabel)
+        top.addSubview(user)
+        top.addSubview(emoji)
+        top.addSubview(emojiChangeButton)
+        top.addSubview(grade)
+        top.addSubview(levelLabel)
 
         user.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(Device.heightScale(12))
-            $0.trailing.equalToSuperview().offset(Device.widthScale(-14))
+            $0.bottom.equalTo(top.snp.centerY).offset(Device.heightScale(-2.5))
+            $0.leading.equalToSuperview().offset(Device.widthScale(35))
         }
-        progressView.snp.makeConstraints {
-            $0.top.equalTo(user.snp.bottom).offset(Device.heightScale(4))
-            $0.trailing.equalToSuperview().offset(Device.widthScale(-14))
-            $0.width.equalTo(Device.widthScale(265))
-            $0.height.equalTo(Device.heightScale(16))
+        levelLabel.snp.makeConstraints {
+            $0.top.equalTo(top.snp.centerY).offset(Device.heightScale(2.5))
+            $0.trailing.equalTo(user.snp.trailing)
+        }
+        grade.snp.makeConstraints {
+            $0.width.equalTo(Device.widthScale(28))
+            $0.height.equalTo(Device.heightScale(14))
+            $0.centerY.equalTo(levelLabel.snp.centerY)
+            $0.trailing.equalTo(levelLabel.snp.leading).offset(Device.widthScale(-10))
         }
         
         emoji.snp.makeConstraints {
-            $0.centerY.equalToSuperview()
-            $0.leading.equalToSuperview().offset(Device.widthScale(12))
+            $0.top.equalToSuperview().offset(Device.heightScale(11))
+            $0.trailing.equalToSuperview().offset(Device.widthScale(-41))
             $0.width.equalTo(Device.widthScale(78))
             $0.height.equalTo(Device.heightScale(78))
         }
@@ -46,19 +49,6 @@ class MyPageVC: BaseViewController {
             $0.width.equalTo(Device.widthScale(28))
             $0.height.equalTo(Device.heightScale(15))
         }
-
-        levelLabel.snp.makeConstraints {
-            $0.bottom.equalToSuperview().offset(Device.heightScale(-12))
-            $0.trailing.equalToSuperview().offset(Device.widthScale(-10))
-        }
-
-        grade.snp.makeConstraints {
-            $0.centerY.equalTo(levelLabel.snp.centerY)
-            $0.trailing.equalTo(levelLabel.snp.leading).offset(Device.widthScale(-5))
-            $0.width.equalTo(Device.widthScale(28))
-            $0.height.equalTo(Device.heightScale(14))
-        }
-
     }
     
     lazy var user = UILabel().then { user in
@@ -99,7 +89,7 @@ class MyPageVC: BaseViewController {
     lazy var levelLabel = UILabel().then {
         $0.font = .BasicFont(.semiBold, size: 18)
         $0.textColor = .labelGray
-        $0.text = "동네대장 🥳 입니다."
+        $0.text = "입니다"
     }
     
     lazy var currentLocationView = UIView().then {
@@ -131,14 +121,7 @@ class MyPageVC: BaseViewController {
         $0.textColor = .meetingTimeOrange
         $0.text = "현재 동네"
     }
-    
-    lazy var logoutButton = UIButton().then {
-        $0.setTitle("logout", for: .normal)
-        $0.setTitleColor(.white, for: .normal)
-        $0.addTarget(self, action: #selector(logoutAction), for: .touchUpInside)
-
-    }
-    
+        
     
     lazy var userLocationView = UIView().then {
         $0.backgroundColor = .white
@@ -175,6 +158,7 @@ class MyPageVC: BaseViewController {
         
         $0.addSubview(blockUserImage)
         $0.addSubview(blockUserLabel)
+        $0.addSubview(blockUserGuideImage)
         
         blockUserImage.snp.makeConstraints {
             $0.centerY.equalToSuperview()
@@ -187,6 +171,12 @@ class MyPageVC: BaseViewController {
             $0.centerY.equalToSuperview()
             $0.leading.equalTo(blockUserImage.snp.trailing).offset(Device.widthScale(11))
         }
+        
+        blockUserGuideImage.snp.makeConstraints {
+            $0.centerY.equalToSuperview()
+            $0.width.height.equalTo(Device.heightScale(16))
+            $0.trailing.equalToSuperview().offset(Device.widthScale(-20))
+        }
     }
     
     private let blockUserImage = UIImageView().then {
@@ -198,6 +188,10 @@ class MyPageVC: BaseViewController {
         $0.font = .BasicFont(.semiBold, size: 14)
         $0.textColor = .black
         $0.text = "만남거부목록"
+    }
+    private let blockUserGuideImage = UIImageView().then {
+        $0.image = UIImage(systemName: "chevron.forward")
+        $0.tintColor = #colorLiteral(red: 0.4392156863, green: 0.4392156863, blue: 0.4392156863, alpha: 1)
     }
     
     let locationManager = CLLocationManager()
@@ -213,7 +207,10 @@ class MyPageVC: BaseViewController {
         getCurrentLocation()
     }
 
-
+    override func viewDidLayoutSubviews() {
+        topView.addBorder(toSide: .bottom, color: .mainBackground, borderWidth: 0.5)
+        userLocationView.addBorder(toSide: .bottom, color: .mainBackground, borderWidth: 0.5)
+    }
     // MARK: - Selectors
     @objc func emojiChangeAction() {
         let emoji: String = "".randomEmoji()
@@ -230,7 +227,7 @@ class MyPageVC: BaseViewController {
         presentAlert(title: "프로필 이모티콘 바꾸기", message: emoji, with: ok, again, cancel)
     }
     
-    @objc func logoutAction() {
+  func logoutAction() {
         self.showIndicator()
         let firebaseAuth = Auth.auth()
         do {
@@ -250,9 +247,9 @@ class MyPageVC: BaseViewController {
         guard let id = Auth.auth().currentUser?.uid else { return }
         
         UserDataManager.getUserData(byID: id) { data in
-            self.user.text = "\(data.email) 님의 \n 인연지수는"
+            self.user.text = "\(data.email) 님은"
             self.emoji.text = data.emoji
-            self.progressView.progress = Float(data.exp / 1000)
+//            self.progressView.progress = Float(data.exp / 1000)
             self.userLocationLabel.text = "우리 동네 \(data.town)"
         }
     }
@@ -349,6 +346,24 @@ extension MyPageVC: CLLocationManagerDelegate {
 extension MyPageVC {
     func configureUI() {
         layout()
+        navButton()
+    }
+    
+    func navButton() {
+        let logout = UIBarButtonItem().then {
+            $0.title = "로그아웃"
+            $0.target = self
+            $0.action = #selector(barButtonAction)
+        }
+        
+        navigationItem.rightBarButtonItem = logout
+    }
+    
+    @objc func barButtonAction() {
+        let action = UIAlertAction(title: "네", style: .default) { action in
+            self.logoutAction()
+        }
+        presentAlert(title: "로그아웃", message: "로그아웃 하시겠습니까?", isCancelActionIncluded: true, preferredStyle: .alert, with: action)
     }
     
     func layout() {
@@ -356,7 +371,7 @@ extension MyPageVC {
         view.addSubview(currentLocationView)
         view.addSubview(userLocationView)
         view.addSubview(blockUserView)
-        view.addSubview(logoutButton)
+        
         
         topView.snp.makeConstraints {
             $0.top.equalToSuperview().offset(Device.topHeight)
@@ -382,8 +397,6 @@ extension MyPageVC {
             $0.width.equalToSuperview()
             $0.height.equalTo(Device.heightScale(50))
         }
-        logoutButton.snp.makeConstraints {
-            $0.center.equalToSuperview()
-        }
+        
     }
 }

@@ -26,7 +26,7 @@ class ChatRoomVC: BaseViewController {
         $0.textColor = #colorLiteral(red: 0.4392156863, green: 0.4392156863, blue: 0.4392156863, alpha: 1)
         $0.numberOfLines = 0
         $0.textAlignment = .center
-        $0.text = "모든 모임대화는 모임 시간 이후 채팅이 불가하며 \n일주일 동안만 보관됩니다."
+        $0.text = "모든 모임대화는 모임 종료 + 12시간 이후 채팅이 불가하며 \n일주일 동안만 보관됩니다"
     }
     
     lazy var chatTableView = UITableView().then {
@@ -42,7 +42,7 @@ class ChatRoomVC: BaseViewController {
         
         chatInputTextField.snp.makeConstraints {
             $0.top.equalToSuperview().offset(Device.heightScale(7))
-            $0.leading.equalToSuperview().offset(Device.widthScale(Device.widthScale(14)))
+            $0.leading.equalToSuperview().offset(Device.widthScale(14))
             $0.height.equalTo(Device.heightScale(35))
             $0.width.equalTo(Device.widthScale(313))
         }
@@ -60,7 +60,7 @@ class ChatRoomVC: BaseViewController {
         $0.font = .BasicFont(.regular, size: 15)
         $0.textColor = .black
         $0.backgroundColor = .white
-        
+        $0.addLeftPadding()
         $0.layer.cornerRadius = 10
     }
     
@@ -82,12 +82,12 @@ class ChatRoomVC: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
+        dismissIndicator()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         tabBarController?.tabBar.isHidden = true
         registerForKeyboardNotifications()
-        viewModel.getRoomTitle(self.postID)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -115,13 +115,17 @@ class ChatRoomVC: BaseViewController {
             let keyboardRectangle = keyboardFrame.cgRectValue
             let keyboardHeight = keyboardRectangle.height
             self.view.frame.origin.y = -keyboardRectangle.height
-//            self.chatInputView.frame.origin.y = -keyboardRectaingle.height
+//            chatTableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: keyboardHeight, right: 0)
+//            self.chatInputView.frame.origin.y = -keyboardHeight
         }
         
     }
+
     
     @objc func keyboardWillHide(note: NSNotification) {
         self.view.frame.origin.y = 0
+//        chatTableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+//        self.chatInputView.frame.origin.y = 0
     }
     
     @objc func barButtonAction() {
@@ -135,28 +139,37 @@ class ChatRoomVC: BaseViewController {
     
     // MARK: - Selectors
     @objc func sendButtonAction() {
-        ChatDataManager.sendChat(content: self.chatInputTextField.text ?? "", chatID: chatID)
-        self.chatInputTextField.text = ""
+        if chatInputTextField.text != "" {
+            ChatDataManager.sendChat(content: self.chatInputTextField.text ?? "", chatID: chatID)
+            self.chatInputTextField.text = ""
+        }
+       
     }
-    
-  
     
     // MARK: - Helpers
    
     func fetchChat() {
         ChatDataManager.getChatData(byId: chatID) { chats in
             self.chatData = chats
+//            self.chatTableView.scrollToBottom()
             self.reloadTable()
-            self.chatTableView.scrollToBottom()
         }
     }
         
     func reloadTable() {
         DispatchQueue.main.async {
             self.chatTableView.reloadData()
+            self.chatTableView.scrollToBottom()
         }
     }
     
+}
+
+extension ChatRoomVC: UITextFieldDelegate {
+    // 키보드 영역 이외 터치시 키보드 해제
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.dismissKeyboard()
+    }
 }
 
 extension ChatRoomVC: UITableViewDataSource, UITableViewDelegate {
@@ -169,6 +182,13 @@ extension ChatRoomVC: UITableViewDataSource, UITableViewDelegate {
         cell = getCellType(from: tableView, indexPath, (chatData?[indexPath.row].sender.documentID)!)
        
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        return topInstructionView
+    }
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 55
     }
     
     func getCellType(from tableView: UITableView, _ indexPath: IndexPath, _ id: String) -> UITableViewCell {
@@ -210,9 +230,9 @@ extension ChatRoomVC {
     }
     
     func binding() {
-        viewModel.roomTitle.bind { [weak self] data in
-            self?.navigationItem.title = data
-        }
+//        viewModel.roomTitle.bind { [weak self] data in
+//            self?.navigationItem.title = data
+//        }
     }
     
     func addNaviButton() {
@@ -226,43 +246,53 @@ extension ChatRoomVC {
     
     func setting() {
         chatRoomMenu.delegate = self
+        chatInputTextField.delegate = self
         
         chatTableView.delegate = self
         chatTableView.dataSource = self
+        
         chatTableView.register(UINib(nibName: "ChatMessageCell", bundle: nil), forCellReuseIdentifier: "ChatMessageCell")
         chatTableView.register(UINib(nibName: "MyMessageCell", bundle: nil), forCellReuseIdentifier: "MyMessageCell")
         chatTableView.keyboardDismissMode = .interactive
+        
+        ChatDataManager.getChattingData(byID: chatID) { model in
+            self.postID = model.post.documentID
+            self.getRoomTitle(self.postID)
+        }
+//        viewModel.getRoomTitle(self.postID)
+    }
+    
+    
+    func getRoomTitle(_ postID: String) {
+        PostDataManager.getPostData(byID: postID) { data in
+            self.navigationItem.title = data.title
+        }
     }
     
     func layout() {
-        view.addSubview(topInstructionView)
         view.addSubview(chatTableView)
         view.addSubview(chatInputView)
-        
-        topInstructionView.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(Device.topHeight)
-            $0.centerX.equalToSuperview()
-            $0.width.equalToSuperview()
-            $0.height.equalTo(Device.heightScale(55))
-        }
+
         chatTableView.snp.makeConstraints {
-            $0.top.equalTo(topInstructionView.snp.bottom)
-            $0.leading.equalToSuperview()
-            $0.trailing.equalToSuperview()
-            $0.bottom.equalTo(chatInputView.snp.top)
+            $0.top.leading.trailing.equalToSuperview()
+            $0.bottom.equalToSuperview().offset(Device.heightScale(-83))//equalTo(chatInputView.snp.top)
         }
         chatInputView.snp.makeConstraints {
-            $0.bottom.equalToSuperview()
-            $0.centerX.equalToSuperview()
-            $0.width.equalToSuperview()
             $0.height.equalTo(Device.heightScale(83))
+            $0.bottom.leading.trailing.equalToSuperview()
         }
     }
 }
 extension ChatRoomVC: ChatRoomMenuDelegate {
-   
-    func dismiss() {
-        self.navigationController?.popViewController(animated: true)
+    func dismiss(postID: String) {
+        if postID != "" {
+            let vc = PostVC()
+            vc.postID = postID
+            self.navigationController?.pushViewController(vc, animated: true)
+        } else {
+            self.navigationController?.popViewController(animated: true)
+        }
+      
     }
 }
 

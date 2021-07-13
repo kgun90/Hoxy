@@ -151,6 +151,12 @@ class WriteVC: BaseViewController {
     var hashTag: [String] = []
    
     let pickerView = UIPickerView()
+    
+    let locationPicker = UIPickerView()
+    let headCountPicker = UIPickerView()
+    let communicationPicker = UIPickerView()
+    let durationPicker = UIPickerView()
+    
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -180,7 +186,7 @@ class WriteVC: BaseViewController {
     
     
     func hashTagSet() {
-        hashTag.insert(communicationLevelView.textField.text ?? "", at: 0)
+//        hashTag.insert(communicationLevelView.textField.text ?? "", at: 0)
         viewModel.writeContents.tag = hashTag
     }
    
@@ -194,21 +200,15 @@ class WriteVC: BaseViewController {
         showIndicator()
         hashTagSet()
 
-        
         let ok = UIAlertAction(title: "확인", style: .default) { (action) in
             self.viewModel.submitAction()
             if self.mode == .write {
-//                self.viewModel.submitAction()
-//                self.dataManager.createPost(self.postModel, self.nickName)
                 self.navigationController?.popViewController(animated: true)
             }
-//            } else {
-//                self.dataManager.updatePost(self.postModel, self.uid ?? "")
-//            }
+
             self.moveToRoot(TabBarController())
         }
-//
-        presentAlert(title: "글 작성하기", message: "글이 게시됩니다. \n계속하시겠습니까?",isCancelActionIncluded: true, with: ok)
+      presentAlert(title: "글 작성하기", message: "글이 게시됩니다. \n계속하시겠습니까?",isCancelActionIncluded: true, with: ok)
     }
 }
 
@@ -243,14 +243,27 @@ extension WriteVC {
             
             viewModel.writeContents.title = data.title
             viewModel.writeContents.location = data.location
+    
             viewModel.writeContents.town = data.town
+            viewModel.writeMenu.value.location = data.town
+            
             viewModel.writeContents.headCount = data.headcount
+            viewModel.writeMenu.value.headCount = String(data.headcount)
+            
             viewModel.writeContents.communication = data.communication
+            viewModel.writeMenu.value.communicationLevel = Constants.communicationLevel[data.communication]
+            
             viewModel.writeContents.emoji = data.emoji
             viewModel.writeContents.start = data.start
+            
             viewModel.writeContents.duration = data.duration
+            viewModel.writeMenu.value.meetingDuration = Constants.meetingDurationDic[data.duration] ?? ""
+            
             viewModel.writeContents.tag = hashTag//data.tag
             viewModel.writeContents.content = data.content
+            viewModel.writeContents.view = data.view
+            
+         
         }
     }
 
@@ -342,10 +355,20 @@ extension WriteVC {
         pickerView.delegate = self
         pickerView.dataSource = self
         
-        meetingLocationView.textField.inputView = pickerView
-        headCountView.textField.inputView = pickerView
-        communicationLevelView.textField.inputView = pickerView
-        meetingDurationView.textField.inputView = pickerView
+        locationPicker.delegate = self
+        locationPicker.dataSource = self
+        headCountPicker.delegate = self
+        headCountPicker.dataSource = self
+        communicationPicker.delegate = self
+        communicationPicker.dataSource = self
+        durationPicker.delegate = self
+        durationPicker.dataSource = self
+            
+        
+        meetingLocationView.textField.inputView = locationPicker
+        headCountView.textField.inputView = headCountPicker
+        communicationLevelView.textField.inputView = communicationPicker
+        meetingDurationView.textField.inputView = durationPicker
     }
     
     func createDatePicker() {
@@ -381,6 +404,7 @@ extension WriteVC {
         }
         let selectedDate = dateFormatter.string(from: sender.date)
         viewModel.writeContents.start = sender.date
+        Log.any(sender.date)
         startTimeView.textField.text = selectedDate
     }
     
@@ -411,14 +435,14 @@ extension WriteVC: UIPickerViewDelegate, UIPickerViewDataSource {
     }
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        switch menu {
-        case .location:
+        switch pickerView {
+        case locationPicker:
             return LocationService.getTownData().count
-        case .headCount:
+        case headCountPicker:
             return Constants.headCount.count
-        case .communicationLevel:
+        case communicationPicker:
             return Constants.communicationLevel.count
-        case .meetingDuration:
+        case durationPicker:
             return Constants.meetingDuration.count
         default:
             return 1
@@ -426,24 +450,25 @@ extension WriteVC: UIPickerViewDelegate, UIPickerViewDataSource {
     }
     
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        switch menu {
-        case .location:
+        Log.any(component)
+        switch pickerView {
+        case locationPicker:
             return LocationService.getTownData()[row]
-        case .headCount:
+        case headCountPicker:
             return String(Constants.headCount[row])
-        case .communicationLevel:
+        case communicationPicker:
             return Constants.communicationLevel[row]
-        case .meetingDuration:
+        case durationPicker:
             return Constants.meetingDuration[row]
         default:
             return ""
         }
-        
     }
         
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         viewModel.pickerViewAction(mode: menu, row: row)
     }
+    
     
 }
 // MARK: - TextViewDelegate
@@ -587,7 +612,7 @@ extension WriteVC {
             $0.top.equalTo(meetingDurationView.snp.bottom)
             $0.centerX.equalToSuperview()
             $0.width.equalToSuperview()
-            $0.height.equalTo(Device.heightScale(280))
+            $0.height.equalTo(Device.isNotch ? Device.heightScale(280) : Device.heightScale(200))
         }
         
         contentCountLabel.snp.makeConstraints {
@@ -599,7 +624,7 @@ extension WriteVC {
             $0.centerX.equalToSuperview()
             $0.bottom.equalToSuperview()
             $0.width.equalToSuperview()
-            $0.height.equalTo(Device.heightScale(108))
+            $0.height.equalTo(Device.isNotch ? Device.heightScale(108) : Device.heightScale(70))
         }
         
         layoutHashtag()

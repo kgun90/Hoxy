@@ -134,8 +134,8 @@ class HomeTableViewCell: UITableViewCell {
         viewIconImage.snp.makeConstraints {
             $0.leading.equalTo(writeTimeLabel.snp.trailing).offset(Device.widthScale(9))
             $0.centerY.equalTo(locationLabel.snp.centerY)
-            $0.height.equalTo(Device.heightScale(15))
-            $0.width.equalTo(Device.widthScale(15))
+            $0.height.equalTo(Device.heightScale(13))
+            $0.width.equalTo(Device.widthScale(13))
         }
         
         viewsLabel.snp.makeConstraints {
@@ -169,8 +169,9 @@ class HomeTableViewCell: UITableViewCell {
         viewsLabel.text = String(data.view)
         meetingTimeLabel.text = "".getMeetingTime(data.start, data.duration)
         hashTagLabel.text = "#" + data.tag.joined(separator: "#")
+        guard let chat = data.chat else { return }
         
-        ChatDataManager.getChattingData(byReference: data.chat!) { chat in
+        ChatDataManager.getChattingData(byReference: chat) { chat in
             let memberCount = chat.member.count
             self.attenderCountLabel.text = " \(memberCount)/\(data.headcount)"
         }

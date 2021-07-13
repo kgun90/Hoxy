@@ -65,7 +65,7 @@ class ChatMessageCell: UITableViewCell {
     
     func configure() {
         guard let data = chatData else { return }
-        
+    
         UserDataManager.getUserData(byReference: data.sender) { member in
             let id = data.sender.documentID
 

@@ -34,6 +34,9 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate {
         $0.tag = 0
     }
     
+    var isFromNotification = false
+    var uid: String = ""
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         let homeNetworkController = UINavigationController(rootViewController: home)
@@ -46,12 +49,35 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate {
         chatNetworkController.tabBarItem = chatItem
         myPageNetworkController.tabBarItem = myPageItem
         
-        
         UITabBar.appearance().tintColor = .white
         UITabBar.appearance().barTintColor = .mainYellow
         
         self.viewControllers = [homeNetworkController, unknownNetoworkController, chatNetworkController, myPageNetworkController]
         self.delegate = self
-        
+      
     }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+      
+        if isFromNotification {
+            chat.isPushNotification = isFromNotification
+            chat.chatID = self.uid
+            Log.any(uid)
+        }
+    }
+
+    func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
+
+          guard let fromView = selectedViewController?.view, let toView = viewController.view else {
+            return false // Make sure you want this as false
+          }
+
+        
+          if fromView != toView {
+            UIView.transition(from: fromView, to: toView, duration: 0.1, options: [.transitionCrossDissolve], completion: nil)
+          }
+
+          return true
+      }
 }

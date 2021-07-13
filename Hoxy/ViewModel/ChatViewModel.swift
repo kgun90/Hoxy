@@ -12,12 +12,7 @@ struct ChatViewModel {
     let roomTitle = Observable("")
     let chatListData = Observable([ChatListModel]())
     
-    func getChatListData() {
-        chatListData.value.removeAll()
-        ChatDataManager.getChatListData { data in
-            self.chatListData.value = data
-        }
-    }
+
     
     func getRoomTitle(_ postID: String) {
         PostDataManager.getPostData(byID: postID) { data in

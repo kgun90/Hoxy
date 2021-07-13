@@ -47,7 +47,22 @@ class ChatListTableViewCell: UITableViewCell {
         layout()
         // Initialization code
     }
-
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        chatTitleLabel.text = nil
+        meetingPlaceLabel.text = nil
+        meetingTimeLabel.text = nil
+        tagLabel.text = nil
+        chatPreviewLabel.text = "메세지가 없습니다"
+        updateLayout()
+    }
+    
+    func updateLayout(){
+        self.setNeedsLayout()
+        self.layoutIfNeeded()
+    }
+    
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 

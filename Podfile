@@ -8,6 +8,7 @@ target 'Hoxy' do
   pod 'Firebase/Analytics'
   pod 'Firebase/Auth'
   pod 'Firebase/Firestore'
+  pod 'Firebase/Messaging'
   pod 'SnapKit'
   pod 'Then'
   pod 'BTNavigationDropdownMenu'

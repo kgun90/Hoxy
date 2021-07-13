@@ -57,6 +57,8 @@
 		EB3EE79226667B61007507D6 /* TagListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB3EE79026667B61007507D6 /* TagListTableViewCell.swift */; };
 		EB3EE79326667B61007507D6 /* TagListTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = EB3EE79126667B61007507D6 /* TagListTableViewCell.xib */; };
 		EB3EE7952667D9C8007507D6 /* TagDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB3EE7942667D9C8007507D6 /* TagDataManager.swift */; };
+		EB3F917E269D786D001108D4 /* SystemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB3F917C269D786D001108D4 /* SystemCell.swift */; };
+		EB3F917F269D786D001108D4 /* SystemCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = EB3F917D269D786D001108D4 /* SystemCell.xib */; };
 		EB43F79425D1BA3700AFED54 /* PostViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB43F79325D1BA3700AFED54 /* PostViewModel.swift */; };
 		EB498515267D6FB0000580B9 /* TagViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB498514267D6FB0000580B9 /* TagViewModel.swift */; };
 		EB498518267E4D8F000580B9 /* AlertItemTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB498516267E4D8F000580B9 /* AlertItemTableCell.swift */; };
@@ -69,6 +71,8 @@
 		EB4D095A268F5CF0004679F0 /* BlockUserListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4D0959268F5CF0004679F0 /* BlockUserListVC.swift */; };
 		EB4D0961269055ED004679F0 /* BlockUserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4D095F269055ED004679F0 /* BlockUserCell.swift */; };
 		EB4D0962269055ED004679F0 /* BlockUserCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = EB4D0960269055ED004679F0 /* BlockUserCell.xib */; };
+		EB4D0964269341AE004679F0 /* AlertDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4D0963269341AD004679F0 /* AlertDataManager.swift */; };
+		EB4D0966269341DD004679F0 /* AlertModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4D0965269341DD004679F0 /* AlertModel.swift */; };
 		EB5D8E5825C70FB7003D957C /* LoginButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5D8E5725C70FB7003D957C /* LoginButton.swift */; };
 		EB5D8E5C25C7168C003D957C /* WriteVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5D8E5B25C7168C003D957C /* WriteVC.swift */; };
 		EB5D8E6025C7172D003D957C /* WriteOptionItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5D8E5F25C7172D003D957C /* WriteOptionItem.swift */; };
@@ -159,6 +163,8 @@
 		EB3EE79026667B61007507D6 /* TagListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagListTableViewCell.swift; sourceTree = "<group>"; };
 		EB3EE79126667B61007507D6 /* TagListTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TagListTableViewCell.xib; sourceTree = "<group>"; };
 		EB3EE7942667D9C8007507D6 /* TagDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagDataManager.swift; sourceTree = "<group>"; };
+		EB3F917C269D786D001108D4 /* SystemCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemCell.swift; sourceTree = "<group>"; };
+		EB3F917D269D786D001108D4 /* SystemCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SystemCell.xib; sourceTree = "<group>"; };
 		EB43F79325D1BA3700AFED54 /* PostViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostViewModel.swift; sourceTree = "<group>"; };
 		EB498514267D6FB0000580B9 /* TagViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagViewModel.swift; sourceTree = "<group>"; };
 		EB498516267E4D8F000580B9 /* AlertItemTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertItemTableCell.swift; sourceTree = "<group>"; };
@@ -171,6 +177,9 @@
 		EB4D0959268F5CF0004679F0 /* BlockUserListVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockUserListVC.swift; sourceTree = "<group>"; };
 		EB4D095F269055ED004679F0 /* BlockUserCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockUserCell.swift; sourceTree = "<group>"; };
 		EB4D0960269055ED004679F0 /* BlockUserCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = BlockUserCell.xib; sourceTree = "<group>"; };
+		EB4D0963269341AD004679F0 /* AlertDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertDataManager.swift; sourceTree = "<group>"; };
+		EB4D0965269341DD004679F0 /* AlertModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertModel.swift; sourceTree = "<group>"; };
+		EB4D096B26982872004679F0 /* Hoxy.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Hoxy.entitlements; sourceTree = "<group>"; };
 		EB5D8E5725C70FB7003D957C /* LoginButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginButton.swift; sourceTree = "<group>"; };
 		EB5D8E5B25C7168C003D957C /* WriteVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WriteVC.swift; sourceTree = "<group>"; };
 		EB5D8E5F25C7172D003D957C /* WriteOptionItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WriteOptionItem.swift; sourceTree = "<group>"; };
@@ -285,6 +294,7 @@
 		EB25DC8625B9C1E5006F4008 /* Hoxy */ = {
 			isa = PBXGroup;
 			children = (
+				EB4D096B26982872004679F0 /* Hoxy.entitlements */,
 				E0ED10D426492ED600661094 /* Util */,
 				EB25DC8725B9C1E5006F4008 /* AppDelegate.swift */,
 				EB25DC8925B9C1E5006F4008 /* SceneDelegate.swift */,
@@ -316,6 +326,7 @@
 				E08F5492265F7B9C00740A04 /* WriteModel.swift */,
 				EB49851A267F151A000580B9 /* TagModel.swift */,
 				EB6E9E3C2681AC76009452A3 /* HomeModel.swift */,
+				EB4D0965269341DD004679F0 /* AlertModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -356,12 +367,7 @@
 			children = (
 				EB38A76D25C12AB500516515 /* HomeTableViewCell.swift */,
 				EB38A76E25C12AB500516515 /* HomeTableViewCell.xib */,
-				EB2968F925D9790400DAE55B /* ChatListTableViewCell.swift */,
-				EB2968FA25D9790400DAE55B /* ChatListTableViewCell.xib */,
-				EB29691C25DCD9FD00DAE55B /* ChatMessageCell.swift */,
-				EB29691D25DCD9FD00DAE55B /* ChatMessageCell.xib */,
-				EB78A37725E7E9EF00E4C538 /* MyMessageCell.swift */,
-				EB78A37825E7E9EF00E4C538 /* MyMessageCell.xib */,
+				EB3F917B269D784E001108D4 /* Chat */,
 				EB05FFD125E3943C00A587BE /* ChatMemberTableViewCell.swift */,
 				EB05FFD225E3943C00A587BE /* ChatMemberTableViewCell.xib */,
 				EB3EE79026667B61007507D6 /* TagListTableViewCell.swift */,
@@ -374,6 +380,21 @@
 			path = CustomCell;
 			sourceTree = "<group>";
 		};
+		EB3F917B269D784E001108D4 /* Chat */ = {
+			isa = PBXGroup;
+			children = (
+				EB2968F925D9790400DAE55B /* ChatListTableViewCell.swift */,
+				EB2968FA25D9790400DAE55B /* ChatListTableViewCell.xib */,
+				EB29691C25DCD9FD00DAE55B /* ChatMessageCell.swift */,
+				EB29691D25DCD9FD00DAE55B /* ChatMessageCell.xib */,
+				EB78A37725E7E9EF00E4C538 /* MyMessageCell.swift */,
+				EB78A37825E7E9EF00E4C538 /* MyMessageCell.xib */,
+				EB3F917C269D786D001108D4 /* SystemCell.swift */,
+				EB3F917D269D786D001108D4 /* SystemCell.xib */,
+			);
+			path = Chat;
+			sourceTree = "<group>";
+		};
 		EB5D8E8B25CBD27D003D957C /* Service */ = {
 			isa = PBXGroup;
 			children = (
@@ -383,6 +404,7 @@
 				E082A932265647F800A56805 /* JoinDataManager.swift */,
 				E08F548E265C83D900740A04 /* WriteDataManager.swift */,
 				EB3EE7942667D9C8007507D6 /* TagDataManager.swift */,
+				EB4D0963269341AD004679F0 /* AlertDataManager.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -547,6 +569,7 @@
 				EB25DC9125B9C1E6006F4008 /* Assets.xcassets in Resources */,
 				EB25DC8F25B9C1E5006F4008 /* Main.storyboard in Resources */,
 				EB2968FC25D9790400DAE55B /* ChatListTableViewCell.xib in Resources */,
+				EB3F917F269D786D001108D4 /* SystemCell.xib in Resources */,
 				EB3EE79326667B61007507D6 /* TagListTableViewCell.xib in Resources */,
 				EB05FFD425E3943C00A587BE /* ChatMemberTableViewCell.xib in Resources */,
 			);
@@ -664,6 +687,7 @@
 				EB38A71425BD707100516515 /* JoinVC.swift in Sources */,
 				EB5D8E7E25CA645A003D957C /* PostVC.swift in Sources */,
 				EB5D8E8925CB183B003D957C /* MemberModel.swift in Sources */,
+				EB4D0966269341DD004679F0 /* AlertModel.swift in Sources */,
 				EB38A74725BF0A9900516515 /* GradeButton.swift in Sources */,
 				EB4D095A268F5CF0004679F0 /* BlockUserListVC.swift in Sources */,
 				EB38A71D25BD89ED00516515 /* JoinInputItem.swift in Sources */,
@@ -675,6 +699,7 @@
 				EB2968FF25D98DEB00DAE55B /* ChatDataManager.swift in Sources */,
 				EB38A72025BDA01600516515 /* BottomButton.swift in Sources */,
 				EB5D8E6B25C7D3E5003D957C /* PostDataManager.swift in Sources */,
+				EB4D0964269341AE004679F0 /* AlertDataManager.swift in Sources */,
 				EB87AB8725BC1B0A00DF3BBB /* UIFont.swift in Sources */,
 				EB5D8E8625CB15B6003D957C /* UserDataManager.swift in Sources */,
 				EB43F79425D1BA3700AFED54 /* PostViewModel.swift in Sources */,
@@ -683,6 +708,7 @@
 				EB6E9E3D2681AC76009452A3 /* HomeModel.swift in Sources */,
 				EBDA507A25BC054100C6A122 /* UIColor.swift in Sources */,
 				EB25DC8825B9C1E5006F4008 /* AppDelegate.swift in Sources */,
+				EB3F917E269D786D001108D4 /* SystemCell.swift in Sources */,
 				EB25DC8A25B9C1E5006F4008 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -831,6 +857,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Hoxy/Hoxy.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = RT3T8DHJJ3;
@@ -856,6 +883,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Hoxy/Hoxy.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = RT3T8DHJJ3;

@@ -9,26 +9,15 @@ import Foundation
 import Firebase
 
 struct WriteDataManager {
-    static func createPost(_ postModel: PostDataModel, _ nickName: String) {
+    static func createPost(_ postModel: [String: Any], _ nickName: String) {
         guard let currentID = Auth.auth().currentUser?.uid else { return }
-        guard let writer = postModel.writer else { return }
-        guard let location = postModel.location else { return }
-        
-        let post = Constants.POST_COLLECTION.addDocument(data: [
-            "title": postModel.title,
-            "content": postModel.content,
-            "writer": writer,
-            "headcount": postModel.headcount,
-            "location": location,
-            "tag": postModel.tag,
-            "date": postModel.date,
-            "emoji":  postModel.emoji,
-            "communication":  postModel.communication,
-            "start": postModel.start,
-            "duration":  postModel.duration,
-            "town":  postModel.town,
-            "view": postModel.view
-        ])
+        guard let writer = postModel["writer"] as? DocumentReference else { return }
+        guard let tags = postModel["tag"] as? [String] else { return }
+        guard let communication = postModel["communication"] as? Int else { return }
+
+
+        let post = Constants.POST_COLLECTION.addDocument(data: postModel)
+
        
         let chat = Constants.CHAT_COLLECTION.addDocument(data: [
             "date": Date(),
@@ -36,27 +25,36 @@ struct WriteDataManager {
             "nickname": [currentID: nickName],
             "post" : post
         ])
+        
+        TagDataManager.addTagData(tags: postModel["tag"] as! [String])
+        
+        UserDataManager.getUserData(byReference: writer) { user in
+            let participation = user.participation
+            writer.updateData(["participation" : participation + 1])
+        }
                 
+        var tag = tags
+        tag.insert(Constants.communicationLevel[communication], at: 0)
+        
         post.updateData([
+            "tag": tag,
             "chat" : chat
         ])
+        
+
     }
     
-    static func updatePost(_ postModel: PostDataModel, _ uid: String) {
-        guard let location = postModel.location else { return }
+    static func updatePost(_ post: [String: Any], _ uid: String) {
+        guard let tags = post["tag"] as? [String] else { return }
+        guard let communication = post["communication"] as? Int else { return }
         
-        Constants.POST_COLLECTION.document(uid).updateData([
-            "title": postModel.title,
-            "content": postModel.content,
-            "headcount": postModel.headcount,
-            "location": location,
-            "tag": postModel.tag,
-            "date": postModel.date,
-            "emoji":  postModel.emoji,
-            "communication":  postModel.communication,
-            "start": postModel.start,
-            "duration":  postModel.duration,
-            "town":  postModel.town
-        ])
+        Constants.POST_COLLECTION.document(uid).updateData(post)
+        
+        TagDataManager.addTagData(tags: tags)
+        
+        var tag = tags
+        tag.insert(Constants.communicationLevel[communication], at: 0)
+        
+        Constants.POST_COLLECTION.document(uid).updateData([ "tag": tag ])
     }
 }

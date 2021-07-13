@@ -29,6 +29,13 @@ class HomeVC: BaseViewController {
         $0.addTarget(self, action: #selector(moveToWrite), for: .touchUpInside)
     }
     
+    private let guideLabel = UILabel().then {
+        $0.font = .BasicFont(.regular, size: 14)
+        $0.textColor = .labelGray
+        $0.text = "알람이 없습니다"
+    }
+
+    
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,7 +44,6 @@ class HomeVC: BaseViewController {
         viewModel.getMenuItem()
         initRefresh()
         configureUI()
-      
     }
 
     
@@ -49,6 +55,7 @@ class HomeVC: BaseViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        viewModel.fetchPostsData()
     }
     // MARK: - Logics
    
@@ -83,8 +90,6 @@ class HomeVC: BaseViewController {
         viewModel.currentLocation()
         viewModel.getMenuItem()
         
-        Log.any(LocationService.getLocationData())
-        Log.any(LocationService.getTownData())
         refresh.endRefreshing()
     }
     
@@ -98,6 +103,7 @@ class HomeVC: BaseViewController {
         DispatchQueue.main.async {
             self.listTableView.reloadData()
         }
+        setting()
     }
 }
 extension HomeVC: UITableViewDataSource, UITableViewDelegate {
@@ -152,12 +158,15 @@ extension HomeVC {
         listTableView.dataSource = self
         listTableView.register(UINib(nibName: "HomeTableViewCell", bundle: nil), forCellReuseIdentifier: "HomeTableViewCell")
         listTableView.tableFooterView = UIView()
+        
+        guideLabel.isHidden = posts.count > 0 ? true : false
     }
     
     func layout() {
         view.addSubview(listTableView)
         view.addSubview(writeButton)
         view.bringSubviewToFront(writeButton)
+        listTableView.addSubview(guideLabel)
         
         listTableView.snp.makeConstraints {
             $0.top.equalToSuperview()
@@ -172,6 +181,10 @@ extension HomeVC {
             $0.trailing.equalToSuperview().offset(Device.widthScale(-30))
             $0.width.equalTo(Device.widthScale(55))
             $0.height.equalTo(Device.heightScale(55))
+        }
+        
+        guideLabel.snp.makeConstraints {
+            $0.center.equalToSuperview()
         }
     }
 }

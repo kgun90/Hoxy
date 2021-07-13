@@ -41,7 +41,7 @@ class PersonalSettingVC: UIViewController {
     }
     
     lazy var locationDescriptionLabel = UILabel().then {
-        $0.text = "현재 위치 기반으로 설정 됩니다."
+        $0.text = "현재 위치기반으로 설정됩니다."
         $0.font = .BasicFont(.medium, size: 10)
         $0.textColor = UIColor(hex: 0x918dff)
     }

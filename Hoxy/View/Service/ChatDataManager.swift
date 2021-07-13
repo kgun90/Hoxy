@@ -7,24 +7,76 @@
 
 import Foundation
 import Firebase
-
+protocol ChatListDelegate {
+    func getChatList(listData: [ChatListModel])
+}
 
 struct ChatDataManager {
+    var delegate: ChatListDelegate?
     
 //  MARK: - Chat List
     static func getChatListData(completion: @escaping ([ChatListModel]) -> Void) {
         guard let userID = Auth.auth().currentUser?.uid else { return }
-       
         Constants.CHAT_COLLECTION.whereField("member", arrayContains: userID).order(by: "date", descending: false).addSnapshotListener { snapshot, error in
+           
             if let e = error {
                 print(e.localizedDescription)
                 return
             }
             guard let documents = snapshot?.documents else { return }
-            var chats = [ChatListModel]()
+            var chats: [ChatListModel] = []
+            
             documents.forEach { document in
-                chats.append(ChatListModel(chat: ChattingModel(dictionary: document.data()), id: document.documentID))
-                completion(chats)
+                let chatting = ChattingModel(dictionary: document.data())
+                Log.any(chatting)
+               
+                PostDataManager.getPostData(byReference: chatting.post) { model in
+                  
+                    if !model.start.getEndtime(start: model.start, duration: model.duration).isExpired {
+                        let chatModel = ChatListModel(chat: chatting, id: document.documentID)
+                        Log.any(chatModel)
+                        chats.append(chatModel)
+                        completion(chats)
+                    }
+                }
+            }
+        }
+    }
+    
+    static func getChats(completion: @escaping ([ChatListModel]) -> Void) {
+        guard let current = Auth.auth().currentUser else { return }
+        
+        Constants.CHAT_COLLECTION.order(by: "date", descending: true).addSnapshotListener { snapshot, error in
+            if let e = error {
+                print(e.localizedDescription)
+                return
+            }
+            guard let documents = snapshot?.documents else { return }
+            var chatList: [ChatListModel] = []
+            let chats = documents.filter {
+                 let data = $0.data()
+                let member = data["member"] as? [String] ?? []
+                return member.contains(current.uid)
+            }
+            
+            chats.forEach { document in
+                let chatData = ChattingModel(dictionary: document.data())
+                let chatId = document.documentID
+                chatData.post.getDocument { snapshot, error in
+                    if let e = error {
+                        print(e.localizedDescription)
+                        return
+                    }
+                    guard let id = snapshot?.documentID else { return }
+                    guard let data = snapshot?.data() else { return }
+                    let post = PostDataModel(uid: id, dictionary: data)
+                    
+                    if !post.start.isExpired {
+                        chatList.append(ChatListModel(chat: chatData, id: chatId))
+                        completion(chatList)
+                    }
+                }
+              
             }
         }
     }
@@ -122,6 +174,21 @@ struct ChatDataManager {
         ban.updateData([ "pair": otherBan])
     }
     
+    static func unblockUser(byID: String) {
+        guard let currentID = Auth.auth().currentUser?.uid else { return }
+        Constants.MEMBER_COLLECTION.document(currentID).collection("ban").document(byID).addSnapshotListener { snapshot, error in
+            if let e = error {
+                print(e.localizedDescription)
+                return
+            }
+            guard let data = snapshot?.data() else { return }
+            let pair = data["pair"] as? DocumentReference
+            pair?.delete()
+        }
+        
+        Constants.MEMBER_COLLECTION.document(currentID).collection("ban").document(byID).delete()
+    }
+    
 //    MARK: - 방 나가기
     static func leaveRoom(chatData chat: DocumentReference, userID id: String) {
         var member: [String] = []
@@ -130,12 +197,60 @@ struct ChatDataManager {
                 print(e.localizedDescription)
                 return
             }
-            
-            if let data = snapshot?.data() {
-                member = data["member"] as? [String] ?? []
-            }
+            guard let data = snapshot?.data() else { return }
+    
+            member = data["member"] as? [String] ?? []
             member.remove(at: member.firstIndex(of: id)!)
+            
             chat.updateData(["member": member])
+            
+            guard let post = data["post"] as? DocumentReference else { return }
+            guard let current = Auth.auth().currentUser else { return }
+            
+            PostDataManager.getPostData(byReference: post) { data in
+                if data.start > Date() {
+                    UserDataManager.getUserData(byID: current.uid) { data in
+                        let participation = data.participation
+                        if participation > 0 {
+                            Constants.MEMBER_COLLECTION.document(current.uid).updateData([
+                                "participation": participation - 1
+                            ])
+                        }
+                    }
+                }
+            }
         }
+    }
+//    방 삭제하기
+    static func removeMeeting(chatData: DocumentReference) {
+        guard let current = Auth.auth().currentUser else { return }
+        
+        self.getChattingData(byReference: chatData) { chat in
+            PostDataManager.getPostData(byReference: chat.post) { post in
+                
+//                Constants.ALERT_COLLECTION.addDocument(data:[
+//                    "title": "\(post.title)모임 삭제 알림",
+//                    "content": "참여 신청했던 \(post.title) 모임이 삭제 되었습니다.",
+//                    "date": Date(),
+//                    "emoji": post.emoji,
+//                    "type": "delete",
+//                    "target": post.chat?.documentID,
+//                    "uid": post.writer?.documentID
+//                ])
+                
+                if post.start > Date() {
+                    UserDataManager.getUserData(byID: current.uid) { data in
+                        let participation = data.participation
+                        if participation > 0 {
+                            Constants.MEMBER_COLLECTION.document(current.uid).updateData([
+                                "participation": participation - 1
+                            ])
+                        }
+                    }
+                }
+            }
+            Constants.POST_COLLECTION.document(chat.post.documentID).delete()
+        }
+        chatData.delete()
     }
 }

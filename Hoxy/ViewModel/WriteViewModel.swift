@@ -26,7 +26,8 @@ struct WriteViewModel{
     var validContents: Bool {
         return writeContents.title.count > 5
             && writeContents.content.count >= 10
-            && writeContents.communication != 0
+//            && writeContents.communication
+            && writeContents.start != nil
             && writeContents.town != ""
             && writeContents.headCount != 0
             && writeContents.duration != 0
@@ -70,9 +71,8 @@ struct WriteViewModel{
         submitButton.value.enable = validContents ? true : false
     }
     
-
-    
     mutating func pickerViewAction(mode: writeMenu, row: Int) {
+        Log.any( writeContents.town)
         switch mode {
         case .location:
             writeMenu.value.location = LocationService.getTownData()[row]
@@ -90,7 +90,7 @@ struct WriteViewModel{
             
             let rand = Int.random(in: 0 ... 2)
             writeContents.emoji = Constants.communicationEmoji[row][rand]
-            writeContents.communication = row + 1
+            writeContents.communication = row
             
         case .meetingDuration:
             writeMenu.value.meetingDuration = Constants.meetingDuration[row]
@@ -105,26 +105,28 @@ struct WriteViewModel{
     func submitAction() {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         guard let location = writeContents.location else { return }
+        guard let start = writeContents.start else { return }
+       
         let postData = [
             "title": writeContents.title,
             "content": writeContents.content,
             "writer": Constants.MEMBER_COLLECTION.document(uid),
             "headcount": writeContents.headCount,
-            "tag": writeContents.tag,
+            "location": location,
             "date": Date(),
             "emoji": writeContents.emoji,
             "communication":  writeContents.communication,
-            "start": writeContents.start,
+            "start": start,
             "duration":  writeContents.duration,
             "town":  writeContents.town,
-            "location": location
+            "view": writeContents.view,
+            "tag": writeContents.tag
         ] as [String : Any]
-        let post = PostDataModel(uid: uid, dictionary: postData)
         
         if writeMode == .write {
-            WriteDataManager.createPost(post, nickname.value)
+            WriteDataManager.createPost(postData, nickname.value)
         } else {
-            WriteDataManager.updatePost(post, nickname.value)
+            WriteDataManager.updatePost(postData, postID ?? "")
         }
       
     }

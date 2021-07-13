@@ -28,7 +28,7 @@ class ChatRoomProfileVC: UIViewController {
         $0.addSubview(locationLabel)
         $0.addSubview(nicknameLabel)
         $0.addSubview(gradeButton)
-        $0.addSubview(expTitleLabel)
+        $0.addSubview(attendCountLabel)
         
         locationLabel.snp.makeConstraints {
             $0.leading.equalToSuperview().offset(Device.widthScale(33))
@@ -44,9 +44,9 @@ class ChatRoomProfileVC: UIViewController {
             $0.width.equalTo(Device.widthScale(28))
             $0.height.equalTo(Device.heightScale(14))
         }
-        expTitleLabel.snp.makeConstraints {
-            $0.leading.equalTo(locationLabel.snp.leading)
-            $0.top.equalTo(nicknameLabel.snp.bottom).offset(Device.heightScale(11))
+        attendCountLabel.snp.makeConstraints {
+            $0.leading.equalTo(nicknameLabel.snp.leading)
+            $0.top.equalTo(nicknameLabel.snp.bottom).offset(5)
         }
     }
     
@@ -61,12 +61,6 @@ class ChatRoomProfileVC: UIViewController {
     }
     
     let gradeButton = GradeButton(mode: .tableCell)
-    
-    lazy var expTitleLabel = UILabel().then {
-        $0.font = .BasicFont(.semiBold, size: 14)
-        $0.textColor = .black
-        $0.text = "인연지수"
-    }
    
     lazy var emojiLabel = UILabel().then {
         $0.font = .BasicFont(.regular, size: 160)
@@ -150,7 +144,6 @@ extension ChatRoomProfileVC {
         view.addSubview(moreButton)
         view.addSubview(profileView)
         view.addSubview(emojiLabel)
-        view.addSubview(attendCountLabel)
         
         profileBackTop.snp.makeConstraints {
             $0.top.equalToSuperview()
@@ -162,9 +155,8 @@ extension ChatRoomProfileVC {
             $0.bottom.equalToSuperview()
             $0.leading.equalToSuperview()
             $0.width.equalToSuperview()
-            $0.height.equalTo(Device.heightScale(430))
-        }
-        
+            $0.height.equalTo(Device.isNotch ? Device.heightScale(430) : Device.heightScale(300))
+        }        
         dismissButton.snp.makeConstraints {
             $0.top.equalToSuperview().offset(Device.navigationBarHeight)
             $0.leading.equalToSuperview().offset(Device.widthScale(20))
@@ -187,10 +179,7 @@ extension ChatRoomProfileVC {
             $0.top.equalToSuperview().offset(Device.heightScale(210))
             $0.leading.equalToSuperview().offset(Device.widthScale(160))
         }
-        attendCountLabel.snp.makeConstraints {
-            $0.bottom.equalToSuperview().offset(Device.heightScale(-300))
-            $0.trailing.equalTo(Device.widthScale(-28))
-        }
+
       
     }
 }
