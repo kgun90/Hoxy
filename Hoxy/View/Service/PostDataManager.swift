@@ -12,52 +12,39 @@ struct PostDataManager {
     
 //    MARK: - 작성된 글 목록을 불러옴 -> HomeVC
     static func getPostListData(completion: @escaping ([PostDataModel]) -> Void) {
-        var blockList: [String] = []
-        guard let id = Auth.auth().currentUser?.uid else { return }
-        Constants.MEMBER_COLLECTION.document(id).collection("ban").addSnapshotListener { snapshot, error in
+        Constants.POST_COLLECTION.order(by: "start", descending: true).addSnapshotListener { snapshot, error in
             if let e = error {
                 print(e.localizedDescription)
                 return
             }
             guard let documents = snapshot?.documents else { return }
-           
-            documents.forEach {
-                let data = BlockModel(id: $0.documentID, dictionary: $0.data())
-                guard let id = data.user?.documentID else { return }
-                blockList.append(id)
+            var postList: [PostDataModel] = []
+            documents.forEach { document in
+                let data = document.data()
+                let post = PostDataModel(uid: document.documentID, dictionary: data)
+    
+                postList.append(post)
             }
+            completion(postList)
         }
-        
-        Constants.POST_COLLECTION.order(by: "start", descending: true).addSnapshotListener { snapshot, error in
-                var postList: [PostDataModel] = []
-                if let e = error {
-                    print(e.localizedDescription)
-                    return
-                }
-                guard let documents = snapshot?.documents else { return }
-               
-                documents.forEach { document in
-                    let data = document.data()
-                    let post = PostDataModel(uid: document.documentID, dictionary: data)
-                    guard let id = post.writer?.documentID else { return }
-                   
-                    if blockList.isEmpty {
-                        postList.append(post)
-                    } else {
-                        blockList.forEach {
-                            if $0 != id {
-                                postList.append(post)
-                            }
-                        }
-                    }
-                   
-                    completion(postList)
-                }
-            }        
     }
     //    MARK: - Reference 로 글정보 받음
     static func getPostData(byReference reference: DocumentReference, completion: @escaping (PostDataModel) -> Void) {
         reference.addSnapshotListener { snapshot, error in
+            if let e = error {
+                print(e.localizedDescription)
+                return
+            }
+            guard let data = snapshot?.data() else { return }
+            guard let id = snapshot?.documentID else { return }
+            
+            completion(PostDataModel(uid: id, dictionary: data))
+        }
+    }
+    
+    //    MARK: - Reference 로 글정보 받음
+    static func getPostDataDocument(byReference reference: DocumentReference, completion: @escaping (PostDataModel) -> Void) {
+        reference.getDocument { snapshot, error in
             if let e = error {
                 print(e.localizedDescription)
                 return

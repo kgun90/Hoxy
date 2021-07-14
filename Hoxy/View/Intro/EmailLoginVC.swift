@@ -7,26 +7,35 @@
 
 import UIKit
 import Firebase
+import CoreLocation
 
 class EmailLoginVC: UIViewController {
     // MARK: - Properties
     private var viewModel = EmailLoginViewModel()
-
-    var manager: LocationManager?
+    
     lazy var logoImage = UIImageView().then {
         $0.image = UIImage(named: "logo")
     }
     
-    let topView = TopView("이메일로 로그인")
+    let topView = TopView("이메일로 로그인", imageTitle: "multiply")
     let emailItem = JoinInputItem("이메일", "id1234@hoxy.com", false)
     let passItem = JoinInputItem("비밀번호", "영문 대소문자/숫자/기호를 모두 포함한 8~16자리 입력", true)
     let loginButton = BottomButton("로그인", .labelGray)
+    
+    let locationManager = CLLocationManager()
+    var currentLocation = CLLocation()
+    var currentTown = ""
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
         configureUI()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        getCurrentLocation()
     }
     
     override func viewDidLayoutSubviews() {
@@ -70,6 +79,30 @@ class EmailLoginVC: UIViewController {
           print("DEBUG: Subscribe Complete")
         }
     }
+    
+    func getCurrentLocation() {
+        self.locationManager.delegate = self
+        self.locationManager.requestWhenInUseAuthorization()
+        self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        self.locationManager.startUpdatingLocation()
+        
+        if CLLocationManager.locationServicesEnabled() {
+            self.locationManager.requestLocation()
+        }
+    }
+    func getLocationName() {
+        let geocode = CLGeocoder()
+        geocode.reverseGeocodeLocation(currentLocation) { (placemark, error) in
+            guard
+                let mark = placemark,
+                let town = mark.first?.subLocality
+            else {
+                return
+            }
+            LocationService.saveCurrentLocation(town: town, location: self.currentLocation)
+            LocationService.saveUserLocation(town: town, location: self.currentLocation)
+        }
+    }
 }
 
 extension EmailLoginVC: UITextFieldDelegate {
@@ -92,6 +125,20 @@ extension EmailLoginVC: UITextFieldDelegate {
         textField.resignFirstResponder()
         return true
     }
+}
+
+extension EmailLoginVC: CLLocationManagerDelegate {
+   func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+       if let location = locations.last {
+           locationManager.stopUpdatingLocation()
+           currentLocation = location
+           getLocationName()
+       }
+   }
+   
+   func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+       print(error.localizedDescription)
+   }
 }
 
 // MARK: UI Configure

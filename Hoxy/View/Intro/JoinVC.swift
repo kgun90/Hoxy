@@ -16,7 +16,7 @@ class JoinVC: UIViewController {
     lazy var logoImage = UIImageView().then {
         $0.image = UIImage(named: "logo")
     }
-    let topView = TopView("회원가입")
+    let topView = TopView("회원가입", imageTitle: "multiply")
     let emailItem = JoinInputItem("이메일", "id1234@hoxy.com", false, "로그인, 비밀번호 찾기 등에 사용됩니다.")
     let passItem = JoinInputItem("비밀번호", "대소문자/숫자/기호를 모두 포함한 8~16자리 입력", true, "특수문자는 (! @ # $ % ^ & ? _ ~) 만 가능합니다." )
     let passCheckItem = JoinInputItem("비밀번호 확인", "입력하신 비밀번호를 다시 한번 입력 해주세요.", true)

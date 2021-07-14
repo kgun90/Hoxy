@@ -27,6 +27,11 @@ class AlertVC: BaseViewController {
         configureUI()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        dismissIndicator()
+    }
+    
     func fetchData() {
         AlertDataManager.getAlertData { data in
             self.alertData = data

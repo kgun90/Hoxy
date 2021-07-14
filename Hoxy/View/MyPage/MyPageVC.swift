@@ -8,8 +8,9 @@
 import UIKit
 import Firebase
 import CoreLocation
+import MessageUI
 
-class MyPageVC: BaseViewController {
+class MyPageVC: BaseViewController, UINavigationControllerDelegate {
 
     // MARK: - Properties
     lazy var topView = UIView().then { top in
@@ -194,23 +195,65 @@ class MyPageVC: BaseViewController {
         $0.tintColor = #colorLiteral(red: 0.4392156863, green: 0.4392156863, blue: 0.4392156863, alpha: 1)
     }
     
+    lazy var sendEmailView = UIView().then {
+        $0.backgroundColor = .white
+        
+        $0.addSubview(emailImage)
+        $0.addSubview(emailLabel)
+        
+        emailImage.snp.makeConstraints {
+            $0.centerY.equalToSuperview()
+            $0.leading.equalToSuperview().offset(Device.widthScale(27))
+            $0.width.equalTo(Device.widthScale(24))
+            $0.height.equalTo(Device.heightScale(24))
+        }
+        
+        emailLabel.snp.makeConstraints {
+            $0.centerY.equalToSuperview()
+            $0.leading.equalTo(emailImage.snp.trailing).offset(Device.widthScale(11))
+        }
+    }
+    
+    private let emailImage = UIImageView().then {
+        $0.image = UIImage(systemName: "envelope")
+        $0.tintColor = #colorLiteral(red: 0.4392156863, green: 0.4392156863, blue: 0.4392156863, alpha: 1)
+    }
+    
+    private let emailLabel = UILabel().then {
+        $0.font = .BasicFont(.semiBold, size: 14)
+        $0.textColor = .black
+        $0.text = "제작자에게 메일 보내기"
+    }
+    
     let locationManager = CLLocationManager()
     var currentLocation = CLLocation()
     var currentTown = ""
+    
+    let composeVC = MFMailComposeViewController()
+    
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.title = "마이페이지"
+        checkEmailAvailability()
         configureUI()
         getUserData()
         gesture()
         getCurrentLocation()
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        dismissIndicator()
+       
+    }
+    
     override func viewDidLayoutSubviews() {
         topView.addBorder(toSide: .bottom, color: .mainBackground, borderWidth: 0.5)
         userLocationView.addBorder(toSide: .bottom, color: .mainBackground, borderWidth: 0.5)
+        blockUserView.addBorder(toSide: .bottom, color: .mainBackground, borderWidth: 0.5)
     }
+    
     // MARK: - Selectors
     @objc func emojiChangeAction() {
         let emoji: String = "".randomEmoji()
@@ -246,12 +289,14 @@ class MyPageVC: BaseViewController {
     func getUserData() {
         guard let id = Auth.auth().currentUser?.uid else { return }
         
-        UserDataManager.getUserData(byID: id) { data in
+        UserDataManager.getUserDataSnapshot(byID: id) { data in
             self.user.text = "\(data.email) 님은"
             self.emoji.text = data.emoji
+            self.grade.getGrade(.tableCell, data.birth)
 //            self.progressView.progress = Float(data.exp / 1000)
             self.userLocationLabel.text = "우리 동네 \(data.town)"
         }
+        dismissIndicator()
     }
         
     func gesture() {
@@ -264,9 +309,13 @@ class MyPageVC: BaseViewController {
         let banlistTapGesture = UITapGestureRecognizer(target: self, action: #selector(bandListTapAction))
         banlistTapGesture.numberOfTouchesRequired = 1
         
+        let sendEmailTapGesture = UITapGestureRecognizer(target: self, action: #selector(sendEmailTapAction))
+        sendEmailTapGesture.numberOfTouchesRequired = 1
+        
         currentLocationView.addGestureRecognizer(curLocTapGesture)
         userLocationView.addGestureRecognizer(userLocTapGesture)
         blockUserView.addGestureRecognizer(banlistTapGesture)
+        sendEmailView.addGestureRecognizer(sendEmailTapGesture)
     }
         
     @objc func currentLocationTapAction() {
@@ -288,6 +337,38 @@ class MyPageVC: BaseViewController {
     @objc func bandListTapAction() {
         let vc = BlockUserListVC()
         navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    @objc func sendEmailTapAction() {
+        // 이메일 사용가능한지 체크하는 if문
+          if MFMailComposeViewController.canSendMail() {
+              
+              let compseVC = MFMailComposeViewController()
+              compseVC.mailComposeDelegate = self
+              
+              compseVC.setToRecipients(["kgun38@gmail.com"])
+              compseVC.setSubject("HOXY 문의 메일")
+              compseVC.setMessageBody("문의 내용 \n ", isHTML: false)
+              
+              self.present(compseVC, animated: true, completion: nil)
+              
+          }
+          else {
+              self.showSendMailErrorAlert()
+          }
+
+       
+        self.present(composeVC, animated: true, completion: nil)
+    }
+    
+    func showSendMailErrorAlert() {
+        let sendMailErrorAlert = UIAlertController(title: "메일을 전송 실패", message: "아이폰 이메일 설정을 확인하고 다시 시도해주세요.", preferredStyle: .alert)
+        let confirmAction = UIAlertAction(title: "확인", style: .default) {
+            (action) in
+            print("확인")
+        }
+        sendMailErrorAlert.addAction(confirmAction)
+        self.present(sendMailErrorAlert, animated: true, completion: nil)
     }
     
     func getCurrentLocation() {
@@ -312,12 +393,16 @@ class MyPageVC: BaseViewController {
             }
             self.currentTown = town
             self.currentLocationLabel.text = "현재 동네 \(town)"
+            Log.any(town)
+            LocationService.saveCurrentLocation(town: town, location: self.currentLocation)
         }
     }
     
     func updateUserLocation() {
         let location = GeoPoint(latitude: currentLocation.coordinate.latitude, longitude: currentLocation.coordinate.longitude)
         let town = currentTown
+        
+        LocationService.saveUserLocation(town: town, location: self.currentLocation)
         if let id = Auth.auth().currentUser?.uid {
             Constants.MEMBER_COLLECTION.document(id).updateData([
                 "location" : location,
@@ -326,7 +411,14 @@ class MyPageVC: BaseViewController {
         }
     }
    
+    private func checkEmailAvailability() {
+        if !MFMailComposeViewController.canSendMail() {
+            print("Mail services are not available")
+            return
+        }
+    }
 
+ 
 }
 extension MyPageVC: CLLocationManagerDelegate {
    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
@@ -342,6 +434,11 @@ extension MyPageVC: CLLocationManagerDelegate {
    }
 }
 
+extension MyPageVC: MFMailComposeViewControllerDelegate {
+    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+        controller.dismiss(animated: true)
+    }
+}
 
 extension MyPageVC {
     func configureUI() {
@@ -371,6 +468,7 @@ extension MyPageVC {
         view.addSubview(currentLocationView)
         view.addSubview(userLocationView)
         view.addSubview(blockUserView)
+        view.addSubview(sendEmailView)
         
         
         topView.snp.makeConstraints {
@@ -397,6 +495,13 @@ extension MyPageVC {
             $0.width.equalToSuperview()
             $0.height.equalTo(Device.heightScale(50))
         }
+        sendEmailView.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.width.equalToSuperview()
+            $0.top.equalTo(blockUserView.snp.bottom)
+            $0.height.equalTo(Device.heightScale(50))
+        }
         
     }
 }
+

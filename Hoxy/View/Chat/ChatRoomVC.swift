@@ -72,6 +72,9 @@ class ChatRoomVC: BaseViewController {
     
     var chatID: String = ""
     var postID: String = ""
+    
+    var postData: PostDataModel?
+    
     var chatData: [ChatModel]?
 
     var chatRoomMenu = ChatRoomMenuVC()
@@ -151,7 +154,6 @@ class ChatRoomVC: BaseViewController {
     func fetchChat() {
         ChatDataManager.getChatData(byId: chatID) { chats in
             self.chatData = chats
-//            self.chatTableView.scrollToBottom()
             self.reloadTable()
         }
     }
@@ -169,6 +171,14 @@ extension ChatRoomVC: UITextFieldDelegate {
     // 키보드 영역 이외 터치시 키보드 해제
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.dismissKeyboard()
+    }
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        guard let post = self.postData else { return }
+        if post.start.isExpired {
+            self.chatInputTextField.isEnabled = false
+            presentOkOnlyAlert(title: "기간이 만료되어 채팅이 불가합니다")
+        }
     }
 }
 
@@ -259,12 +269,12 @@ extension ChatRoomVC {
             self.postID = model.post.documentID
             self.getRoomTitle(self.postID)
         }
-//        viewModel.getRoomTitle(self.postID)
     }
     
     
     func getRoomTitle(_ postID: String) {
         PostDataManager.getPostData(byID: postID) { data in
+            self.postData = data
             self.navigationItem.title = data.title
         }
     }

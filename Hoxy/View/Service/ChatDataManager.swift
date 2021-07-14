@@ -17,6 +17,8 @@ struct ChatDataManager {
 //  MARK: - Chat List
     static func getChatListData(completion: @escaping ([ChatListModel]) -> Void) {
         guard let userID = Auth.auth().currentUser?.uid else { return }
+        var chats: [ChatListModel] = []
+        
         Constants.CHAT_COLLECTION.whereField("member", arrayContains: userID).order(by: "date", descending: false).addSnapshotListener { snapshot, error in
            
             if let e = error {
@@ -24,7 +26,6 @@ struct ChatDataManager {
                 return
             }
             guard let documents = snapshot?.documents else { return }
-            var chats: [ChatListModel] = []
             
             documents.forEach { document in
                 let chatting = ChattingModel(dictionary: document.data())
@@ -45,6 +46,7 @@ struct ChatDataManager {
     
     static func getChats(completion: @escaping ([ChatListModel]) -> Void) {
         guard let current = Auth.auth().currentUser else { return }
+        var chatList: [ChatListModel] = []
         
         Constants.CHAT_COLLECTION.order(by: "date", descending: true).addSnapshotListener { snapshot, error in
             if let e = error {
@@ -52,9 +54,9 @@ struct ChatDataManager {
                 return
             }
             guard let documents = snapshot?.documents else { return }
-            var chatList: [ChatListModel] = []
+           
             let chats = documents.filter {
-                 let data = $0.data()
+                let data = $0.data()
                 let member = data["member"] as? [String] ?? []
                 return member.contains(current.uid)
             }
@@ -62,23 +64,15 @@ struct ChatDataManager {
             chats.forEach { document in
                 let chatData = ChattingModel(dictionary: document.data())
                 let chatId = document.documentID
-                chatData.post.getDocument { snapshot, error in
-                    if let e = error {
-                        print(e.localizedDescription)
-                        return
-                    }
-                    guard let id = snapshot?.documentID else { return }
-                    guard let data = snapshot?.data() else { return }
-                    let post = PostDataModel(uid: id, dictionary: data)
-                    
-                    if !post.start.isExpired {
-                        chatList.append(ChatListModel(chat: chatData, id: chatId))
-                        completion(chatList)
-                    }
-                }
-              
+                
+                let chat = ChatListModel(chat: chatData, id: chatId)
+
+                chatList.append(chat)
+
             }
+            completion(chatList)
         }
+       
     }
     
     // MARK: - Chatting Document 정보 얻어오기

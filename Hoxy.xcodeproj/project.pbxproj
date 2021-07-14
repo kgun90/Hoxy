@@ -59,6 +59,7 @@
 		EB3EE7952667D9C8007507D6 /* TagDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB3EE7942667D9C8007507D6 /* TagDataManager.swift */; };
 		EB3F917E269D786D001108D4 /* SystemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB3F917C269D786D001108D4 /* SystemCell.swift */; };
 		EB3F917F269D786D001108D4 /* SystemCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = EB3F917D269D786D001108D4 /* SystemCell.xib */; };
+		EB3F9181269EB43E001108D4 /* BlockDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB3F9180269EB43E001108D4 /* BlockDataManager.swift */; };
 		EB43F79425D1BA3700AFED54 /* PostViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB43F79325D1BA3700AFED54 /* PostViewModel.swift */; };
 		EB498515267D6FB0000580B9 /* TagViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB498514267D6FB0000580B9 /* TagViewModel.swift */; };
 		EB498518267E4D8F000580B9 /* AlertItemTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB498516267E4D8F000580B9 /* AlertItemTableCell.swift */; };
@@ -66,7 +67,6 @@
 		EB49851B267F151A000580B9 /* TagModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB49851A267F151A000580B9 /* TagModel.swift */; };
 		EB4D0950268C21AB004679F0 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4D094F268C21AB004679F0 /* Log.swift */; };
 		EB4D0954268C4F4E004679F0 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4D0953268C4F4E004679F0 /* LocationManager.swift */; };
-		EB4D0956268D8B5B004679F0 /* MainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4D0955268D8B5B004679F0 /* MainViewModel.swift */; };
 		EB4D0958268E158F004679F0 /* UserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4D0957268E158F004679F0 /* UserDefaults.swift */; };
 		EB4D095A268F5CF0004679F0 /* BlockUserListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4D0959268F5CF0004679F0 /* BlockUserListVC.swift */; };
 		EB4D0961269055ED004679F0 /* BlockUserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4D095F269055ED004679F0 /* BlockUserCell.swift */; };
@@ -165,6 +165,7 @@
 		EB3EE7942667D9C8007507D6 /* TagDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagDataManager.swift; sourceTree = "<group>"; };
 		EB3F917C269D786D001108D4 /* SystemCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemCell.swift; sourceTree = "<group>"; };
 		EB3F917D269D786D001108D4 /* SystemCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SystemCell.xib; sourceTree = "<group>"; };
+		EB3F9180269EB43E001108D4 /* BlockDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockDataManager.swift; sourceTree = "<group>"; };
 		EB43F79325D1BA3700AFED54 /* PostViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostViewModel.swift; sourceTree = "<group>"; };
 		EB498514267D6FB0000580B9 /* TagViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagViewModel.swift; sourceTree = "<group>"; };
 		EB498516267E4D8F000580B9 /* AlertItemTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertItemTableCell.swift; sourceTree = "<group>"; };
@@ -172,7 +173,6 @@
 		EB49851A267F151A000580B9 /* TagModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagModel.swift; sourceTree = "<group>"; };
 		EB4D094F268C21AB004679F0 /* Log.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
 		EB4D0953268C4F4E004679F0 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
-		EB4D0955268D8B5B004679F0 /* MainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModel.swift; sourceTree = "<group>"; };
 		EB4D0957268E158F004679F0 /* UserDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaults.swift; sourceTree = "<group>"; };
 		EB4D0959268F5CF0004679F0 /* BlockUserListVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockUserListVC.swift; sourceTree = "<group>"; };
 		EB4D095F269055ED004679F0 /* BlockUserCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockUserCell.swift; sourceTree = "<group>"; };
@@ -350,14 +350,13 @@
 		EB25DCA125BB2C9D006F4008 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
-				EB43F79325D1BA3700AFED54 /* PostViewModel.swift */,
-				E0ED10D526492EE800661094 /* EmailLoginViewModel.swift */,
 				E0ED10E2264CFCE600661094 /* JoinViewModel.swift */,
+				E0ED10D526492EE800661094 /* EmailLoginViewModel.swift */,
 				E08F5488265B372900740A04 /* HomeViewModel.swift */,
 				E08F5490265C848B00740A04 /* WriteViewModel.swift */,
+				EB43F79325D1BA3700AFED54 /* PostViewModel.swift */,
 				EB498514267D6FB0000580B9 /* TagViewModel.swift */,
 				EB6E9E3E2682F45C009452A3 /* ChatViewModel.swift */,
-				EB4D0955268D8B5B004679F0 /* MainViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -405,6 +404,7 @@
 				E08F548E265C83D900740A04 /* WriteDataManager.swift */,
 				EB3EE7942667D9C8007507D6 /* TagDataManager.swift */,
 				EB4D0963269341AD004679F0 /* AlertDataManager.swift */,
+				EB3F9180269EB43E001108D4 /* BlockDataManager.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -639,7 +639,6 @@
 				EB5D8E7225C7D629003D957C /* PostDataModel.swift in Sources */,
 				EB5D8E7825C7E999003D957C /* NSMutableAttrubutedString.swift in Sources */,
 				EB78A37125E755EC00E4C538 /* UITableView.swift in Sources */,
-				EB4D0956268D8B5B004679F0 /* MainViewModel.swift in Sources */,
 				EB1C983A2674C79400042EC2 /* TagItem.swift in Sources */,
 				EB29690225D991D400DAE55B /* ChatListModel.swift in Sources */,
 				E0ED10E3264CFCE600661094 /* JoinViewModel.swift in Sources */,
@@ -705,6 +704,7 @@
 				EB43F79425D1BA3700AFED54 /* PostViewModel.swift in Sources */,
 				EBC658A825C1AA2400CF9AA5 /* LoginModel.swift in Sources */,
 				EBDA507425BC03DC00C6A122 /* MyPageVC.swift in Sources */,
+				EB3F9181269EB43E001108D4 /* BlockDataManager.swift in Sources */,
 				EB6E9E3D2681AC76009452A3 /* HomeModel.swift in Sources */,
 				EBDA507A25BC054100C6A122 /* UIColor.swift in Sources */,
 				EB25DC8825B9C1E5006F4008 /* AppDelegate.swift in Sources */,

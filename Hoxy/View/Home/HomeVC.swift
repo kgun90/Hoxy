@@ -32,7 +32,7 @@ class HomeVC: BaseViewController {
     private let guideLabel = UILabel().then {
         $0.font = .BasicFont(.regular, size: 14)
         $0.textColor = .labelGray
-        $0.text = "알람이 없습니다"
+        $0.text = "모임이 없습니다"
     }
 
     
@@ -41,7 +41,6 @@ class HomeVC: BaseViewController {
         super.viewDidLoad()
         showIndicator()
         viewModel.fetchPostsData()
-        viewModel.getMenuItem()
         initRefresh()
         configureUI()
     }
@@ -56,6 +55,8 @@ class HomeVC: BaseViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         viewModel.fetchPostsData()
+        viewModel.getMenuItem()
+        showIndicator()
     }
     // MARK: - Logics
    
@@ -87,7 +88,7 @@ class HomeVC: BaseViewController {
     
     @objc func updateUI(refresh: UIRefreshControl) {
         reloadTable()
-        viewModel.currentLocation()
+//        viewModel.currentLocation()
         viewModel.getMenuItem()
         
         refresh.endRefreshing()
@@ -105,6 +106,8 @@ class HomeVC: BaseViewController {
         }
         setting()
     }
+    
+    
 }
 extension HomeVC: UITableViewDataSource, UITableViewDelegate {
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -166,7 +169,7 @@ extension HomeVC {
         view.addSubview(listTableView)
         view.addSubview(writeButton)
         view.bringSubviewToFront(writeButton)
-        listTableView.addSubview(guideLabel)
+        view.addSubview(guideLabel)
         
         listTableView.snp.makeConstraints {
             $0.top.equalToSuperview()

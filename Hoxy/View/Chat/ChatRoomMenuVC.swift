@@ -154,6 +154,7 @@ class ChatRoomMenuVC: UIViewController, ChatMemberDelegate {
     @objc func leaveRoomAction() {
         guard let currentUser = Auth.auth().currentUser else { return }
         guard let chat = self.postData?.chat else { return }
+        guard let post = self.postData else { return }
         
         let ok = UIAlertAction(title: "나가기", style: .default) { (action) in
             
@@ -166,13 +167,17 @@ class ChatRoomMenuVC: UIViewController, ChatMemberDelegate {
                 self.delegate?.dismiss(postID: "")
             }
         }
-        if self.postData?.writer?.documentID == currentUser.uid {
-            presentAlert(title: "모임 종료하기", message: "모임을 종료하게 되면 모임글이 삭제됩니다. \n 계속 하시겠습니까?", isCancelActionIncluded: true, with: ok)
+        
+        if post.start.isExpired {
+            presentOkOnlyAlert(title: "모임 기간이 만료 되어 모임을 떠나실수 없습니다")
         } else {
-            presentAlert(title: "모임 떠나기", message: "채팅방을 나가시면 모임을 떠나게 됩니다. 계속 하시겠습니까?", isCancelActionIncluded: true, with: ok)
-           
+            if self.postData?.writer?.documentID == currentUser.uid {
+                presentAlert(title: "모임 종료하기", message: "모임을 종료하게 되면 모임글이 삭제됩니다. \n 계속 하시겠습니까?", isCancelActionIncluded: true, with: ok)
+            } else {
+                presentAlert(title: "모임 떠나기", message: "채팅방을 나가시면 모임을 떠나게 됩니다. 계속 하시겠습니까?", isCancelActionIncluded: true, with: ok)
+               
+            }
         }
-     
     }
     
 

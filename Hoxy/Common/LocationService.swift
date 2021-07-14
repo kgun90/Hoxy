@@ -39,14 +39,29 @@ struct LocationService {
     static func getTownData() -> [String] {
         let current = UserDefaults.standard.string(forKey: Constants.currentTown) ?? ""
         let user = UserDefaults.standard.string(forKey: Constants.userTown) ?? ""
-        return [current, user]
+        
+        if current == user {
+            return [current]
+        } else {
+            return [current, user]
+        }
+       
     }
     
     static func getLocationData() -> [CLLocation?] {
         let currentLocation = UserDefaults.standard.location(forKey: Constants.currentLocation)
         let userLocation = UserDefaults.standard.location(forKey: Constants.userLocation)
         
-        return [currentLocation, userLocation]
+        
+        let current = UserDefaults.standard.string(forKey: Constants.currentTown) ?? ""
+        let user = UserDefaults.standard.string(forKey: Constants.userTown) ?? ""
+        
+        if current == user {
+            return [currentLocation]
+        } else {
+            return [currentLocation, userLocation]
+        }
+        
     }
     
     static func getGeoPoint(location: CLLocation) -> GeoPoint {

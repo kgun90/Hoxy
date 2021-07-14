@@ -45,6 +45,7 @@ class ChatListVC: BaseViewController {
             
             isPushNotification = nil
         }
+        dismissIndicator()
     }
     // MARK: - Selectors
     
@@ -99,7 +100,6 @@ extension ChatListVC: UITableViewDataSource, UITableViewDelegate {
 
 extension ChatListVC {
     func configureUI() {
-       
         getChatListData()
         setting()
         layout()
@@ -107,8 +107,9 @@ extension ChatListVC {
     
     func getChatListData() {
         ChatDataManager.getChats { data in
-                self.listData = data
-                self.reloadTableView()
+            Log.any(data)
+            self.listData = data
+            self.reloadTableView()
         }
     }
     

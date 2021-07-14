@@ -11,15 +11,37 @@ import Firebase
 
 struct HomeViewModel {
     let postData = Observable([PostDataModel]())
+    let banData = Observable("")
     let menuItem = Observable([""])
     
     let manager = LocationManager()
+    
     func fetchPostsData() {
+        var posts: [PostDataModel] = []
+        var bans: [String] = []
+        self.postData.value = []
+        
+        BlockDataManager.getBanListData { blockModel in
+            blockModel.forEach {
+                bans.append($0.user?.documentID ?? "")
+            }
+        }
+   
         PostDataManager.getPostListData { data in
-            self.postData.value = data
+            posts = data
+        }
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            if bans.count > 0 {
+                self.postData.value = posts.filter{
+                    !bans.contains($0.writer?.documentID ?? "")
+                }
+            } else {
+                self.postData.value = posts
+            }
+            self.locationChangeAction(self.postData.value, 0)
         }
     }
-
     
     func locationChangeAction(_ postData: [PostDataModel], _ index: Int) {
         if index == 0 {

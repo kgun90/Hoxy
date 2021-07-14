@@ -58,7 +58,7 @@ struct EmailLoginViewModel {
             buttonSet.value.color = .mainYellow
         } else {
             buttonSet.value.visability = false
-            buttonSet.value.color = #colorLiteral(red: 0.5058823529, green: 0.5058823529, blue: 0.5058823529, alpha: 1)
+            buttonSet.value.color = .labelGray
         }
     }
     

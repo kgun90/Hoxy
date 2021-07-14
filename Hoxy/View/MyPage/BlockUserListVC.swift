@@ -44,6 +44,9 @@ class BlockUserListVC: BaseViewController {
         configureUI()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        dismissIndicator()
+    }
     override func viewDidLayoutSubviews() {
         topInstructionView.addBorder(toSide: .bottom, color: .mainBackground, borderWidth: 0.5)
     }
@@ -53,7 +56,7 @@ class BlockUserListVC: BaseViewController {
     // MARK: - Helpers
     func getBlockListData() {
         blockData = []
-        UserDataManager.getBanListData { data in
+        BlockDataManager.getBanListData { data in
             self.blockData = data
             self.reloadTable()
         }

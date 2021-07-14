@@ -204,9 +204,11 @@ class WriteVC: BaseViewController {
             self.viewModel.submitAction()
             if self.mode == .write {
                 self.navigationController?.popViewController(animated: true)
+            } else {
+                self.moveToRoot(TabBarController())
             }
 
-            self.moveToRoot(TabBarController())
+            
         }
       presentAlert(title: "글 작성하기", message: "글이 게시됩니다. \n계속하시겠습니까?",isCancelActionIncluded: true, with: ok)
     }

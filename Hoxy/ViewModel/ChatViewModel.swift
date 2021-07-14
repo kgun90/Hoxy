@@ -11,9 +11,7 @@ import Firebase
 struct ChatViewModel {
     let roomTitle = Observable("")
     let chatListData = Observable([ChatListModel]())
-    
-
-    
+        
     func getRoomTitle(_ postID: String) {
         PostDataManager.getPostData(byID: postID) { data in
             roomTitle.value = data.title

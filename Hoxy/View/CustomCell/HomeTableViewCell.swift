@@ -177,7 +177,7 @@ class HomeTableViewCell: UITableViewCell {
         }
         guard let writer = data.writer else { return }
         
-        UserDataManager.getUserData(byReference: writer) { data in
+        UserDataManager.getUserDataSnapshot(byReference: writer) { data in
             self.gradeButton.getGrade(.tableCell, data.birth)
         }
     }

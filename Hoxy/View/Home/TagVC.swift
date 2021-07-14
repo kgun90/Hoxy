@@ -15,7 +15,7 @@ class TagVC: UIViewController {
     var delegate: TagDelegate?
         
     // MARK: - Properties
-    let topView = TopView("태그추가", .mainYellow, "multiply")
+    let topView = TopView("태그추가", .mainYellow, imageTitle: "multiply")
     lazy var tagPostButton = UIButton().then {
         $0.setTitle("등록", for: .normal)
         $0.titleLabel?.font = .BasicFont(.medium, size: 15)

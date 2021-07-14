@@ -35,7 +35,13 @@ class MainLoginVC: UIViewController {
         $0.titleLabel?.font = .BasicFont(.semiBold, size: 15)
         $0.addTarget(self, action: #selector(joinAction), for: .touchUpInside)
     }
-    private var viewModel = MainViewModel()
+    
+    private let makerMark = UILabel().then {
+        $0.text = "© 2021.Geon Kang All rights reserved."
+        $0.textColor = .labelGray
+        $0.font = .BasicFont(.light, size: 12)
+    }
+    
     var town: CLLocation?
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -93,11 +99,12 @@ class MainLoginVC: UIViewController {
     
     func layout() {
         view.addSubview(logoImage)
-        view.addSubview(googleLoginButton)
-        view.addSubview(appleLoginButton)
+//        view.addSubview(googleLoginButton)
+//        view.addSubview(appleLoginButton)
         view.addSubview(emailLoginButton)
         view.addSubview(joinLabel)
         view.addSubview(joinButton)
+        view.addSubview(makerMark)
         
         logoImage.snp.makeConstraints {
             $0.centerX.equalToSuperview()
@@ -106,21 +113,25 @@ class MainLoginVC: UIViewController {
             $0.top.equalToSuperview().offset(Device.heightScale(174))
         }
         
-        googleLoginButton.snp.makeConstraints {
-            $0.centerX.equalToSuperview()
-            $0.top.equalTo(logoImage.snp.bottom).offset(Device.heightScale(61.6))
-            $0.width.equalTo(Device.widthScale(287))
-            $0.height.equalTo(Device.heightScale(48))
-        }
-        appleLoginButton.snp.makeConstraints {
-            $0.centerX.equalToSuperview()
-            $0.top.equalTo(googleLoginButton.snp.bottom).offset(Device.heightScale(20))
-            $0.width.equalTo(Device.widthScale(287))
-            $0.height.equalTo(Device.heightScale(48))
-        }
+//        googleLoginButton.snp.makeConstraints {
+//            $0.centerX.equalToSuperview()
+//            $0.top.equalTo(logoImage.snp.bottom).offset(Device.heightScale(61.6))
+//            $0.width.equalTo(Device.widthScale(287))
+//            $0.height.equalTo(Device.heightScale(48))
+//        }
+//        appleLoginButton.snp.makeConstraints {
+//            $0.centerX.equalToSuperview()
+//            $0.top.equalTo(googleLoginButton.snp.bottom).offset(Device.heightScale(20))
+//            $0.width.equalTo(Device.widthScale(287))
+//            $0.height.equalTo(Device.heightScale(48))
+//        }
         emailLoginButton.snp.makeConstraints {
-            $0.centerX.equalToSuperview()
-            $0.top.equalTo(appleLoginButton.snp.bottom).offset(Device.heightScale(20))
+//            $0.centerX.equalToSuperview()
+//            $0.top.equalTo(appleLoginButton.snp.bottom).offset(Device.heightScale(20))
+//            $0.width.equalTo(Device.widthScale(287))
+//            $0.height.equalTo(Device.heightScale(48))
+
+            $0.center.equalToSuperview()
             $0.width.equalTo(Device.widthScale(287))
             $0.height.equalTo(Device.heightScale(48))
         }
@@ -133,6 +144,11 @@ class MainLoginVC: UIViewController {
             $0.leading.equalTo(joinLabel.snp.trailing).offset(6)
             $0.height.equalTo(19)
             $0.top.equalTo(emailLoginButton.snp.bottom).offset(Device.heightScale(36))
+        }
+        
+        makerMark.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.bottom.equalToSuperview().offset(Device.heightScale(-30))
         }
     }
 }
